@@ -86,3 +86,14 @@ drop column `role`;
 
 alter table user
 drop column `role`;
+
+CREATE TABLE `maindb`.`role` (
+  `id` BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(150) NOT NULL);
+
+CREATE TABLE `maindb`.`employee_role` (
+  `id` BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  `employee_id` BIGINT NOT NULL,
+  `role_id` BIGINT NOT NULL,
+  FOREIGN KEY (employee_id) references maindb.employee(id),
+  FOREIGN KEY (role_id) references maindb.role(id));

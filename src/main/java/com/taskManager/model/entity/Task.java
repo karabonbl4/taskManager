@@ -27,7 +27,7 @@ public class Task {
     @JoinColumn(name = "department_id")
     private Department departmentTask;
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "tasks")
-    private List<Role> employees;
+    private List<Employee> employees;
 
 
 }

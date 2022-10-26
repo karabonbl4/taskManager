@@ -1,7 +1,9 @@
 package com.taskManager.service.impl;
 
 import com.taskManager.exception.UserNotFoundException;
+import com.taskManager.model.entity.Role;
 import com.taskManager.model.entity.User;
+import com.taskManager.model.repository.RoleRepository;
 import com.taskManager.model.repository.UserRepository;
 import com.taskManager.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -10,12 +12,15 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -30,12 +35,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if(userFromDB != null){
             return false;
         }
-        user.setFirstName(user.getFirstName());
-        user.setLastName(user.getLastName());
-        user.setEmail(user.getEmail());
-        user.setUsername(user.getUsername());
+
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-//        user.setRoles();
+        user.setRoles(Collections.singletonList(roleRepository.save(new Role("ROLE_USER"))));
         userRepository.save(user);
         return true;
     }

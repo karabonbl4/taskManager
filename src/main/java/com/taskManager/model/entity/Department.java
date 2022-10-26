@@ -14,7 +14,7 @@ public class Department {
     @Column
     private String name;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "departmentEmployee")
-    private List<Role> employees;
+    private List<Employee> employees;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "departmentCustomer")
     private List<Customer> customers;
     @ManyToOne(cascade = CascadeType.ALL)

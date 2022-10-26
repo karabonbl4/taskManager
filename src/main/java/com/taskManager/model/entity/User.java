@@ -28,7 +28,10 @@ public class User implements UserDetails {
     private String confirmPassword;
     @OneToMany(mappedBy = "user")
     private List<Department> departments;
-    @OneToMany(mappedBy = "userId", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "userId")
+    private List<Employee> functions;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private List<Role> roles;
 
     @Override
