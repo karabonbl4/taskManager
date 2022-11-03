@@ -7,6 +7,7 @@ import com.taskManager.model.repository.RoleRepository;
 import com.taskManager.model.repository.UserRepository;
 import com.taskManager.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -32,7 +33,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public boolean saveUser(User user) {
         User userFromDB = userRepository.findByUsername(user.getUsername());
-        if(userFromDB != null){
+        if (userFromDB != null) {
             return false;
         }
 
@@ -42,9 +43,31 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return true;
     }
 
-    public User findByEmail(String email){
+    @Override
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public User getAuthUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String userAuthenticationName = ((UserDetails) principal).getUsername();
+        return userRepository.findByUsername(userAuthenticationName);
+    }
+
+    @Override
+    public boolean availableEmail(String email) {
         User user = userRepository.findByEmail(email);
-        if (user == null){
+        if (user != null) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
             throw new UserNotFoundException("User with this email does not exist");
         }
         return user;
