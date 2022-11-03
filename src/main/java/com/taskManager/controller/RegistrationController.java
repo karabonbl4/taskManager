@@ -21,17 +21,25 @@ public class RegistrationController {
         return "registration";
     }
     @PostMapping("/registration")
-    public String addUser(@ModelAttribute("userForm") @Validated User user, Model model){
+    public String addUser(@ModelAttribute("userForm") @Validated User userForm, Model model){
 
-        if (!user.getPassword().equals(user.getConfirmPassword())){
+        if (!userForm.getPassword().equals(userForm.getConfirmPassword())){
             model.addAttribute("passwordError", "Password incorrect!");
             return "registration";
         }
-        if (!userService.saveUser(user)){
+        if (!userService.availableEmail(userForm.getEmail())){
+            model.addAttribute("emailError", "User with that e-mail already exist!");
+            return "registration";
+        }
+        if (!userService.saveUser(userForm)){
             model.addAttribute("usernameError", "User with that username already exist");
             return "registration";
         }
 
         return "redirect:/";
+    }
+    @GetMapping("/")
+    public String homePage(){
+        return "index";
     }
 }

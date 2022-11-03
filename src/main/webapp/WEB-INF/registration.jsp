@@ -17,7 +17,6 @@
           <form:input type="firstName" path="firstName" placeholder="First name"></form:input>
     </div>
     <div>
-    <div>
           <form:input type="lastName" path="lastName" placeholder="Last name"></form:input>
     </div>
     <div>

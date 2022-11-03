@@ -16,6 +16,7 @@
     <h4><a href="/registration">Register</a></h4>
   </sec:authorize>
   <sec:authorize access="isAuthenticated()">
+    <h4><a href="/department">Department</a></h4>
     <h4><a href="/logout">Log out</a></h4>
   </sec:authorize>
 </div>

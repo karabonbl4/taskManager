@@ -20,6 +20,8 @@ public class Department {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
+    @Column
+    private String location;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "departmentMaterial")
     private List<Material> materials;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "departmentProvider")
