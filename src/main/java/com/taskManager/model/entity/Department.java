@@ -13,21 +13,16 @@ public class Department {
     private long id;
     @Column
     private String name;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "departmentEmployee")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "department")
     private List<Employee> employees;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "departmentCustomer")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "departmentId")
     private List<Customer> customers;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    private User user;
     @Column
     private String location;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "departmentMaterial")
     private List<Material> materials;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "departmentProvider")
     private List<Provider> providers;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "departmentTask")
-    private List<Task> tasks;
 
     @Override
     public String toString() {
@@ -35,11 +30,10 @@ public class Department {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", employees=" + employees +
+                ", location=" + location +
                 ", customers=" + customers +
-                ", user=" + user +
                 ", materials=" + materials +
                 ", providers=" + providers +
-                ", tasks=" + tasks +
                 '}';
     }
 }

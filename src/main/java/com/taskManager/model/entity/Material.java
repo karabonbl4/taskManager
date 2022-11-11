@@ -19,9 +19,6 @@ public class Material {
     @Column
     private Integer value;
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "provider_id")
-    private Provider provider;
-    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "department_id")
     private Department departmentMaterial;
 }

@@ -16,6 +16,8 @@ table, th, td {
     <h2>Add new department</h2>
     <div>
           <form:input type="name" path="name" placeholder="Name"></form:input>
+          <form:errors path="name"></form:errors>
+          ${departmentError}
     </div>
     <div>
           <form:input type="location" path="location" placeholder="Location"></form:input>
@@ -27,17 +29,20 @@ table, th, td {
     <h4>Departments not found</h4>
 </c:if>
 <c:if test = "${departments.size() > 0}">
+    <h2>Your departments</h2>
     <table>
       <tr>
         <th>Name</th>
         <th>Location</th>
-        <th></th>
+        <th>Function</th>
+        <th>Manager</th>
       </tr>
       <c:forEach items="${departments}" var="department">
         <tr>
-          <td>${department.name}</td>
+          <td><a href="/departmentDetails/?id=${department.id}">${department.name}</td>
           <td>${department.location}</td>
-          <td><button type="submit" value="${department.name}">Choose</button></td>
+          <td>${department.authUserFunction}</td>
+          <td>${department.manager}</td>
         </tr>
       </c:forEach>
     </table>

@@ -21,8 +21,6 @@ public class Provider {
     private String owner;
     @Column
     private String email;
-    @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL)
-    private List<Material> materials;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "department_id")
     private Department departmentProvider;
