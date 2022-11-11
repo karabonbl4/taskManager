@@ -22,6 +22,6 @@ public class Customer {
     private String email;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "department_id")
-    private Department departmentCustomer;
+    private Department departmentId;
 
 }

@@ -1,15 +1,15 @@
-package com.taskManager.model.repository;
+package com.taskManager.service;
 
 import com.taskManager.model.entity.Department;
 import com.taskManager.model.entity.Employee;
 import com.taskManager.model.entity.User;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
-public interface EmployeeRepository extends JpaRepository<Employee, Long> {
+public interface EmployeeService {
     Employee findByUserAndDepartment(User user, Department department);
     List<Employee> findByUser(User user);
+    void save(Employee employee);
+    com.taskManager.model.dto.EmployeeDto convertToEmployeeDto(Employee employee);
+
 }

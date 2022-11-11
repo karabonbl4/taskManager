@@ -23,11 +23,6 @@ public class Task {
     private int priority;
     @Column
     private Date workday;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "department_id")
-    private Department departmentTask;
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "tasks")
     private List<Employee> employees;
-
-
 }

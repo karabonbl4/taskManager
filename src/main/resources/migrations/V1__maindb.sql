@@ -3,7 +3,6 @@ create table user (
   `firstname` varchar(100) not null,
   `lastname` varchar(100) not null,
   `email` varchar(255) not null,
-  `role` varchar(45) not null,
   `login` varchar(255) not null,
   `password` varchar(255) not null,
   unique index email_unique (`email` asc) visible,
@@ -12,13 +11,11 @@ create table user (
 create table department (
   `id` bigint primary key not null auto_increment,
   `name` varchar(255) not null,
-  `user_id` bigint not null,
-  foreign key (user_id) references maindb.user(id));
+  `location` varchar(255) not null;
   
   create table employee (
   `id` bigint primary key not null auto_increment,
   `name` varchar(45) not null,
-  `role` varchar(45) not null default 'e',
   `user_id` bigint not null,
   `department_id` bigint not null,
   foreign key (user_id) references maindb.user (id),
@@ -31,8 +28,7 @@ create table customer (
   `tax_number` int not null,
   `owner` varchar(255) not null,
   `department_id` bigint not null,
-  foreign key (department_id) references maindb.department(id),
-  unique index `tax_number_unique` (`tax_number` asc) visible);
+  foreign key (department_id) references maindb.department(id);
 
 create table provider (
   `id` bigint primary key not null auto_increment,
@@ -41,17 +37,14 @@ create table provider (
   `location` varchar(45) not null,
   `owner` varchar(45) null,
   `department_id` bigint not null,
-  foreign key (department_id) references maindb.department(id),
-  unique index `tax_number_unique` (`tax_number` asc) visible);
+  foreign key (department_id) references maindb.department(id);
 
 create table material (
   `id` bigint primary key not null auto_increment,
   `name` varchar(255) not null,
   `property` varchar(45) null,
   `value` int not null,
-  `provider_id` bigint not null,
   `department_id` bigint not null,
-  foreign key (provider_id) references maindb.provider(id),
   foreign key (department_id) references maindb.department(id));
 
 create table product (
@@ -67,12 +60,7 @@ create table task (
   `description` varchar(450) not null,
   `dead_line` datetime(6) not null,
   `priority` int null,
-  `workday` date not null,
-  `department_id` BIGINT NOT NULL,
-  foreign key (department_id) references maindb.department(id));
-  
-alter table department
-add column `location` varchar(255) not null;
+  `workday` date not null;
 
 create table employee_task (
   `id` bigint primary key not null auto_increment,
@@ -80,12 +68,6 @@ create table employee_task (
   `task_id` bigint not null,
   foreign key (employee_id) references maindb.employee(id),
   foreign key (task_id) references maindb.task(id));
-
-alter table employee
-drop column `role`;
-
-alter table user
-drop column `role`;
 
 CREATE TABLE `maindb`.`role` (
   `id` BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
