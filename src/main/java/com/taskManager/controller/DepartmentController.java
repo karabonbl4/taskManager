@@ -8,8 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
-
 @Controller
 @RequiredArgsConstructor
 public class DepartmentController {
@@ -33,7 +31,7 @@ public class DepartmentController {
     }
     @GetMapping(value = "/departmentDetails")
     public String getDepartmentDetails(@RequestParam long id, @NotNull Model model){
-        var departmentDto = departmentService.convertDepartmentToDepartmentDto(departmentService.findById(id));
+        var departmentDto = departmentService.findById(id);
         model.addAttribute("department", departmentDto);
         return "departmentDetails";
     }

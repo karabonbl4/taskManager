@@ -18,10 +18,10 @@ public class ProviderController {
     @GetMapping(value = "/provider")
     public String getProviders(@RequestParam("department_id") long id, @NotNull Model model){
         var department = departmentService.findById(id);
-        var providers = department.getProviders();
-        model.addAttribute("department", departmentService.convertDepartmentToDepartmentDto(department));
+        var providers = departmentService.getDepartmentProviders(id);
+        model.addAttribute("department", department);
         model.addAttribute("providers", providers);
-        model.addAttribute("providerError", "You already have such proovider!");
+        model.addAttribute("providerError", "You already have such provider!");
         return "provider";
     }
 }

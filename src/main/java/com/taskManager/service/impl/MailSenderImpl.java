@@ -1,6 +1,6 @@
 package com.taskManager.service.impl;
 
-import com.taskManager.model.dto.EmployeeDto;
+import com.taskManager.service.dto.EmployeeDto;
 import com.taskManager.service.MailSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

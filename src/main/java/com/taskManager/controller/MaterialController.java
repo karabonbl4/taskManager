@@ -2,7 +2,6 @@ package com.taskManager.controller;
 
 import com.taskManager.service.DepartmentService;
 import com.taskManager.service.MaterialService;
-import com.taskManager.service.ProviderService;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Controller;
@@ -19,8 +18,8 @@ public class MaterialController {
     @GetMapping(value = "/material")
     public String getProviders(@RequestParam("department_id") long id, @NotNull Model model){
         var department = departmentService.findById(id);
-        var materials = department.getMaterials();
-        model.addAttribute("department", departmentService.convertDepartmentToDepartmentDto(department));
+        var materials = departmentService.getDepartmentMaterials(id);
+        model.addAttribute("department", department);
         model.addAttribute("materials", materials);
         model.addAttribute("materialError", "You already have such material!");
         return "material";

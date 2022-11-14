@@ -1,6 +1,7 @@
-package com.taskManager.model.dto;
+package com.taskManager.service.dto;
 
 import lombok.Data;
+
 
 @Data
 public class DepartmentDto {
@@ -9,4 +10,5 @@ public class DepartmentDto {
     private String location;
     private String manager;
     private String authUserFunction;
+
 }

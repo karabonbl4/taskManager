@@ -33,13 +33,13 @@ public class Employee {
     @JoinColumn(name = "department_id")
     private Department department;
 
-//    @Override
-//    public String toString() {
-//        return "Employee{" +
-//                "id=" + id +
-//                ", name='" + name + '\'' +
-//                ", userId=" + user +
-//                ", tasks=" + tasks.toString() +
-//                '}';
-//    }
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", userId=" + user +
+                ", tasks=" + tasks.toString() +
+                '}';
+    }
 }

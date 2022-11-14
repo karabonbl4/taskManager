@@ -1,10 +1,8 @@
 package com.taskManager.model.entity;
 
 import lombok.Data;
-import org.hibernate.annotations.common.reflection.XProperty;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Data
 @Entity

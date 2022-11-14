@@ -25,4 +25,6 @@ public class Task {
     private Date workday;
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "tasks")
     private List<Employee> employees;
+
+
 }

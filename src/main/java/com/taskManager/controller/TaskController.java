@@ -29,7 +29,7 @@ public class TaskController {
         }
         var filteredTasks = taskService.filterByDate(taskService.findByDepartmentId(id), date);
         model.addAttribute("tasks", filteredTasks);
-        model.addAttribute("department", departmentService.convertDepartmentToDepartmentDto(department));
+        model.addAttribute("department", department);
         return "task";
     }
 }

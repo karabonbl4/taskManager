@@ -1,6 +1,6 @@
 package com.taskManager.controller;
 
-import com.taskManager.model.dto.EmployeeDto;
+import com.taskManager.service.dto.EmployeeDto;
 import com.taskManager.model.entity.Department;
 import com.taskManager.model.entity.Employee;
 import com.taskManager.service.DepartmentService;
@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.stream.Collectors;
-
 @Controller
 @RequiredArgsConstructor
 public class EmployeeController {
@@ -29,11 +27,9 @@ public class EmployeeController {
     @GetMapping(value = "/employee")
     public String getEmployees(@RequestParam("department_id") long id, @NotNull Model model){
         var department = departmentService.findById(id);
-        var employees = department.getEmployees().stream()
-                .map(employeeService::convertToEmployeeDto)
-                .collect(Collectors.toList());
+        var employees = departmentService.getDepartmentEmployees(id);
         model.addAttribute("employees", employees);
-        model.addAttribute("department", departmentService.convertDepartmentToDepartmentDto(department));
+        model.addAttribute("department", department);
         return "employee";
     }
     @GetMapping(value = "/invoiceEmployee")
@@ -41,7 +37,7 @@ public class EmployeeController {
         var department = departmentService.findById(id);
         EmployeeDto invitedEmployee = new EmployeeDto();
         model.addAttribute("newEmployee", invitedEmployee);
-        model.addAttribute("department", departmentService.convertDepartmentToDepartmentDto(department));
+        model.addAttribute("department",department);
         return "invoiceEmployee";
     }
     @PostMapping(value = "/invoiceEmployee")
@@ -49,7 +45,7 @@ public class EmployeeController {
         var department = departmentService.findById(invitedEmployee.getDepartmentId());
         var invoiceLinkByEmployee = mailSender.createInvoiceLinkByEmployee(invitedEmployee);
         mailSender.sendInvoice(invitedEmployee.getEmail(), invoiceLinkByEmployee);
-        model.addAttribute("department", departmentService.convertDepartmentToDepartmentDto(department));
+        model.addAttribute("department", department);
         return "employee";
     }
     @GetMapping(value = "/invoiceHandler")
@@ -57,7 +53,7 @@ public class EmployeeController {
                                       @RequestParam("name") String jobTitle,
                                       @RequestParam("email") String email, Model model){
         var department = departmentService.findById(Long.parseLong(id));
-        model.addAttribute("department", departmentService.convertDepartmentToDepartmentDto(department));
+        model.addAttribute("department", department);
         var employeeDto = new EmployeeDto();
         employeeDto.setJobTitle(jobTitle);
         employeeDto.setDepartmentId(Long.parseLong(id));
@@ -72,16 +68,16 @@ public class EmployeeController {
         var employee = new Employee();
         employee.setName(newEmployee.getJobTitle());
         employee.setUser(user);
-        employee.setDepartment(department);
+        employee.setDepartment(departmentService.getById(newEmployee.getDepartmentId()));
         employeeService.save(employee);
-        model.addAttribute("department", departmentService.convertDepartmentToDepartmentDto(department));
+        model.addAttribute("department", department);
         return "departmentDetails";
     }
     @PostMapping(value = "/invoiceHandler", params="cancel")
     public String backToDepartment(@ModelAttribute("newEmployee") EmployeeDto newEmployee, Model model){
         var departments = departmentService.getDepartmentsDto();
         model.addAttribute("departments", departments);
-        model.addAttribute("newDepartment", new Department());
+        model.addAttribute("newDepartment", new Department()); //overwrite to deptDto
         return "department";
     }
 }

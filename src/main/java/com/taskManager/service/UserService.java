@@ -1,6 +1,5 @@
 package com.taskManager.service;
 
-import com.taskManager.model.entity.Department;
 import com.taskManager.model.entity.User;
 
 import java.util.List;
