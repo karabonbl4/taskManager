@@ -6,32 +6,61 @@
     <title>Handle of invoice</title>
 </head>
 <body>
-    <jsp:include page="departmentDetails.jsp"/>
-    <div>
-        <form:form method="POST" modelAttribute="newEmployee">
-            <h2>Offer</h2>
-            <form:label path="jobTitle">Job title:<form:input path="jobTitle" value="${newEmployee.jobTitle}" /></form:label><br>
-            <form:label path="username">Username:<form:input path="username" value="${username}" /></form:label><br>
-            <form:input type="hidden" path="departmentId" value="${departmentId}" />
-            <input type="submit" name="submit" value="Agree" /><input type="submit" name="cancel" value="Disagree" />
-          </form:form>
-    </div>
-    <div>
-    <br>
-        <c:if test = "${employees.size() > 0}">
-            <table>
-              <tr>
-                <th>Username</th>
-                <th>Function</th>
-              </tr>
-              <c:forEach items="${employees}" var="employee">
-                <tr>
-                  <td>${employee.username}</td>
-                  <td>${employee.name}</td>
-                </tr>
-              </c:forEach>
-            </table>
-        </c:if>
+    <c:if test="${department.authUserFunction=='manager'}">
+        <jsp:include page="common/header.jsp"/>
+    </c:if>
+    <c:if test="${department.authUserFunction!='manager'}">
+        <jsp:include page="index.jsp"/>
+    </c:if>
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-md-7 col-lg-8">
+                <div>
+                    <button type="button" onclick="document.location='/task?department_id=${department.id}&calendar='" class="w-100 btn btn-primary btn-lg" disabled>Tasks</button>
+                </div><br>
+                <form:form method="POST" modelAttribute="newEmployee">
+                      <div class="card border-primary mb-3 text-center" style="max-width: 18rem;">
+                            <div class="card-header">Offer</div>
+                                <div class"card-body">
+                                <h5 class="card-title">${department.name}, ${department.location}</h5>
+                                   <div class="mb-3 row">
+                                       <label for="jobTitle" class="col-sm-6 col-form-label">Job title</label>
+                                   <div class="col-sm-6">
+                                        <form:input type="text" readonly="true" class="form-control-plaintext" path="jobTitle" id="jobTitle" value="${newEmployee.jobTitle}" />
+                                   </div>
+                                   </div>
+                                  <div class="mb-3 row">
+                                       <label for="username" class="col-sm-6 col-form-label">Username</label>
+                                  <div class="col-sm-6">
+                                       <form:input type="text" readonly="true" class="form-control-plaintext" path="username" id="username" value="${username}" />
+                                  </div>
+                                  </div>
+                                    <div>
+                                        <div>
+                                            <form:input type="hidden" path="departmentId" value="${department.id}"></form:input>
+                                        </div>
+                                    </div>
+                                </div>
+                      </div>
+                    <input type="submit" class="btn btn-primary" name="submit" value="Agree"/>
+                    <input type="submit" class="btn btn-danger" name="cancel" value="Disagree"/>
+                </form:form>
+            </div>
+            <div class="col-md-5 col-lg-4 order-md-last">
+                <div class="card text-bg-info mb-3" style="max-width: 18rem;">
+                    <div class="card-header">Info</div>
+                        <div class="card-body">
+                            <h5 class="card-title">Department info</h5>
+                                <p class="card-text">Title: ${department.name}</p>
+                                <p class="card-text">Location: ${department.location}</p>
+                            <h5 class="card-title">User info</h5>
+                                <p class="card-text">Username: ${pageContext.request.userPrincipal.name}</p>
+                                <p class="card-text">Function: ${department.authUserFunction}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>
