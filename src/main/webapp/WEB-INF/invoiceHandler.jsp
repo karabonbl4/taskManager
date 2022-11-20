@@ -16,18 +16,21 @@
         <div class="row g-5">
             <div class="col-md-7 col-lg-8">
                 <div>
-                    <button type="button" onclick="document.location='/task?department_id=${department.id}&calendar='" class="w-100 btn btn-primary btn-lg" disabled>Tasks</button>
-                </div><br>
+                    <form:form method="GET" action="/task" modelAttribute="workDayWithDepartmentIdDto">
+                        <form:input type="hidden" path="departmentId" value="${department.id}"></form:input>
+                        <input type="submit" class="w-100 btn btn-primary btn-lg" value="Tasks"></input>
+                    </form:form>
+                    </div><br>
                 <form:form method="POST" modelAttribute="newEmployee">
                       <div class="card border-primary mb-3 text-center" style="max-width: 18rem;">
-                            <div class="card-header">Offer</div>
+                            <div class="card-header">Invoice</div>
                                 <div class"card-body">
                                 <h5 class="card-title">${department.name}, ${department.location}</h5>
                                    <div class="mb-3 row">
                                        <label for="jobTitle" class="col-sm-6 col-form-label">Job title</label>
-                                   <div class="col-sm-6">
+                                      <div class="col-sm-6">
                                         <form:input type="text" readonly="true" class="form-control-plaintext" path="jobTitle" id="jobTitle" value="${newEmployee.jobTitle}" />
-                                   </div>
+                                      </div>
                                    </div>
                                   <div class="mb-3 row">
                                        <label for="username" class="col-sm-6 col-form-label">Username</label>

@@ -12,22 +12,32 @@
     <c:if test="${department.authUserFunction!='manager'}">
         <jsp:include page="index.jsp"/>
     </c:if>
+    <c:set var="calendar" value=""/>
     <div class="container">
         <div class="row g-5">
             <div class="col-md-7 col-lg-8">
                 <div>
-                    <button type="button" onclick="document.location='/task?department_id=${department.id}&calendar='" class="w-100 btn btn-primary btn-lg">Tasks</button>
-                </div><br>
+                    <form:form method="GET" action="/task" modelAttribute="workDayWithDepartmentIdDto">
+                                      <form:input type="hidden" path="departmentId" value="${department.id}"></form:input>
+                                      <input type="submit" class="w-100 btn btn-primary btn-lg" value="Tasks"></input>
+                                  </form:form>
+                    </div><br>
+                <div>
+                    <a href = "/createTask?departmentId=${department.id}">Create new task</a><br>
+                </div>
                 <div>
                    <h5 class="display 6">Choose the date to see your tasks:</h5>
-                   <form class="row g-3">
+                   <form:form method="POST" class="row g-3" modelAttribute="workDayWithDepartmentIdDto">
                           <div class="col-auto">
-                              <input type="date" class="form-control" name="calendar">
+                              <form:input type="hidden"  path="departmentId" value="${department.id}"></form:input>
                           </div>
                           <div class="col-auto">
-                              <input type="submit" class="btn btn-primary" value="Choose">
+                              <form:input type="date" class="form-control" path="date" name="newCalendar" value="${newCalendar}"></form:input>
                           </div>
-                   </form>
+                          <div class="col-auto">
+                              <button type="submit" class="btn btn-primary">Choose</button>
+                          </div>
+                   </form:form>
                 </div>
                 <div>
                     <c:if test = "${tasks.size() == 0}">
@@ -49,8 +59,9 @@
                            <td>${task.name}</td>
                            <td>${task.description}</td>
                            <td>${task.priority}</td>
-                           <td>${task.executor}</td>
-                           <td>${task.deadline}</td>
+                           <td><c:forEach items="${task.employees}" var="executor">
+                                <p>${executor.name}</p></c:forEach></td>
+                           <td>${task.deadLine}</td>
                         </tr>
                         </c:forEach>
                     </table>

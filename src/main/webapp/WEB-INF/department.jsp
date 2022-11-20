@@ -41,15 +41,21 @@
         <th scope="col">Location</th>
         <th scope="col">Function</th>
         <th scope="col">Manager</th>
+        <th scope="col"></th>
       </tr>
     </thead>
     <tbody>
       <c:forEach items="${departments}" var="department">
         <tr>
-          <td><a href="/task?department_id=${department.id}&calendar=">${department.name}</td>
+          <td><form:form method="GET" action="/task" modelAttribute="workDayWithDepartmentIdDto">
+                  <form:input type="hidden" path="departmentId" value="${department.id}"></form:input>
+                  <input type="submit" class="btn btn-link" value="${department.name}"/>
+              </form:form>
+          </td>
           <td>${department.location}</td>
           <td>${department.authUserFunction}</td>
           <td>${department.manager}</td>
+          <td><input type="button" action="/editDepartment?departmentId=${department.id}" class="btn btn-secondary btn-sm" value="Edit"/></td>
         </tr>
       </c:forEach>
       </tbody>

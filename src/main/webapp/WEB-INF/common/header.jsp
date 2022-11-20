@@ -20,11 +20,11 @@
                     <svg class="bi me-2" width="45" height="45" role="img" aria-label="TaskManager"><image width="45" height="45" xlink:href="https://files.fm/thumb_show.php?i=sgx9pc45f"/></svg>
                 </a>
                 <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-                    <li><a href="/customer?department_id=${department.id}" class="nav-link px-2 link-secondary">Customers</a></li>
-                    <li><a href="/provider?department_id=${department.id}" class="nav-link px-2 link-secondary">Providers</a></li>
-                    <li><a href="/material?department_id=${department.id}" class="nav-link px-2 link-secondary">Materials</a></li>
-                    <li><a href="/employee?department_id=${department.id}" class="nav-link px-2 link-secondary">Employees</a></li>
-                    <li><a href="/report?department_id=${department.id}" class="nav-link px-2 link-secondary">Reports</a></li>
+                    <li><a href="/customer?departmentId=${department.id}" class="nav-link px-2 link-secondary">Customers</a></li>
+                    <li><a href="/provider?departmentId=${department.id}" class="nav-link px-2 link-secondary">Providers</a></li>
+                    <li><a href="/material?departmentId=${department.id}" class="nav-link px-2 link-secondary">Materials</a></li>
+                    <li><a href="/employee?departmentId=${department.id}" class="nav-link px-2 link-secondary">Employees</a></li>
+                    <li><a href="/report?departmentId=${department.id}" class="nav-link px-2 link-secondary">Reports</a></li>
                 </ul>
                 <div class="col-md-3 text-end">
                     <a href="/department" class="btn btn-outline-primary me-2">Departments</a>

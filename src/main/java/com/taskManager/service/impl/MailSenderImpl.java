@@ -32,7 +32,7 @@ public class MailSenderImpl implements MailSender {
     public String createInvoiceLinkByEmployee(EmployeeDto employeeDto) {
         String link = host.concat(port)
                 .concat("/invoiceHandler?")
-                .concat("department_id=" + employeeDto.getDepartmentId().toString())
+                .concat("departmentId=" + employeeDto.getDepartmentId().toString())
                 .concat("&name=" + employeeDto.getJobTitle())
                 .concat("&email=" + employeeDto.getEmail());
         return link;

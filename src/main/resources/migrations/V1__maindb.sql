@@ -57,7 +57,7 @@ create table product (
 create table task (
   `id` bigint primary key not null auto_increment,
   `name` varchar(150) not null,
-  `description` varchar(450) not null,
+  `description` varchar(150) not null,
   `dead_line` datetime(6) not null,
   `priority` int null,
   `workday` date not null;

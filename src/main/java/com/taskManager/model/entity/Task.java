@@ -3,8 +3,7 @@ package com.taskManager.model.entity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -12,19 +11,29 @@ import java.util.List;
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     @Column
     private String name;
     @Column
-    private StringBuilder description;
+    private String description;
     @Column
-    private Timestamp deadLine;
+    private Date deadLine;
     @Column
-    private int priority;
+    private Integer priority;
     @Column
     private Date workday;
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "tasks")
     private List<Employee> employees;
 
-
+//    @Override
+//    public String toString() {
+//        return "Task{" +
+//                "id=" + id +
+//                ", name='" + name + '\'' +
+//                ", description='" + description + '\'' +
+//                ", deadLine=" + deadLine +
+//                ", priority=" + priority +
+//                ", workday=" + workday +
+//                '}';
+//    }
 }

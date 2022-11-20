@@ -16,12 +16,14 @@
         <div class="row g-5">
             <div class="col-md-7 col-lg-8">
                 <div>
-                    <button type="button" onclick="document.location='/task?department_id=${department.id}&calendar='" class="w-100 btn btn-primary btn-lg">Tasks</button>
+                    <form:form method="GET" action="/task" modelAttribute="workDayWithDepartmentIdDto">
+                        <form:input type="hidden" path="departmentId" value="${department.id}"></form:input>
+                        <input type="submit" class="w-100 btn btn-primary btn-lg" value="Tasks"></input>
+                    </form:form>
                 </div><br>
                 <c:if test = "${customers.size() == 0}">
                         <h4>Customers not found</h4>
                 </c:if>
-
                     <c:if test = "${customers.size() > 0}">
                         <table>
                           <tr>
@@ -40,8 +42,7 @@
                           </c:forEach>
                         </table>
                     </c:if>
-
-            </div>
+        </div>
             <div class="col-md-5 col-lg-4 order-md-last">
                 <div class="card text-bg-info mb-3" style="max-width: 18rem;">
                     <div class="card-header">Info</div>

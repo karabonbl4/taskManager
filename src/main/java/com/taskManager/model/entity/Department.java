@@ -29,11 +29,11 @@ public class Department {
         return "Department{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", employees=" + employees +
+                ", employees=" + employees.toString() +
                 ", location=" + location +
-                ", customers=" + customers +
-                ", materials=" + materials +
-                ", providers=" + providers +
+                ", customers=" + customers.toString() +
+                ", materials=" + materials.toString() +
+                ", providers=" + providers.toString() +
                 '}';
     }
 }

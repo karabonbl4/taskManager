@@ -16,7 +16,10 @@
         <div class="row g-5">
             <div class="col-md-7 col-lg-8">
                 <div>
-                    <button type="button" onclick="document.location='/task?department_id=${department.id}&calendar='" class="w-100 btn btn-primary btn-lg">Tasks</button>
+                    <form:form method="GET" action="/task" modelAttribute="workDayWithDepartmentIdDto">
+                        <form:input type="hidden" path="departmentId" value="${department.id}"></form:input>
+                        <input type="button" class="w-100 btn btn-primary btn-lg" value="Tasks"></input>
+                    </form:form>
                 </div><br>
                 <form:form method="POST" modelAttribute="newEmployee">
                     <h2 class="display-6">Invite new employee</h2>

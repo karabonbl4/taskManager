@@ -39,7 +39,6 @@ public class Employee {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", userId=" + user +
-                ", tasks=" + tasks.toString() +
                 '}';
     }
 }
