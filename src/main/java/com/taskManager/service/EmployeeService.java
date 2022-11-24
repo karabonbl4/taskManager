@@ -11,7 +11,8 @@ public interface EmployeeService {
     Employee findByUserAndDepartment(User user, Department department);
     List<Employee> findByUser(User user);
     void save(Employee employee);
+    void saveAll(List<Employee> employees);
+    Employee findById(Long id);
     EmployeeDto convertToEmployeeDto(Employee employee);
-//    Employee convertToEmployee(EmployeeDto employeeDto);
 
 }

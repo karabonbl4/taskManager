@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MaterialRepository extends JpaRepository<Material, Integer> {
+    Material findById(Long id);
 }

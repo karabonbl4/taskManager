@@ -89,6 +89,19 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+				<version>8.0.2</version>
+				<configuration>
+					<locations>
+						<location>filesystem:src/main/resources/migrations</location>
+					</locations>
+					<url>jdbc:mysql://localhost:3306/maindb</url>
+					<user>root</user>
+					<password>As107411</password>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>

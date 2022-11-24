@@ -24,7 +24,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public boolean save(Department department) {
-        if (findByUsername().stream()
+        if (findByAuthUsername().stream()
                 .anyMatch(dept -> dept.getName().equalsIgnoreCase(department.getName())) || department.getName().equalsIgnoreCase("")) {
             return false;
         }
@@ -33,13 +33,13 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public List<Department> findByUsername() {
+    public List<Department> findByAuthUsername() {
         return departmentRepository.findByEmployees_User_Username(userService.getAuthUser().getUsername());
     }
 
     @Override
     public List<DepartmentDto> getDepartmentsDto() {
-        return findByUsername().stream()
+        return findByAuthUsername().stream()
                 .map(this::convertToDepartmentDto)
                 .collect(Collectors.toList());
     }

@@ -26,8 +26,9 @@ create table customer (
   `name` varchar(255) not null,
   `location` varchar(255) not null,
   `tax_number` int not null,
-  `owner` varchar(255) not null,
+  `owner` varchar(255) null,
   `department_id` bigint not null,
+  `email` varchar(255) not null,
   foreign key (department_id) references maindb.department(id);
 
 create table provider (
@@ -37,6 +38,7 @@ create table provider (
   `location` varchar(45) not null,
   `owner` varchar(45) null,
   `department_id` bigint not null,
+  `email` varchar(255) not null,
   foreign key (department_id) references maindb.department(id);
 
 create table material (
@@ -57,7 +59,7 @@ create table product (
 create table task (
   `id` bigint primary key not null auto_increment,
   `name` varchar(150) not null,
-  `description` varchar(450) not null,
+  `description` varchar(150) not null,
   `dead_line` datetime(6) not null,
   `priority` int null,
   `workday` date not null;

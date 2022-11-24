@@ -1,51 +1,68 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
+<%@ page contentType="text/html; charset=utf-8" language="java" isELIgnored="false" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
     <title>Departments</title>
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/grid/">
+    <style>
+         <%@include file='css/grid.css' %>
+    </style>
+  <%@include file='index.jsp' %>
 </head>
-<style>
-table, th, td {
-  border:1px solid black;
-}
-</style>
 <body>
-<div>
-  <form:form method="POST" modelAttribute="newDepartment">
-    <h2>Add new department</h2>
-    <div>
-          <form:input type="name" path="name" placeholder="Name"></form:input>
+<main>
+<div class="container">
+  <form:form class="row g-3" method="POST" modelAttribute="newDepartment">
+    <div class="col-auto">
+     <label for="staticEmail2" class="visually-hidden">Title</label>
+          <form:input type="text" class="form-control" id="staticEmail2" path="name" placeholder="Title"></form:input>
           <form:errors path="name"></form:errors>
           ${departmentError}
     </div>
-    <div>
-          <form:input type="location" path="location" placeholder="Location"></form:input>
+    <div class="col-auto">
+      <label for="staticEmail2" class="visually-hidden">Location</label>
+          <form:input type="text" class="form-control" id="staticEmail2" path="location" placeholder="Location"></form:input>
     </div>
-    <button type="submit">Add department</button>
+    <div class="col-auto">
+    <button type="submit" class="btn btn-primary mb-3">Add department</button>
+    </div>
   </form:form>
-</div>
 <c:if test = "${departments.size() == 0}">
     <h4>Departments not found</h4>
 </c:if>
 <c:if test = "${departments.size() > 0}">
-    <h2>Your departments</h2>
-    <table>
+    <div class="container-fluid"><h1 class="display-6">Your departments</h1></div>
+    <table class="table">
+    <thead>
       <tr>
-        <th>Name</th>
-        <th>Location</th>
-        <th>Function</th>
-        <th>Manager</th>
+        <th scope="col">Name</th>
+        <th scope="col">Location</th>
+        <th scope="col">Function</th>
+        <th scope="col">Manager</th>
+        <th scope="col"></th>
       </tr>
+    </thead>
+    <tbody>
       <c:forEach items="${departments}" var="department">
         <tr>
-          <td><a href="/departmentDetails/?id=${department.id}">${department.name}</td>
+          <td><form:form method="GET" action="/task" modelAttribute="workDayWithDepartmentIdDto">
+                  <form:input type="hidden" path="departmentId" value="${department.id}"></form:input>
+                  <input type="submit" class="btn btn-link" value="${department.name}"/>
+              </form:form>
+          </td>
           <td>${department.location}</td>
           <td>${department.authUserFunction}</td>
           <td>${department.manager}</td>
+          <td><input type="button" action="/editDepartment?departmentId=${department.id}" class="btn btn-secondary btn-sm" value="Edit"/></td>
         </tr>
       </c:forEach>
+      </tbody>
     </table>
 </c:if>
+</div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>
