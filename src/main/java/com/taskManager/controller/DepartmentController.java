@@ -3,7 +3,7 @@ package com.taskManager.controller;
 import com.taskManager.service.DepartmentService;
 import com.taskManager.service.dto.DepartmentDto;
 import com.taskManager.service.dto.WorkDayWithDepartmentIdDto;
-import com.taskManager.service.mapper.DateConverter;
+import com.taskManager.service.converter.DateConverter;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Controller;
@@ -37,11 +37,4 @@ public class DepartmentController {
         }
         return "redirect:/department";
     }
-//    @GetMapping(value = "/departmentDetails")
-//    public String getDepartmentDetails(@RequestParam long id, @NotNull Model model){
-//        var departmentDto = departmentService.findById(id);
-//        model.addAttribute("department", departmentDto);
-//        return "departmentDetails";
-//    }
-
 }

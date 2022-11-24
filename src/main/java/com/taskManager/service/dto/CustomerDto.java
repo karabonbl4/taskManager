@@ -8,6 +8,7 @@ public class CustomerDto {
     private String name;
     private Integer taxNumber;
     private String location;
+    private String owner;
     private String email;
     private Long departmentId;
 }

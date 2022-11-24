@@ -21,25 +21,37 @@
                         <input type="submit" class="w-100 btn btn-primary btn-lg" value="Tasks"></input>
                     </form:form>
                 </div><br>
+                <a href = "/createProvider?departmentId=${department.id}">Create new provider</a><br>
                 <c:if test = "${providers.size() == 0}">
-                        <h4>Providers not found</h4>
+                <h4>Providers not found</h4>
                 </c:if>
                     <c:if test = "${providers.size() > 0}">
-                        <table>
-                          <tr>
-                            <th>Name</th>
-                            <th>Location</th>
-                            <th>Tax number</th>
-                            <th>Email</th>
-                          </tr>
-                          <c:forEach items="${providers}" var="provider">
-                            <tr>
-                              <td>${provider.name}</td>
-                              <td>${provider.location}</td>
-                              <td>${provider.taxNumber}</td>
-                              <td>${provider.email}</td>
-                            </tr>
-                          </c:forEach>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Title</th>
+                                    <th scope="col">Tax number</th>
+                                    <th scope="col">Location</th>
+                                    <th scope="col">Owner</th>
+                                    <th scope="col">E-mail</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach items="${providers}" var="provider">
+                                    <tr>
+                                        <td scope="raw">${providers.indexOf(provider) + 1}</td>
+                                        <td>${provider.name}</td>
+                                        <td>${provider.taxNumber}</td>
+                                        <td>${provider.location}</td>
+                                        <td>${provider.owner}</td>
+                                        <td>${provider.email}</td>
+                                        <td><input type="button" action="/editProvider?departmentId=${department.id}" class="btn btn-secondary btn-sm" value="Edit"/></td>
+                                        <td><input type="button" action="/deleteProvider?departmentId=${department.id}" class="btn btn-danger  btn-sm" value="Delete"/></td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
                         </table>
                     </c:if>
         </div>

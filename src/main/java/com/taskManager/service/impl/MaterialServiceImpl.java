@@ -1,6 +1,7 @@
 package com.taskManager.service.impl;
 
 import com.taskManager.model.entity.Material;
+import com.taskManager.model.repository.DepartmentRepository;
 import com.taskManager.model.repository.MaterialRepository;
 import com.taskManager.service.DepartmentService;
 import com.taskManager.service.MaterialService;
@@ -12,16 +13,29 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MaterialServiceImpl implements MaterialService {
     private final MaterialRepository materialRepository;
-//    private final DepartmentService departmentService;
+    private final DepartmentRepository departmentRepository;
+
+    @Override
+    public boolean save(Material material) {
+        if(departmentRepository.findById(material.getDepartmentMaterial().getId()).getMaterials().stream()
+                .anyMatch(materialFromDept -> materialFromDept.getName().equals(material.getName())
+                        &&materialFromDept.getProperty().equals(material.getProperty()))){
+           return false;
+        }
+        materialRepository.save(material);
+        return true;
+    }
 
     @Override
     public Material convertToMaterial(MaterialDto materialDto) {
         var material = new Material();
-        material.setId(materialDto.getId());
+        if(materialDto.getId()!=0){
+            material = findById(materialDto.getId());
+        }
         material.setName(materialDto.getName());
-//        material.setDepartmentMaterial(departmentService.convertToDepartment(departmentService.findById(materialDto.getDepartmentId())));
         material.setProperty(materialDto.getProperty());
         material.setValue(materialDto.getValue());
+        material.setDepartmentMaterial(departmentRepository.findById(materialDto.getDepartmentId()));
         return material;
     }
 
@@ -34,5 +48,19 @@ public class MaterialServiceImpl implements MaterialService {
         materialDto.setProperty(material.getProperty());
         materialDto.setValue(material.getValue());
         return materialDto;
+    }
+
+    @Override
+    public boolean update(Material material) {
+        if (material.equals(materialRepository.findById(material.getId()))){
+            return false;
+        }
+        materialRepository.saveAndFlush(material);
+        return true;
+    }
+
+    @Override
+    public Material findById(Long id) {
+        return materialRepository.findById(id);
     }
 }

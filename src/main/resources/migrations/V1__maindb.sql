@@ -26,8 +26,9 @@ create table customer (
   `name` varchar(255) not null,
   `location` varchar(255) not null,
   `tax_number` int not null,
-  `owner` varchar(255) not null,
+  `owner` varchar(255) null,
   `department_id` bigint not null,
+  `email` varchar(255) not null,
   foreign key (department_id) references maindb.department(id);
 
 create table provider (
@@ -37,6 +38,7 @@ create table provider (
   `location` varchar(45) not null,
   `owner` varchar(45) null,
   `department_id` bigint not null,
+  `email` varchar(255) not null,
   foreign key (department_id) references maindb.department(id);
 
 create table material (

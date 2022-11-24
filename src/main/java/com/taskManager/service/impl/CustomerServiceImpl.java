@@ -2,6 +2,7 @@ package com.taskManager.service.impl;
 
 import com.taskManager.model.entity.Customer;
 import com.taskManager.model.repository.CustomerRepository;
+import com.taskManager.model.repository.DepartmentRepository;
 import com.taskManager.service.CustomerService;
 import com.taskManager.service.dto.CustomerDto;
 import lombok.RequiredArgsConstructor;
@@ -13,11 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
-
-    @Override
-    public List<Customer> findByDepartmentId(long id) { //check condition of customer, because throw EX, that customer not found
-        return customerRepository.findByDepartmentId(id);
-    }
+    private final DepartmentRepository departmentRepository;
 
     @Override
     public Customer findByTaxNumber(Integer taxNumber) {
@@ -26,10 +23,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public boolean save(Customer customer) {
-        if (findByTaxNumber(customer.getTaxNumber())!=null){ //other condition
+        if (departmentRepository.findById(customer.getDepartmentId().getId()).getCustomers().stream()
+                .anyMatch(existCustomer->existCustomer.getTaxNumber().equals(customer.getTaxNumber()))){
             return false;
         }
-        customerRepository.save(customer);
+        customerRepository.saveAndFlush(customer);
         return true;
     }
 
@@ -41,6 +39,7 @@ public class CustomerServiceImpl implements CustomerService {
         customerDto.setTaxNumber(customer.getTaxNumber());
         customerDto.setEmail(customer.getEmail());
         customerDto.setLocation(customer.getLocation());
+        customerDto.setOwner(customer.getOwner());
         customerDto.setDepartmentId(customer.getDepartmentId().getId());
         return customerDto;
     }
@@ -48,12 +47,26 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer convertToCustomer(CustomerDto customerDto) {
         var customer = new Customer();
+        if(customerDto.getId()!=0){
+            customer = findById(customerDto.getId());
+        }
         customer.setName(customerDto.getName());
         customer.setTaxNumber(customerDto.getTaxNumber());
         customer.setEmail(customerDto.getEmail());
         customer.setLocation(customerDto.getLocation());
-//        customer.setDepartmentId(departmentService.getById(customerDto.getDepartmentId()));
+        customer.setOwner(customerDto.getOwner());
+        customer.setDepartmentId(departmentRepository.findById(customerDto.getDepartmentId()));
         return customer;
+    }
+
+    @Override
+    public void update(Customer customer) {
+        customerRepository.saveAndFlush(customer);
+    }
+
+    @Override
+    public Customer findById(long id) {
+        return customerRepository.findById(id);
     }
 
 }

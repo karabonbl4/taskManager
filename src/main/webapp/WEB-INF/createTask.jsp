@@ -3,15 +3,15 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
+    <title>New task</title>
+</head>
+<body>
     <c:if test="${department.authUserFunction=='manager'}">
         <jsp:include page="common/header.jsp"/>
     </c:if>
     <c:if test="${department.authUserFunction!='manager'}">
         <jsp:include page="index.jsp"/>
     </c:if>
-    <title>New task</title>
-</head>
-<body>
     <div class="container">
         <div class="row g-5">
             <div class="col-md-7 col-lg-8">
@@ -64,7 +64,6 @@
                             <label for="floatingExecutors" class="col-sm-2 col-form-label">Executors</label>
                                 <div class="col-sm-10">
                                 <form:select class="form-select" id="floatingExecutors" path="executors" multiple="multiple">
-                                        <option selected>Choose executors</option>
                                         <c:forEach items="${employees}" var="executor">
                                             <option value="${executor.id}">${executor.jobTitle}</option>
                                         </c:forEach>

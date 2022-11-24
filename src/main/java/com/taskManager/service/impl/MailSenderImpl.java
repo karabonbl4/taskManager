@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 public class MailSenderImpl implements MailSender {
     private final JavaMailSender mailSender;
     private final StringBuilder invoiceText = new StringBuilder("You are invited to be part of the team:");
-    private final String subject = new String("Invoice");
     @Value("${app.host}")
     private String host;
     @Value("${server.port}")
@@ -23,6 +22,7 @@ public class MailSenderImpl implements MailSender {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setFrom("karabonbl4@gmail.com");
         mailMessage.setTo(to);
+        String subject = "Invoice";
         mailMessage.setSubject(subject);
         mailMessage.setText(invoiceText +"\n"+ link);
         mailSender.send(mailMessage);
@@ -30,11 +30,10 @@ public class MailSenderImpl implements MailSender {
 
     @Override
     public String createInvoiceLinkByEmployee(EmployeeDto employeeDto) {
-        String link = host.concat(port)
+        return host.concat(port)
                 .concat("/invoiceHandler?")
                 .concat("departmentId=" + employeeDto.getDepartmentId().toString())
                 .concat("&name=" + employeeDto.getJobTitle())
                 .concat("&email=" + employeeDto.getEmail());
-        return link;
     }
 }

@@ -1,6 +1,7 @@
 package com.taskManager.service.impl;
 
 import com.taskManager.model.entity.Provider;
+import com.taskManager.model.repository.DepartmentRepository;
 import com.taskManager.model.repository.ProviderRepository;
 import com.taskManager.service.DepartmentService;
 import com.taskManager.service.ProviderService;
@@ -12,7 +13,21 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ProviderServiceImpl implements ProviderService {
     private final ProviderRepository providerRepository;
-//    private final DepartmentService departmentService;
+    private final DepartmentRepository departmentRepository;
+
+    @Override
+    public Provider findByTaxNumber(Integer taxNumber) {
+        return providerRepository.findByTaxNumber(taxNumber);
+    }
+
+    @Override
+    public boolean save(Provider provider) {
+        if(findByTaxNumber(provider.getTaxNumber())!=null){
+            return false;
+        }
+        providerRepository.save(provider);
+        return true;
+    }
 
     @Override
     public ProviderDto convertToProviderDto(Provider provider) {
@@ -29,12 +44,12 @@ public class ProviderServiceImpl implements ProviderService {
     @Override
     public Provider convertToProvider(ProviderDto providerDto) {
         var provider = new Provider();
-        provider.setId(providerDto.getId());
         provider.setName(providerDto.getName());
-//        provider.setDepartmentProvider(departmentService.convertToDepartment(departmentService.findById(providerDto.getDepartmentId())));
-        provider.setTaxNumber(provider.getTaxNumber());
-        provider.setLocation(provider.getLocation());
-        provider.setEmail(provider.getEmail());
+        provider.setOwner(providerDto.getOwner());
+        provider.setDepartmentProvider(departmentRepository.findById(providerDto.getDepartmentId()));
+        provider.setTaxNumber(providerDto.getTaxNumber());
+        provider.setLocation(providerDto.getLocation());
+        provider.setEmail(providerDto.getEmail());
         return provider;
     }
 }

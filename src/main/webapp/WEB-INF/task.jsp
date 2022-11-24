@@ -22,9 +22,11 @@
                                       <input type="submit" class="w-100 btn btn-primary btn-lg" value="Tasks"></input>
                                   </form:form>
                     </div><br>
-                <div>
-                    <a href = "/createTask?departmentId=${department.id}">Create new task</a><br>
-                </div>
+                <c:if test="${department.authUserFunction=='manager'}">
+                    <div>
+                        <a href = "/createTask?departmentId=${department.id}">Create new task</a><br>
+                    </div>
+                </c:if>
                 <div>
                    <h5 class="display 6">Choose the date to see your tasks:</h5>
                    <form:form method="POST" class="row g-3" modelAttribute="workDayWithDepartmentIdDto">
@@ -46,24 +48,28 @@
                 </div>
                 <div>
                 <c:if test = "${tasks.size() > 0}">
-                    <table>
-                        <tr>
-                           <th>Name</th>
-                           <th>Description</th>
-                           <th>Priority</th>
-                           <th>Executor</th>
-                           <th>Deadline</th>
-                        </tr>
-                        <c:forEach items="${tasks}" var="task">
-                        <tr>
-                           <td>${task.name}</td>
-                           <td>${task.description}</td>
-                           <td>${task.priority}</td>
-                           <td><c:forEach items="${task.employees}" var="executor">
-                                <p>${executor.name}</p></c:forEach></td>
-                           <td>${task.deadLine}</td>
-                        </tr>
-                        </c:forEach>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                               <th scope="col">Name</th>
+                               <th scope="col">Description</th>
+                               <th scope="col">Priority</th>
+                               <th scope="col">Executors</th>
+                               <th scope="col">Deadline</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach items="${tasks}" var="task">
+                            <tr>
+                               <td scope="col">${task.name}</td>
+                               <td scope="col">${task.description}</td>
+                               <td scope="col">${task.priority}</td>
+                               <td scope="col"><c:forEach items="${task.employees}" var="executor">
+                                    <p>${executor.name}</p></c:forEach></td>
+                               <td scope="col">${task.deadLine}</td>
+                            </tr>
+                            </c:forEach>
+                        </tbody>
                     </table>
                 </c:if>
                 </div>
@@ -86,3 +92,4 @@
     </div>
 </body>
 </html>
+

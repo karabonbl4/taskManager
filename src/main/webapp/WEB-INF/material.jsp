@@ -21,27 +21,39 @@
                         <input type="submit" class="w-100 btn btn-primary btn-lg" value="Tasks"></input>
                   </form:form>
                 </div><br>
+                <a href = "/createMaterial?departmentId=${department.id}">Create new material</a><br>
                 <c:if test = "${materials.size() == 0}">
                         <h4>Materials not found</h4>
                 </c:if>
-
                     <c:if test = "${materials.size() > 0}">
-                        <table>
+                        <table class="table">
+                        <thead>
                           <tr>
-                            <th>Name</th>
-                            <th>Property</th>
-                            <th>Value</th>
+                            <th scope="col">#</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Property</th>
+                            <th scope="col">Value</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
                           </tr>
+                        </thead>
+                        <tbody>
                           <c:forEach items="${materials}" var="material">
                             <tr>
-                              <td>${material.name}</td>
-                              <td>${material.property}</td>
-                              <td>${material.value}</td>
-                            </tr>
+                              <td scope="raw">${materials.indexOf(material) + 1}</td>
+                              <form:form action="/editMaterial" method="GET" modelAttribute="editMaterial">
+                              <form:input type="hidden" path="id" value="${material.id}"></form:input>
+                              <td><form:input type="hidden" path="name" value="${material.name}"></form:input>${material.name}</td>
+                              <td><form:input type="hidden" path="property" value="${material.property}"></form:input>${material.property}</td>
+                              <td><form:input type="hidden" path="value" value="${material.value}"></form:input>${material.value}</td>
+                              <form:input type="hidden" path="departmentId" value="${material.departmentId}"></form:input>
+                              <td><button type="submit" class="btn btn-secondary btn-sm">Edit</button></form:form></td>
+                              <td><input type="button" action="/deleteMaterial?departmentId=${department.id}" class="btn btn-danger btn-sm" value="Delete"/></td>
+                             </tr>
                           </c:forEach>
+                        </tbody>
                         </table>
                     </c:if>
-
             </div>
             <div class="col-md-5 col-lg-4 order-md-last">
                 <div class="card text-bg-info mb-3" style="max-width: 18rem;">

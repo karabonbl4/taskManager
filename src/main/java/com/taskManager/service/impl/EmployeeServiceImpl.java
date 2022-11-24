@@ -1,8 +1,5 @@
 package com.taskManager.service.impl;
 
-import com.taskManager.model.entity.Task;
-import com.taskManager.service.DepartmentService;
-import com.taskManager.service.UserService;
 import com.taskManager.service.dto.EmployeeDto;
 import com.taskManager.model.entity.Department;
 import com.taskManager.model.entity.Employee;
@@ -12,9 +9,7 @@ import com.taskManager.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +29,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void save(Employee employee) {
         employeeRepository.saveAndFlush(employee);
+    }
+
+    @Override
+    public void saveAll(List<Employee> employees) {
+        employeeRepository.saveAllAndFlush(employees);
     }
 
     @Override

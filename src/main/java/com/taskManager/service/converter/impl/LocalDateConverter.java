@@ -1,6 +1,6 @@
-package com.taskManager.service.mapper.impl;
+package com.taskManager.service.converter.impl;
 
-import com.taskManager.service.mapper.DateConverter;
+import com.taskManager.service.converter.DateConverter;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;

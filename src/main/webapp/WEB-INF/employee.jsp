@@ -40,6 +40,8 @@
                                     <td scope="raw">${employees.indexOf(employee) + 1}</td>
                                     <td>${employee.username}</td>
                                     <td>${employee.jobTitle}</td>
+                                    <td><input type="button" action="/editEmployee?departmentId=${department.id}" class="btn btn-secondary btn-sm" value="Edit"/></td>
+                                    <td><input type="button" action="/deleteEmployee?departmentId=${department.id}" class="btn btn-danger btn-sm" value="Delete"/></td>
                                 </tr>
                             </c:forEach>
                             </tbody>

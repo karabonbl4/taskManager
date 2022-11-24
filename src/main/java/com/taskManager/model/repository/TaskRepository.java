@@ -11,4 +11,5 @@ import java.util.List;
 public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findByWorkday(Date workday);
     List<Task> findByEmployees_Department_Id(long id);
+
 }
