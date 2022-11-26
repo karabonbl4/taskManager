@@ -31,10 +31,12 @@ public class DepartmentController {
 
     @PostMapping(value = "/department")
     public String addDepartment(@ModelAttribute DepartmentDto newDepartment, Model model){
-        if (!departmentService.save(departmentService.convertToDepartment(newDepartment))){
-            model.addAttribute("departmentError", "You already have such a department!");
+        if (!departmentService.save(newDepartment)){
+            model.addAttribute("departmentError", "You already have such a department or fields is empty!");
+            model.addAttribute("newDepartment", new DepartmentDto());
             return "department";
         }
         return "redirect:/department";
     }
+
 }

@@ -7,6 +7,7 @@ import java.util.Date;
 
 @Data
 public class TaskCreateDto {
+    private Long id;
     private String name;
     private String description;
     private Date deadlineDate;
@@ -14,4 +15,5 @@ public class TaskCreateDto {
     private Integer priority;
     private Date workday;
     private String executors;
+    private Long departmentId;
 }

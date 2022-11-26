@@ -61,7 +61,6 @@ public class CustomerController {
 
         var department = departmentService.findById(editCustomer.getDepartmentId());
         var customers = departmentService.getDepartmentCustomers(department.getId());
-//        model.addAttribute("editCustomer", editCustomer);
         model.addAttribute("department", department);
         model.addAttribute("customers", customers);
         model.addAttribute("editCustomer", editCustomer);
@@ -70,6 +69,6 @@ public class CustomerController {
     @PostMapping(value = "/editCustomer")
     public String editCustomer(@ModelAttribute("editCustomer") CustomerDto editCustomer, Model model){
         customerService.update(customerService.convertToCustomer(editCustomer));
-        return "redirect:/department";
+        return "redirect:/customer?departmentId=".concat(editCustomer.getDepartmentId().toString());
     }
 }

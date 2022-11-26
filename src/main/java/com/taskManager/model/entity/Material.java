@@ -19,4 +19,15 @@ public class Material {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "department_id")
     private Department departmentMaterial;
+
+    @Override
+    public String toString() {
+        return "Material{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", property='" + property + '\'' +
+                ", value=" + value +
+                ", department=" + departmentMaterial.getId() +
+                '}';
+    }
 }

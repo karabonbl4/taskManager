@@ -23,4 +23,17 @@ public class Provider {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "department_id")
     private Department departmentProvider;
+
+    @Override
+    public String toString() {
+        return "Provider{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", taxNumber=" + taxNumber +
+                ", location='" + location + '\'' +
+                ", owner='" + owner + '\'' +
+                ", email='" + email + '\'' +
+                ", departmentProvider=" + departmentProvider.getId() +
+                '}';
+    }
 }

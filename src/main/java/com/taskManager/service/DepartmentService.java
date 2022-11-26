@@ -6,7 +6,7 @@ import com.taskManager.service.dto.*;
 import java.util.List;
 
 public interface DepartmentService {
-    boolean save(Department department);
+    boolean save(DepartmentDto departmentDto);
     List<Department> findByAuthUsername();
     List<DepartmentDto> getDepartmentsDto();
     DepartmentDto findById(long id);

@@ -23,12 +23,12 @@ public class DepartmentServiceImpl implements DepartmentService {
     private final ProviderService providerService;
 
     @Override
-    public boolean save(Department department) {
+    public boolean save(DepartmentDto departmentDto) {
         if (findByAuthUsername().stream()
-                .anyMatch(dept -> dept.getName().equalsIgnoreCase(department.getName())) || department.getName().equalsIgnoreCase("")) {
+                .anyMatch(dept -> dept.getName().equalsIgnoreCase(departmentDto.getName())) || departmentDto.getName().equalsIgnoreCase("")) {
             return false;
         }
-        employeeService.save(new Employee(userService.getAuthUser(), "manager", departmentRepository.save(department)));
+        employeeService.save(new Employee(userService.getAuthUser(), "manager", departmentRepository.save(convertToDepartment(departmentDto))));
         return true;
     }
 
@@ -65,7 +65,9 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public Department convertToDepartment(DepartmentDto departmentDto) {
         var department = new Department();
-        department.setId(departmentDto.getId());
+        if(departmentDto.getId()!=0){
+            department.setId(departmentDto.getId());
+        }
         department.setName(departmentDto.getName());
         department.setLocation(departmentDto.getLocation());
         return department;
