@@ -20,6 +20,9 @@ public class TaskConverterImpl implements TaskConverter {
     @Override
     public Task convertToTask(TaskCreateDto taskCreateDto) {
         var task = new Task();
+        if(taskCreateDto.getId()!=null){
+            task.setId(taskCreateDto.getId());
+        }
         task.setName(taskCreateDto.getName());
         task.setDescription(taskCreateDto.getDescription());
         task.setWorkday(taskCreateDto.getWorkday());
@@ -36,8 +39,17 @@ public class TaskConverterImpl implements TaskConverter {
         return task;
     }
 
-    @Override
-    public TaskCreateDto convertToTaskDto(Task task) {
-        return null;
-    }
+//    @Override
+//    public TaskCreateDto convertToTaskDto(Task task) {
+//        var taskCreateDto = new TaskCreateDto();
+//        if(task.getId()!=0){
+//            taskCreateDto.setId(task.getId());
+//        }
+//        taskCreateDto.setName(task.getName());
+//        taskCreateDto.setDescription(task.getDescription());
+//        taskCreateDto.setPriority(task.getPriority());
+//        taskCreateDto.setWorkday(task.getWorkday());
+//        taskCreateDto.setDeadlineDate();
+//        return null;
+//    }
 }

@@ -7,7 +7,7 @@ public interface MaterialService {
     boolean save(Material material);
     Material convertToMaterial(MaterialDto materialDto);
     MaterialDto convertToMaterialDto(Material material);
-    boolean update(Material material);
+    boolean update(MaterialDto materialDto);
     Material findById(Long id);
 
 }

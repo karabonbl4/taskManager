@@ -5,6 +5,7 @@ import com.taskManager.model.entity.Task;
 import com.taskManager.model.repository.TaskRepository;
 import com.taskManager.service.EmployeeService;
 import com.taskManager.service.TaskService;
+import com.taskManager.service.dto.TaskDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,12 +36,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Task> filterByDate(List<Task> tasks, Date workDay) {
-        Date date;
-        if (workDay == null) {
-            date = Date.from(LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
-        } else {
-            date = workDay;
-        }
+        var date = Objects.requireNonNullElseGet(workDay, () -> Date.from(LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
         SimpleDateFormat smf = new SimpleDateFormat("yyyy-MM-dd");
         return tasks.stream()
                 .filter(task -> smf.format(task.getWorkday()).equals(smf.format(date)))
@@ -48,15 +45,19 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> filterByExecutor(List<Task> tasks, String function) {
-        return tasks.stream()
-                .map(Task::getEmployees)
+    public List<Task> filterByExecutorAndDate(List<Task> tasks, String function, Date workday) {
+        var date = Objects.requireNonNullElseGet(workday, () -> Date.from(LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
+        SimpleDateFormat smf = new SimpleDateFormat("yyyy-MM-dd");
+         var filteredTasks = tasks.stream()
+                .map(task-> task.getEmployees())
                 .flatMap(List::stream)
                 .filter(employee -> employee.getName().equalsIgnoreCase(function))
-                .map(Employee::getTasks)
+                .map(employee-> employee.getTasks())
                 .flatMap(List::stream)
                 .distinct()
+                .filter(task -> smf.format(task.getWorkday()).equals(smf.format(date)))
                 .collect(Collectors.toList());
+        return filteredTasks;
     }
 
     @Override
@@ -75,7 +76,7 @@ public class TaskServiceImpl implements TaskService {
 //        task.setDescription(taskDto.getDescription());
 //        task.setWorkday(taskDto.getWorkday());
 //        task.setPriority(taskDto.getPriority());
-//        task.setDeadLine(taskDto.getDeadLine());
+//        task.setDeadLine(taskDto.getDeadLineDate());
 //        task.setEmployees(taskDto.getEmployees().stream()
 //                .map(Employee::getId)
 //                .map(employeeService::findById)

@@ -55,13 +55,20 @@
           <td>${department.location}</td>
           <td>${department.authUserFunction}</td>
           <td>${department.manager}</td>
-          <td><input type="button" action="/editDepartment?departmentId=${department.id}" class="btn btn-secondary btn-sm" value="Edit"/></td>
+
+          <td>
+             <c:if test="${department.authUserFunction=='manager'}">
+                <input type="button" action="/editDepartment?departmentId=${department.id}" class="btn btn-secondary btn-sm" value="Edit"/>
+             </c:if>
+          </td>
+
         </tr>
       </c:forEach>
       </tbody>
     </table>
 </c:if>
 </div>
+<jsp:include page="common/footer.jsp"/>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>

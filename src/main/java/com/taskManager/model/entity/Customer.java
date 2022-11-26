@@ -24,4 +24,16 @@ public class Customer {
     @JoinColumn(name = "department_id")
     private Department departmentId;
 
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", taxNumber=" + taxNumber +
+                ", location='" + location + '\'' +
+                ", owner='" + owner + '\'' +
+                ", email='" + email + '\'' +
+                ", departmentId=" + departmentId.getId() +
+                '}';
+    }
 }
