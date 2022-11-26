@@ -31,8 +31,8 @@ public class EmployeeController {
 
     @GetMapping(value = "/employee")
     public String getEmployees(@RequestParam("departmentId") long id, @NotNull Model model){
-        var workDayWithDepartmentIdDto = new WorkDayWithDepartmentIdDto();
-        workDayWithDepartmentIdDto.setDate(dateConverter.convertLocalToDate(LocalDate.now()));
+        var workDayWithDepartmentIdDto = new WorkDayWithDepartmentIdDto();                              //какой-то рабочий день по умолчанию
+        workDayWithDepartmentIdDto.setDate(dateConverter.convertLocalToDate(LocalDate.now()));          //какой-то рабочий день по умолчанию
         model.addAttribute("employees", departmentService.getDepartmentEmployees(id));
         model.addAttribute("department", departmentService.findById(id));
         model.addAttribute("workDayWithDepartmentIdDto", workDayWithDepartmentIdDto);
@@ -41,21 +41,20 @@ public class EmployeeController {
     @GetMapping(value = "/invoiceEmployee")
     public String createInvoiceEmployee(@RequestParam("departmentId") long id, @NotNull Model model){
         var department = departmentService.findById(id);
-        var invitedEmployee = new EmployeeDto();
-        var workDayWithDepartmentIdDto = new WorkDayWithDepartmentIdDto();
-        workDayWithDepartmentIdDto.setDate(dateConverter.convertLocalToDate(LocalDate.now()));
-        model.addAttribute("newEmployee", invitedEmployee);
+        var workDayWithDepartmentIdDto = new WorkDayWithDepartmentIdDto();                      //какой-то рабочий день по умолчанию
+        workDayWithDepartmentIdDto.setDate(dateConverter.convertLocalToDate(LocalDate.now()));  //какой-то рабочий день по умолчанию
+        model.addAttribute("newEmployee", new EmployeeDto());
         model.addAttribute("department",department);
         model.addAttribute("workDayWithDepartmentIdDto", workDayWithDepartmentIdDto);
         return "invoiceEmployee";
     }
     @PostMapping(value = "/invoiceEmployee")
     public String sendInvoiceToUser(@ModelAttribute("newEmployee") @NotNull EmployeeDto invitedEmployee, @NotNull Model model){
-        var department = departmentService.findById(invitedEmployee.getDepartmentId());
-        var invoiceLinkByEmployee = mailSender.createInvoiceLinkByEmployee(invitedEmployee);
-        var workDayWithDepartmentIdDto = new WorkDayWithDepartmentIdDto();
-        workDayWithDepartmentIdDto.setDate(dateConverter.convertLocalToDate(LocalDate.now()));
-        mailSender.sendInvoice(invitedEmployee.getEmail(), invoiceLinkByEmployee);
+        var department = departmentService.findById(invitedEmployee.getDepartmentId());         //переделать
+        var invoiceLinkByEmployee = mailSender.createInvoiceLinkByEmployee(invitedEmployee);        //
+        var workDayWithDepartmentIdDto = new WorkDayWithDepartmentIdDto();                                  //
+        workDayWithDepartmentIdDto.setDate(dateConverter.convertLocalToDate(LocalDate.now()));              //
+        mailSender.sendInvoice(invitedEmployee.getEmail(), invoiceLinkByEmployee);                          //
         model.addAttribute("department", department);
         model.addAttribute("workDayWithDepartmentIdDto", workDayWithDepartmentIdDto);
         return "employee";
@@ -66,10 +65,10 @@ public class EmployeeController {
                                       @NotNull Model model){
         var department = departmentService.findById(Long.parseLong(id));
 
-        var employeeDto = new EmployeeDto();
-        employeeDto.setJobTitle(jobTitle);
-        employeeDto.setDepartmentId(department.getId());
-        employeeDto.setUsername(userService.getAuthUser().getUsername());
+        var employeeDto = new EmployeeDto();                                                                // нужно перенести в сервиса
+        employeeDto.setJobTitle(jobTitle);                                                                  // нужно перенести в сервиса
+        employeeDto.setDepartmentId(department.getId());                                                    //
+        employeeDto.setUsername(userService.getAuthUser().getUsername());                                   //
         model.addAttribute("newEmployee", employeeDto);
         model.addAttribute("department", department);
         return "invoiceHandler";
@@ -78,19 +77,19 @@ public class EmployeeController {
     public String handleInvoice(@ModelAttribute("newEmployee") EmployeeDto newEmployee, Model model){
         var department = departmentService.findById(newEmployee.getDepartmentId());
         var user = userService.getAuthUser();
-        var employee = new Employee();
+        var employee = new Employee();                                                                  //нужно перенести в сервиса
         employee.setName(newEmployee.getJobTitle());
         employee.setUser(user);
-        employee.setDepartment(departmentService.getById(newEmployee.getDepartmentId()));
-        employeeService.save(employee);
+        employee.setDepartment(departmentService.getById(department.getId()));
+        employeeService.save(employee);                                                                 //
         model.addAttribute("department", department);
-        return "department"; //не откроет
+        return "redirect:/department"; //не откроет
     }
     @PostMapping(value = "/invoiceHandler", params="cancel")
     public String backToDepartment(@ModelAttribute("newEmployee") EmployeeDto newEmployee, Model model){
         var departments = departmentService.getDepartmentsDto();
         model.addAttribute("departments", departments);
         model.addAttribute("newDepartment", new Department()); //overwrite to deptDto
-        return "department";
+        return "redirect:/department";
     }
 }

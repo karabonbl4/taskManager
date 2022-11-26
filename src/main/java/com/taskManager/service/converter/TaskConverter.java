@@ -5,5 +5,5 @@ import com.taskManager.service.dto.TaskCreateDto;
 
 public interface TaskConverter {
     Task convertToTask(TaskCreateDto taskDto);
-    TaskCreateDto convertToTaskDto(Task task);
+//    TaskCreateDto convertToTaskDto(Task task);
 }

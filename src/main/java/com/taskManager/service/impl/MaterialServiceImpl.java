@@ -51,11 +51,13 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public boolean update(Material material) {
-        if (material.equals(materialRepository.findById(material.getId()))){
+    public boolean update(MaterialDto materialdto) {
+        var dbMaterial = materialRepository.findById(materialdto.getId());
+        if (materialdto.equals(dbMaterial)){
             return false;
         }
-        materialRepository.saveAndFlush(material);
+
+        materialRepository.saveAndFlush(convertToMaterial(materialdto));
         return true;
     }
 

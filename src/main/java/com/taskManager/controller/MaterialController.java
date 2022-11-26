@@ -66,13 +66,13 @@ public class MaterialController {
     }
     @PostMapping(value = "/editMaterial")
     public String editMaterial(@ModelAttribute("editMaterial") MaterialDto editMaterial, Model model) {
-        if (!materialService.update(materialService.convertToMaterial(editMaterial))) {
+        if (!materialService.update(editMaterial)) {
             model.addAttribute("materialError", "Change one of some rows");
             var department = departmentService.findById(editMaterial.getDepartmentId());
             model.addAttribute("editMaterial", editMaterial);
             model.addAttribute("department", department);
             return "editMaterial";
         }
-        return "redirect:/department";
+        return "redirect:/material?departmentId=".concat(editMaterial.getDepartmentId().toString());
     }
 }

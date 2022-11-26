@@ -3,6 +3,7 @@ package com.taskManager.controller;
 import com.taskManager.service.DepartmentService;
 import com.taskManager.service.TaskService;
 import com.taskManager.service.dto.TaskCreateDto;
+import com.taskManager.service.dto.TaskDto;
 import com.taskManager.service.dto.WorkDayWithDepartmentIdDto;
 import com.taskManager.service.converter.TaskConverter;
 import lombok.RequiredArgsConstructor;
@@ -26,27 +27,30 @@ public class TaskController {
         var department = departmentService.findById(workDayWithDepartmentIdDto.getDepartmentId());
         var workday = workDayWithDepartmentIdDto.getDate();
         var filteredTasks = taskService.filterByDate(taskService.findByDepartmentId(workDayWithDepartmentIdDto.getDepartmentId()), workday);
+        var doubleFilteredTasks = taskService.filterByExecutorAndDate(taskService.findByDepartmentId(workDayWithDepartmentIdDto.getDepartmentId()), department.getAuthUserFunction(), workday);
         if (!department.getAuthUserFunction().equalsIgnoreCase("manager")){
-            var doubleFilteredTasks = taskService.filterByExecutor(filteredTasks, department.getAuthUserFunction());
             model.addAttribute("tasks", doubleFilteredTasks);
         } else {
         model.addAttribute("tasks", filteredTasks);}
         model.addAttribute("department", department);
         model.addAttribute("workDayWithDepartmentIdDto", workDayWithDepartmentIdDto);
+        model.addAttribute("editTask", new TaskCreateDto());
         return "task";
     }
     @PostMapping(value = "/task")
     public String getTaskByDate(@ModelAttribute @NotNull WorkDayWithDepartmentIdDto workDayWithDepartmentIdDto, @NotNull Model model) {
         var workday = workDayWithDepartmentIdDto.getDate();
-        var filteredTasks = taskService.filterByDate(taskService.findByDepartmentId(workDayWithDepartmentIdDto.getDepartmentId()), workday);
+
         var department = departmentService.findById(workDayWithDepartmentIdDto.getDepartmentId());
-        if (!department.getAuthUserFunction().equalsIgnoreCase("manager")){
-            var doubleFilteredTasks = taskService.filterByExecutor(filteredTasks, department.getAuthUserFunction());
-            model.addAttribute("tasks", doubleFilteredTasks);
+        var filteredTasks = taskService.filterByDate(taskService.findByDepartmentId(workDayWithDepartmentIdDto.getDepartmentId()), workday);
+        var doubleFilteredTasks = taskService.filterByExecutorAndDate(taskService.findByDepartmentId(workDayWithDepartmentIdDto.getDepartmentId()), department.getAuthUserFunction(), workday);
+        if (department.getAuthUserFunction().equalsIgnoreCase("manager")){
+            model.addAttribute("tasks", filteredTasks);
         } else {
-            model.addAttribute("tasks", filteredTasks);}
+            model.addAttribute("tasks", doubleFilteredTasks);}
         model.addAttribute("department", department);
         model.addAttribute("workDayWithDepartmentIdDto", workDayWithDepartmentIdDto);
+        model.addAttribute("editTask", new TaskDto());
         return "task";
     }
     @GetMapping(value = "/createTask")
@@ -69,6 +73,15 @@ public class TaskController {
         workDayWithDepartmentIdDto.setDate(workday);
         model.addAttribute("department", department);
         model.addAttribute("workDayWithDepartmentIdDto", workDayWithDepartmentIdDto);
-        return "task";
+        return "redirect:/department";
+    }
+    @GetMapping(value = "/editTask")
+    public String editTask(@ModelAttribute(value = "editTask") TaskDto editTask, Model model){
+        var department = departmentService.findById(editTask.getDepartmentId());
+        var employees = departmentService.getDepartmentEmployees(editTask.getDepartmentId());
+        model.addAttribute("employees", employees);
+        model.addAttribute("department", department);
+        model.addAttribute("editTask", editTask);
+        return "editTask";
     }
 }

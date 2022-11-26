@@ -1,18 +1,22 @@
 package com.taskManager.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.taskManager.model.entity.Employee;
 import lombok.Data;
+import org.intellij.lang.annotations.Pattern;
 
 import java.util.Date;
-import java.util.List;
 
 @Data
 public class TaskDto {
     private Long id;
     private String name;
     private String description;
-    private Date deadLine;
-    private Integer priority;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date deadlineDate;
+    private String deadlineTime;
     private Date workday;
-    private List<Employee> employees;
+    private Integer priority;
+    private Long departmentId;
+    private String executors;
 }

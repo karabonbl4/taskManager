@@ -17,7 +17,7 @@
             <div class="col-md-7 col-lg-8">
                 <form:form method="POST" modelAttribute="newEmployee">
                       <div class="card border-primary mb-3 text-center" style="max-width: 18rem;">
-                            <div class="card-header">Invoice</div>
+                            <div class="card-header">Offer</div>
                                 <div class"card-body">
                                 <h5 class="card-title">${department.name}, ${department.location}</h5>
                                    <div class="mb-3 row">
@@ -57,6 +57,7 @@
                     </div>
                 </div>
             </div>
+          <jsp:include page="common/footer.jsp"/>
         </div>
     </div>
 </body>
