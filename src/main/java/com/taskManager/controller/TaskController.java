@@ -32,9 +32,10 @@ public class TaskController {
             model.addAttribute("tasks", doubleFilteredTasks);
         } else {
         model.addAttribute("tasks", filteredTasks);}
+
         model.addAttribute("department", department);
         model.addAttribute("workDayWithDepartmentIdDto", workDayWithDepartmentIdDto);
-        model.addAttribute("editTask", new TaskCreateDto());
+        model.addAttribute("editTask", new TaskDto());
         return "task";
     }
     @PostMapping(value = "/task")
@@ -76,12 +77,30 @@ public class TaskController {
         return "redirect:/department";
     }
     @GetMapping(value = "/editTask")
-    public String editTask(@ModelAttribute(value = "editTask") TaskDto editTask, Model model){
+    public String getComparableFormTask(@ModelAttribute(value = "editTask") @NotNull TaskDto editTask, @NotNull Model model){
         var department = departmentService.findById(editTask.getDepartmentId());
         var employees = departmentService.getDepartmentEmployees(editTask.getDepartmentId());
+
         model.addAttribute("employees", employees);
         model.addAttribute("department", department);
         model.addAttribute("editTask", editTask);
         return "editTask";
+    }
+
+    @PostMapping(value = "/editTask")
+    public String editTask(@ModelAttribute(value = "editTask") @NotNull TaskDto editTask, @NotNull Model model){
+        var department = departmentService.findById(editTask.getDepartmentId());
+        var employees = departmentService.getDepartmentEmployees(editTask.getDepartmentId());
+        if (!taskService.update(editTask)){
+            model.addAttribute("editTask", editTask);
+            model.addAttribute("employees", employees);
+            model.addAttribute("department", department);
+            model.addAttribute("taskError", "Need to change something row");
+            return "editTask";
+        }
+
+
+        model.addAttribute("editTask", editTask);
+        return "redirect:/task?departmentId=".concat(editTask.getDepartmentId().toString());
     }
 }

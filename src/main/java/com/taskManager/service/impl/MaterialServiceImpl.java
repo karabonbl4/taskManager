@@ -17,7 +17,7 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Override
     public boolean save(Material material) {
-        if(departmentRepository.findById(material.getDepartmentMaterial().getId()).getMaterials().stream()
+        if(departmentRepository.getReferenceById(material.getDepartmentMaterial().getId()).getMaterials().stream()
                 .anyMatch(materialFromDept -> materialFromDept.getName().equals(material.getName())
                         &&materialFromDept.getProperty().equals(material.getProperty()))){
            return false;
@@ -35,7 +35,7 @@ public class MaterialServiceImpl implements MaterialService {
         material.setName(materialDto.getName());
         material.setProperty(materialDto.getProperty());
         material.setValue(materialDto.getValue());
-        material.setDepartmentMaterial(departmentRepository.findById(materialDto.getDepartmentId()));
+        material.setDepartmentMaterial(departmentRepository.getReferenceById(materialDto.getDepartmentId()));
         return material;
     }
 
@@ -63,6 +63,6 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Override
     public Material findById(Long id) {
-        return materialRepository.findById(id);
+        return materialRepository.getReferenceById(id);
     }
 }

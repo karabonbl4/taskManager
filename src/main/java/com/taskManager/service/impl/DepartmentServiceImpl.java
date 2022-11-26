@@ -65,7 +65,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public Department convertToDepartment(DepartmentDto departmentDto) {
         var department = new Department();
-        if(departmentDto.getId()!=0){
+        if(departmentDto.getId()!=null){
             department.setId(departmentDto.getId());
         }
         department.setName(departmentDto.getName());
@@ -75,40 +75,41 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public List<EmployeeDto> getDepartmentEmployees(Long departmentId) {
-        return departmentRepository.findById(departmentId).getEmployees().stream()
+        return departmentRepository.getReferenceById(departmentId).getEmployees().stream()
                 .map(employeeService::convertToEmployeeDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<MaterialDto> getDepartmentMaterials(Long departmentId) {
-        return departmentRepository.findById(departmentId).getMaterials().stream()
+        return departmentRepository.getReferenceById(departmentId).getMaterials().stream()
                 .map(materialService::convertToMaterialDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<ProviderDto> getDepartmentProviders(Long departmentId) {
-        return departmentRepository.findById(departmentId).getProviders().stream()
+        return departmentRepository.getReferenceById(departmentId).getProviders().stream()
                 .map(providerService::convertToProviderDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<CustomerDto> getDepartmentCustomers(Long departmentId) {
-        return departmentRepository.findById(departmentId).getCustomers().stream()
+        return departmentRepository.getReferenceById(departmentId).getCustomers().stream()
                 .map(customerService::convertToCustomerDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public Department getById(Long id) {
-        return departmentRepository.findById(id);
+        return departmentRepository.getReferenceById(id);
     }
+
 
     @Override
     public DepartmentDto findById(long id) {
-        return convertToDepartmentDto(departmentRepository.findById(id));
+        return convertToDepartmentDto(departmentRepository.getReferenceById(id));
     }
 
 }

@@ -5,6 +5,7 @@ import com.taskManager.model.entity.Task;
 import com.taskManager.model.repository.TaskRepository;
 import com.taskManager.service.EmployeeService;
 import com.taskManager.service.TaskService;
+import com.taskManager.service.converter.TaskConverter;
 import com.taskManager.service.dto.TaskDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
     private final EmployeeService employeeService;
+    private final TaskConverter taskConverter;
 
     @Override
     public List<Task> findByDate(Date date) {
@@ -69,30 +71,30 @@ public class TaskServiceImpl implements TaskService {
         }
         employeeService.saveAll(employees);
     }
-//    public Task mapToTask(TaskDto taskDto) {
-//        var task = new Task();
-//        task.setId(taskDto.getId());
-//        task.setName(taskDto.getName());
-//        task.setDescription(taskDto.getDescription());
-//        task.setWorkday(taskDto.getWorkday());
-//        task.setPriority(taskDto.getPriority());
-//        task.setDeadLine(taskDto.getDeadLineDate());
-//        task.setEmployees(taskDto.getEmployees().stream()
-//                .map(Employee::getId)
-//                .map(employeeService::findById)
-//                .collect(Collectors.toList()));
-//        return task;
-//    }
 
-//    public TaskDto mapToTaskDto(Task task) {
-//        var taskDto = new TaskDto();
-//        taskDto.setId(task.getId());
-//        taskDto.setName(task.getName());
-//        taskDto.setDescription(task.getDescription());
-//        taskDto.setWorkday(task.getWorkday());
-//        taskDto.setPriority(task.getPriority());
-//        taskDto.setDeadLine(task.getDeadLine());
-//        taskDto.setEmployees(task.getEmployees());
-//        return taskDto;
-//    }
+    @Override
+    public boolean update(TaskDto taskDto) {
+        var task = taskRepository.getReferenceById(taskDto.getId());
+        if (taskDto.getExecutors()==null){
+            taskDto.setExecutors(task.getEmployees().stream()
+                    .map(Employee::getId)
+                    .toString()
+                    .concat(","));
+        }
+        if(taskConverter.convertToTask(taskDto).equals(task)){
+            return false;
+        }
+        var oldEmployees = new ArrayList<>(task.getEmployees());
+        var returnedTask = taskRepository.saveAndFlush(taskConverter.convertToTask(taskDto));
+        var newEmployees = new ArrayList<>(returnedTask.getEmployees());
+        for (var employee : oldEmployees) {
+            employee.getTasks().remove(returnedTask);
+        }
+        for (var employee:newEmployees) {
+            employee.getTasks().add(returnedTask);
+        }
+        employeeService.saveAll(oldEmployees);
+        employeeService.saveAll(newEmployees);
+        return true;
+    }
 }

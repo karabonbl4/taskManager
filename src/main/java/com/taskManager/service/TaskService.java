@@ -13,6 +13,7 @@ public interface TaskService {
     List<Task> filterByDate(List<Task> tasks, Date date);
     List<Task> filterByExecutorAndDate(List<Task> tasks, String function, Date date);
     void save(Task task);
-//    Task mapToTask(TaskDto taskDto);
-//    TaskDto mapToTaskDto(Task task);
+    boolean update(TaskDto taskDto);
+
+
 }

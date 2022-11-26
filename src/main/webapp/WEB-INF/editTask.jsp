@@ -51,7 +51,7 @@
                             <label for="floatingPriority" class="col-sm-2 col-form-label">Task priority</label>
                                 <div class="col-sm-10">
                                     <form:select class="form-select" id="floatingPriority" path="priority">
-                                        <option selected>${editTask.priority}</option>
+                                        <option selected value="${editTask.priority}">${editTask.priority}</option>
                                         <option value="1">&#9734</option>
                                         <option value="2">&#9734&#9734</option>
                                         <option value="3">&#9734&#9734&#9734</option>
@@ -72,10 +72,11 @@
                         </div>
                         <div class="mb-3 row">
                             <form:input type="hidden" path="id" value="${editTask.id}"></form:input>
-
+                            <form:input type="hidden" path="departmentId" value="${editTask.departmentId}"></form:input>
                         </div>
+                        <form:errors path="id"></form:errors>${taskError}
                     <button type="submit" class="btn btn-primary">Edit</button>
-                    <a href="/material?departmentId=" class="btn btn-link">Back to Tasks</a>
+                    <a href="/task?departmentId=${editTask.departmentId}" class="btn btn-link">Back to Tasks</a>
                 </form:form>
             </div>
             <div class="col-md-5 col-lg-4 order-md-last">
