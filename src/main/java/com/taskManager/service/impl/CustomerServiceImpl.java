@@ -8,7 +8,6 @@ import com.taskManager.service.dto.CustomerDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +22,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public boolean save(Customer customer) {
-        if (departmentRepository.findById(customer.getDepartmentId().getId()).getCustomers().stream()
+        if (departmentRepository.getReferenceById(customer.getDepartmentId().getId()).getCustomers().stream()
                 .anyMatch(existCustomer->existCustomer.getTaxNumber().equals(customer.getTaxNumber()))){
             return false;
         }
@@ -47,26 +46,21 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer convertToCustomer(CustomerDto customerDto) {
         var customer = new Customer();
-        if(customerDto.getId()!=0){
-            customer = findById(customerDto.getId());
+        if(customerDto.getId()!=null){
+            customer = customerRepository.getReferenceById(customerDto.getId());
         }
         customer.setName(customerDto.getName());
         customer.setTaxNumber(customerDto.getTaxNumber());
         customer.setEmail(customerDto.getEmail());
         customer.setLocation(customerDto.getLocation());
         customer.setOwner(customerDto.getOwner());
-        customer.setDepartmentId(departmentRepository.findById(customerDto.getDepartmentId()));
+        customer.setDepartmentId(departmentRepository.getReferenceById(customerDto.getDepartmentId()));
         return customer;
     }
 
     @Override
     public void update(Customer customer) {
         customerRepository.saveAndFlush(customer);
-    }
-
-    @Override
-    public Customer findById(long id) {
-        return customerRepository.findById(id);
     }
 
 }

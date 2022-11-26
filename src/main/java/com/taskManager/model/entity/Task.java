@@ -25,15 +25,4 @@ public class Task {
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "tasks")
     private List<Employee> employees;
 
-//    @Override
-//    public String toString() {
-//        return "Task{" +
-//                "id=" + id +
-//                ", name='" + name + '\'' +
-//                ", description='" + description + '\'' +
-//                ", deadLine=" + deadLine +
-//                ", priority=" + priority +
-//                ", workday=" + workday +
-//                '}';
-//    }
 }

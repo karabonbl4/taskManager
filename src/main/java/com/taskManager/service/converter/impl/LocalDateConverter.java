@@ -9,17 +9,15 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 @Component
 public class LocalDateConverter implements DateConverter {
 
     @Override
     public Date convertLocalToDate(LocalDate localDate){
-        if (localDate==null){
-            return Date.from(LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
-        }
-        return Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
-        }
+        return Date.from(Objects.requireNonNullElseGet(localDate, LocalDate::now).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+    }
 
     @Override
     public LocalDate convertDateToLocal(Date date) {
@@ -38,12 +36,4 @@ public class LocalDateConverter implements DateConverter {
         }
         return date;
     }
-
-//    @Override
-//    public Date convertToDeadLineDate(Date date) {
-//        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-//        var deadLineDate = formatter.par
-//        return null;
-//    }
-
 }

@@ -11,5 +11,4 @@ public interface CustomerService {
     CustomerDto convertToCustomerDto(Customer customer);
     Customer convertToCustomer(CustomerDto customerDto);
     void update(Customer customer);
-    Customer findById(long id);
 }

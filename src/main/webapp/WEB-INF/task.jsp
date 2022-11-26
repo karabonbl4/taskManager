@@ -69,7 +69,7 @@
                                    <td><form:input type="hidden" path="name" value="${task.name}"></form:input>${task.name}</td>
                                    <td><form:input type="hidden" path="description" value="${task.description}"></form:input>${task.description}</td>
                                    <td><form:input type="hidden" path="priority" value="${task.priority}"></form:input>${task.priority}</td>
-                                   <td><form:input type="hidden" path="executors" value="${task.employees}"></form:input>
+                                   <td><form:input type="hidden" path="executors" value="${editTask.executors}"></form:input>
                                    <c:forEach items="${task.employees}" var="executor">
                                         <p>${executor.name}</p></c:forEach></td>
                                    <fmt:formatDate value="${task.deadLine}" pattern="yyyy-MM-dd" var="deadLineDate"/>

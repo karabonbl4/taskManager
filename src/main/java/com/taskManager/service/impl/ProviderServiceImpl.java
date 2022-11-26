@@ -3,7 +3,6 @@ package com.taskManager.service.impl;
 import com.taskManager.model.entity.Provider;
 import com.taskManager.model.repository.DepartmentRepository;
 import com.taskManager.model.repository.ProviderRepository;
-import com.taskManager.service.DepartmentService;
 import com.taskManager.service.ProviderService;
 import com.taskManager.service.dto.ProviderDto;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +45,7 @@ public class ProviderServiceImpl implements ProviderService {
         var provider = new Provider();
         provider.setName(providerDto.getName());
         provider.setOwner(providerDto.getOwner());
-        provider.setDepartmentProvider(departmentRepository.findById(providerDto.getDepartmentId()));
+        provider.setDepartmentProvider(departmentRepository.getReferenceById(providerDto.getDepartmentId()));
         provider.setTaxNumber(providerDto.getTaxNumber());
         provider.setLocation(providerDto.getLocation());
         provider.setEmail(providerDto.getEmail());
