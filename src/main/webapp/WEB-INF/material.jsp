@@ -42,14 +42,15 @@
                             <tr>
                               <td scope="raw">${materials.indexOf(material) + 1}</td>
                               <form:form action="/editMaterial" method="GET" modelAttribute="editMaterial">
-                              <form:input type="hidden" path="id" value="${material.id}"></form:input>
-                              <td><form:input type="hidden" path="name" value="${material.name}"></form:input>${material.name}</td>
-                              <td><form:input type="hidden" path="property" value="${material.property}"></form:input>${material.property}</td>
-                              <td><form:input type="hidden" path="value" value="${material.value}"></form:input>${material.value}</td>
-                              <form:input type="hidden" path="departmentId" value="${material.departmentId}"></form:input>
-                              <td><button type="submit" class="btn btn-secondary btn-sm">Edit</button></form:form></td>
-                              <td><input type="button" action="/deleteMaterial?departmentId=${department.id}" class="btn btn-danger btn-sm" value="Delete"/></td>
-                             </tr>
+                                  <form:input type="hidden" path="id" value="${material.id}"></form:input>
+                                  <td><form:input type="hidden" path="name" value="${material.name}"></form:input>${material.name}</td>
+                                  <td><form:input type="hidden" path="property" value="${material.property}"></form:input>${material.property}</td>
+                                  <td><form:input type="hidden" path="value" value="${material.value}"></form:input>${material.value}</td>
+                                  <form:input type="hidden" path="departmentId" value="${material.departmentId}"></form:input>
+                                  <td><input type="submit" name="edit" class="btn btn-secondary btn-sm" value="Edit"></td>
+                                  <td><input type="submit" name="delete" class="btn btn-danger btn-sm" value="Delete"/></td>
+                              </form:form>
+                            </tr>
                           </c:forEach>
                         </tbody>
                         </table>

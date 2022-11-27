@@ -87,6 +87,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public List<MaterialDto> getDepartmentMaterials(Long departmentId) {
         return departmentRepository.getReferenceById(departmentId).getMaterials().stream()
+                .filter(material -> !material.getName().equals("deleted"))
                 .map(materialService::convertToMaterialDto)
                 .collect(Collectors.toList());
     }
@@ -94,6 +95,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public List<ProviderDto> getDepartmentProviders(Long departmentId) {
         return departmentRepository.getReferenceById(departmentId).getProviders().stream()
+                .filter(provider -> !provider.getName().equals("deleted"))
                 .map(providerService::convertToProviderDto)
                 .collect(Collectors.toList());
     }
@@ -101,6 +103,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public List<CustomerDto> getDepartmentCustomers(Long departmentId) {
         return departmentRepository.getReferenceById(departmentId).getCustomers().stream()
+                .filter(customer -> !customer.getName().equals("deleted"))
                 .map(customerService::convertToCustomerDto)
                 .collect(Collectors.toList());
     }

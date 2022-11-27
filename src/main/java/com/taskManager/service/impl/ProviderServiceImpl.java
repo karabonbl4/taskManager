@@ -67,4 +67,10 @@ public class ProviderServiceImpl implements ProviderService {
         return true;
     }
 
+    @Override
+    public void delete(ProviderDto providerDto) {
+        var dbProvider = providerRepository.getReferenceById(providerDto.getId());
+        dbProvider.setName("deleted");
+        providerRepository.saveAndFlush(dbProvider);
+    }
 }

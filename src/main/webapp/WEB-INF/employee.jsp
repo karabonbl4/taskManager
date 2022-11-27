@@ -46,7 +46,7 @@
                                     <form:input type="hidden" path="departmentId" value="${employee.departmentId}"></form:input>
                                     <c:if test="${employee.jobTitle!='manager'}">
                                     <td><input type="submit" name="edit" class="btn btn-secondary btn-sm" value="Edit"></td>
-                                    <td><input type="submit" name="delete" class="btn btn-danger btn-sm" value="Delete"/>
+                                    <td><input type="submit" name="delete" class="btn btn-danger btn-sm" value="Delete"/></td>
                                     </c:if>
                                     <c:if test="${employee.jobTitle=='manager'}">
                                     <td></td>
