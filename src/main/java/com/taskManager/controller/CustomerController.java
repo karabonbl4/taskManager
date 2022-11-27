@@ -1,11 +1,8 @@
 package com.taskManager.controller;
 
-import com.taskManager.model.entity.Customer;
 import com.taskManager.service.CustomerService;
 import com.taskManager.service.DepartmentService;
 import com.taskManager.service.dto.CustomerDto;
-import com.taskManager.service.dto.WorkDayWithDepartmentIdDto;
-import com.taskManager.service.converter.DateConverter;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Controller;

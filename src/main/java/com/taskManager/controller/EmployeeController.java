@@ -1,9 +1,7 @@
 package com.taskManager.controller;
 
-import com.taskManager.model.entity.Employee;
 import com.taskManager.service.*;
 import com.taskManager.service.dto.EmployeeDto;
-import com.taskManager.model.entity.Department;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Controller;
@@ -72,7 +70,7 @@ public class EmployeeController {
     @PostMapping(value = "/invoiceHandler", params = "submit")
     public String handleInvoice(@ModelAttribute("newEmployee") EmployeeDto newEmployee, Model model) {
         var department = departmentService.findById(newEmployee.getDepartmentId());
-        employeeService.save(employeeService.convertToEmployee(newEmployee));                                                                 //
+        employeeService.save(employeeService.convertToEmployee(newEmployee));
         model.addAttribute("department", department);
         return "redirect:/department";
     }
@@ -82,7 +80,7 @@ public class EmployeeController {
         return "redirect:/department";
     }
 
-    @GetMapping(value = "/editEmployee", params="edit")
+    @GetMapping(value = "/editEmployee", params = "edit")
     public String getEditEmployeeForm(@ModelAttribute @NotNull EmployeeDto editEmployee, @NotNull Model model) {
         var department = departmentService.findById(editEmployee.getDepartmentId());
         model.addAttribute("department", department);
@@ -99,8 +97,9 @@ public class EmployeeController {
         }
         return "redirect:/employee?departmentId=".concat(editEmployee.getDepartmentId().toString());
     }
+
     @GetMapping(value = "/editEmployee", params = "delete")
-    public String deleteEmployee(@ModelAttribute EmployeeDto editEmployee, Model model){
+    public String deleteEmployee(@ModelAttribute EmployeeDto editEmployee, Model model) {
         employeeService.delete(editEmployee);
         return "redirect:/employee?departmentId=".concat(editEmployee.getDepartmentId().toString());
     }
