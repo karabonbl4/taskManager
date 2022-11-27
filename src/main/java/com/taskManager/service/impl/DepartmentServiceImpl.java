@@ -109,11 +109,6 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public Department getById(Long id) {
-        return departmentRepository.getReferenceById(id);
-    }
-
-    @Override
     public boolean update(DepartmentDto departmentDto) {
         var dbDepartment = departmentRepository.getReferenceById(departmentDto.getId());
         if (dbDepartment.getName().equals(departmentDto.getName()) & dbDepartment.getLocation().equals(departmentDto.getLocation())){
