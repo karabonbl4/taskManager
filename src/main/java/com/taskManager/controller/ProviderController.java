@@ -50,7 +50,7 @@ public class ProviderController {
         return "redirect:/department";
     }
 
-    @GetMapping(value = "/editProvider")
+    @GetMapping(value = "/editProvider", params = "edit")
     public String getEditProviderForm(@ModelAttribute("editProvider") @NotNull ProviderDto editProvider, @NotNull Model model) {
         var department = departmentService.findById(editProvider.getDepartmentId());
         var customers = departmentService.getDepartmentCustomers(department.getId());
@@ -59,12 +59,19 @@ public class ProviderController {
         model.addAttribute("editProvider", editProvider);
         return "editProvider";
     }
+    @GetMapping(value = "/editProvider", params = "delete")
+    public String deleteProvider(@ModelAttribute ProviderDto editProvider, Model model){
+        providerService.delete(editProvider);
+        return "redirect:/provider?departmentId=".concat(editProvider.getDepartmentId().toString());
+    }
 
     @PostMapping(value = "/editProvider")
     public String editProvider(@ModelAttribute("editProvider") ProviderDto editProvider, Model model) {
         if (!providerService.update(editProvider)) {
+            var department = departmentService.findById(editProvider.getDepartmentId());
             model.addAttribute("providerError", "Change one of some rows");
             model.addAttribute("editProvider", editProvider);
+            model.addAttribute("department", department);
             return "editProvider";
         }
         return "redirect:/provider?departmentId=".concat(editProvider.getDepartmentId().toString());

@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.LocalDate;
-
 @Controller
 @RequiredArgsConstructor
 public class MaterialController {
@@ -53,19 +51,26 @@ public class MaterialController {
         return "redirect:/department";
     }
 
-    @GetMapping(value = "/editMaterial")
+    @GetMapping(value = "/editMaterial", params = "edit")
     public String getEditMaterialForm(@ModelAttribute("editMaterial") @NotNull MaterialDto editMaterial, @NotNull Model model) {
         var department = departmentService.findById(editMaterial.getDepartmentId());
         model.addAttribute("editMaterial", editMaterial);
         model.addAttribute("department", department);
         return "editMaterial";
     }
+    @GetMapping(value = "/editMaterial", params = "delete")
+    public String deleteMaterial(@ModelAttribute MaterialDto editMaterial){
+        materialService.delete(editMaterial);
+        return "redirect:/material?departmentId=".concat(editMaterial.getDepartmentId().toString());
+    }
 
     @PostMapping(value = "/editMaterial")
     public String editMaterial(@ModelAttribute("editMaterial") MaterialDto editMaterial, Model model) {
         if (!materialService.update(editMaterial)) {
+            var department = departmentService.findById(editMaterial.getDepartmentId());
             model.addAttribute("materialError", "Change one of some rows");
             model.addAttribute("editMaterial", editMaterial);
+            model.addAttribute("department", department);
             return "editMaterial";
         }
         return "redirect:/material?departmentId=".concat(editMaterial.getDepartmentId().toString());

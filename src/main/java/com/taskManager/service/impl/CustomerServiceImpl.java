@@ -69,4 +69,11 @@ public class CustomerServiceImpl implements CustomerService {
         return true;
     }
 
+    @Override
+    public void delete(CustomerDto customerDto) {
+        var dbCustomer = customerRepository.getReferenceById(customerDto.getId());
+        dbCustomer.setName("deleted");
+        customerRepository.saveAndFlush(dbCustomer);
+    }
+
 }

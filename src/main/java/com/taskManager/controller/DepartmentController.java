@@ -2,15 +2,12 @@ package com.taskManager.controller;
 
 import com.taskManager.service.DepartmentService;
 import com.taskManager.service.dto.DepartmentDto;
-import com.taskManager.service.dto.WorkDayWithDepartmentIdDto;
-import com.taskManager.service.converter.DateConverter;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 
 @Controller
 @RequiredArgsConstructor

@@ -1,11 +1,8 @@
 package com.taskManager.controller;
 
-import com.taskManager.model.entity.Customer;
 import com.taskManager.service.CustomerService;
 import com.taskManager.service.DepartmentService;
 import com.taskManager.service.dto.CustomerDto;
-import com.taskManager.service.dto.WorkDayWithDepartmentIdDto;
-import com.taskManager.service.converter.DateConverter;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Controller;
@@ -15,7 +12,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.LocalDate;
 
 @Controller
 @RequiredArgsConstructor
@@ -52,7 +48,7 @@ public class CustomerController {
         }
         return "redirect:/customer?departmentId=".concat(newCustomer.getDepartmentId().toString());
     }
-    @GetMapping(value = "/editCustomer")
+    @GetMapping(value = "/editCustomer", params = "edit")
     public String getEditCustomerForm(@ModelAttribute("editCustomer") @NotNull CustomerDto editCustomer, @NotNull Model model){
         var department = departmentService.findById(editCustomer.getDepartmentId());
         var customers = departmentService.getDepartmentCustomers(department.getId());
@@ -60,6 +56,11 @@ public class CustomerController {
         model.addAttribute("customers", customers);
         model.addAttribute("editCustomer", editCustomer);
         return "editCustomer";
+    }
+    @GetMapping(value = "/editCustomer", params = "delete")
+    public String deleteCustomer(@ModelAttribute CustomerDto editCustomer, Model model){
+        customerService.delete(editCustomer);
+        return "redirect:/customer?departmentId=".concat(editCustomer.getDepartmentId().toString());
     }
     @PostMapping(value = "/editCustomer")
     public String editCustomer(@ModelAttribute("editCustomer") CustomerDto editCustomer, Model model){

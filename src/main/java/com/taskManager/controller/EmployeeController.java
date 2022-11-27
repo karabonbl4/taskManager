@@ -1,9 +1,7 @@
 package com.taskManager.controller;
 
-import com.taskManager.model.entity.Employee;
 import com.taskManager.service.*;
 import com.taskManager.service.dto.EmployeeDto;
-import com.taskManager.model.entity.Department;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Controller;
@@ -93,8 +91,10 @@ public class EmployeeController {
     @PostMapping(value = "/editEmployee")
     public String editEmployee(@ModelAttribute EmployeeDto editEmployee, Model model) {
         if (!employeeService.update(editEmployee)) {
+            var department = departmentService.findById(editEmployee.getDepartmentId());
             model.addAttribute("employeeError", "Employee with this job title already exist");
             model.addAttribute("editEmployee", editEmployee);
+            model.addAttribute("department", department);
             return "editEmployee";
         }
         return "redirect:/employee?departmentId=".concat(editEmployee.getDepartmentId().toString());

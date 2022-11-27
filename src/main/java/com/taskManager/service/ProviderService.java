@@ -9,4 +9,5 @@ public interface ProviderService {
     ProviderDto convertToProviderDto(Provider provider);
     Provider convertToProvider(ProviderDto providerDto);
     boolean update(ProviderDto providerDto);
+    void delete(ProviderDto providerDto);
 }

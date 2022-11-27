@@ -3,7 +3,6 @@ package com.taskManager.service.impl;
 import com.taskManager.model.entity.Material;
 import com.taskManager.model.repository.DepartmentRepository;
 import com.taskManager.model.repository.MaterialRepository;
-import com.taskManager.service.DepartmentService;
 import com.taskManager.service.MaterialService;
 import com.taskManager.service.dto.MaterialDto;
 import lombok.RequiredArgsConstructor;
@@ -59,5 +58,12 @@ public class MaterialServiceImpl implements MaterialService {
         }
         materialRepository.saveAndFlush(material);
         return true;
+    }
+
+    @Override
+    public void delete(MaterialDto materialDto) {
+        var dbMaterial = materialRepository.getReferenceById(materialDto.getId());
+        dbMaterial.setName("deleted");
+        materialRepository.saveAndFlush(dbMaterial);
     }
 }

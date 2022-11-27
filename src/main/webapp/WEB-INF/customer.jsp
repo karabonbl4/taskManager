@@ -43,15 +43,16 @@
                                     <tr>
                                         <td scope="raw">${customers.indexOf(customer) + 1}</td>
                                         <form:form action="/editCustomer" method="GET" modelAttribute="editCustomer">
-                                        <form:input type="hidden" path="id" value="${customer.id}"></form:input>
-                                        <td><form:input type="hidden" path="name" value="${customer.name}"></form:input>${customer.name}</td>
-                                        <td><form:input type="hidden" path="taxNumber" value="${customer.taxNumber}"></form:input>${customer.taxNumber}</td>
-                                        <td><form:input type="hidden" path="location" value="${customer.location}"></form:input>${customer.location}</td>
-                                        <td><form:input type="hidden" path="owner" value="${customer.owner}"></form:input>${customer.owner}</td>
-                                        <td><form:input type="hidden" path="email" value="${customer.email}"></form:input>${customer.email}</td>
-                                        <form:input type="hidden" path="departmentId" value="${customer.departmentId}"></form:input>
-                                        <td><button type="submit" class="btn btn-secondary btn-sm">Edit</button></form:form></td>
-                                        <td><input type="button" action="/deleteCustomer?departmentId=${department.id}" class="btn btn-danger btn-sm" value="Delete"/></td>
+                                            <form:input type="hidden" path="id" value="${customer.id}"></form:input>
+                                            <td><form:input type="hidden" path="name" value="${customer.name}"></form:input>${customer.name}</td>
+                                            <td><form:input type="hidden" path="taxNumber" value="${customer.taxNumber}"></form:input>${customer.taxNumber}</td>
+                                            <td><form:input type="hidden" path="location" value="${customer.location}"></form:input>${customer.location}</td>
+                                            <td><form:input type="hidden" path="owner" value="${customer.owner}"></form:input>${customer.owner}</td>
+                                            <td><form:input type="hidden" path="email" value="${customer.email}"></form:input>${customer.email}</td>
+                                            <form:input type="hidden" path="departmentId" value="${customer.departmentId}"></form:input>
+                                            <td><input type="submit" name="edit" class="btn btn-secondary btn-sm" value="Edit"></td>
+                                            <td><input type="submit" name="delete" class="btn btn-danger btn-sm" value="Delete"/></td>
+                                        </form:form>
                                     </tr>
                                 </c:forEach>
                             </tbody>
