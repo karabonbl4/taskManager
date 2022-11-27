@@ -21,10 +21,11 @@ public class ProviderServiceImpl implements ProviderService {
 
     @Override
     public boolean save(Provider provider) {
-        if(findByTaxNumber(provider.getTaxNumber())!=null){
+        if (departmentRepository.getReferenceById(provider.getDepartmentProvider().getId()).getCustomers().stream()
+                .anyMatch(existProvider->existProvider.getTaxNumber().equals(provider.getTaxNumber()))){
             return false;
         }
-        providerRepository.save(provider);
+        providerRepository.saveAndFlush(provider);
         return true;
     }
 
@@ -43,6 +44,9 @@ public class ProviderServiceImpl implements ProviderService {
     @Override
     public Provider convertToProvider(ProviderDto providerDto) {
         var provider = new Provider();
+        if(providerDto.getId()!=null){
+            provider.setId(providerDto.getId());
+        }
         provider.setName(providerDto.getName());
         provider.setOwner(providerDto.getOwner());
         provider.setDepartmentProvider(departmentRepository.getReferenceById(providerDto.getDepartmentId()));
@@ -51,4 +55,16 @@ public class ProviderServiceImpl implements ProviderService {
         provider.setEmail(providerDto.getEmail());
         return provider;
     }
+
+    @Override
+    public boolean update(ProviderDto providerDto) {
+        var dbprovider = providerRepository.getReferenceById(providerDto.getId());
+        var provider = convertToProvider(providerDto);
+        if (provider.equals(dbprovider)){
+            return false;
+        }
+        providerRepository.saveAndFlush(provider);
+        return true;
+    }
+
 }

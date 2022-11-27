@@ -29,8 +29,8 @@ public class MaterialServiceImpl implements MaterialService {
     @Override
     public Material convertToMaterial(MaterialDto materialDto) {
         var material = new Material();
-        if(materialDto.getId()!=0){
-            material = findById(materialDto.getId());
+        if(materialDto.getId()!=null){
+            material.setId(materialDto.getId());
         }
         material.setName(materialDto.getName());
         material.setProperty(materialDto.getProperty());
@@ -51,18 +51,13 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public boolean update(MaterialDto materialdto) {
-        var dbMaterial = materialRepository.findById(materialdto.getId());
-        if (materialdto.equals(dbMaterial)){
+    public boolean update(MaterialDto materialDto) {
+        var dbMaterial = materialRepository.getReferenceById(materialDto.getId());
+        var material = convertToMaterial(materialDto);
+        if (material.equals(dbMaterial)){
             return false;
         }
-
-        materialRepository.saveAndFlush(convertToMaterial(materialdto));
+        materialRepository.saveAndFlush(material);
         return true;
-    }
-
-    @Override
-    public Material findById(Long id) {
-        return materialRepository.getReferenceById(id);
     }
 }

@@ -2,6 +2,7 @@ package com.taskManager.service.converter.impl;
 
 import com.taskManager.model.entity.Employee;
 import com.taskManager.model.entity.Task;
+import com.taskManager.service.DepartmentService;
 import com.taskManager.service.EmployeeService;
 import com.taskManager.service.dto.TaskCreateDto;
 import com.taskManager.service.converter.DateConverter;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 public class TaskConverterImpl implements TaskConverter {
     private final EmployeeService employeeService;
     private final DateConverter dateConverter;
+    private final DepartmentService departmentService;
 
     @Override
     public Task convertToTask(TaskCreateDto taskCreateDto) {

@@ -8,5 +8,5 @@ public interface ProviderService {
     boolean save(Provider provider);
     ProviderDto convertToProviderDto(Provider provider);
     Provider convertToProvider(ProviderDto providerDto);
-
+    boolean update(ProviderDto providerDto);
 }

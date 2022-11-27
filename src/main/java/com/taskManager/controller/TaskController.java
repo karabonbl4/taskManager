@@ -25,14 +25,8 @@ public class TaskController {
     @GetMapping(value = "/task")
     public String getTask(@ModelAttribute @NotNull WorkDayWithDepartmentIdDto workDayWithDepartmentIdDto, @NotNull Model model){
         var department = departmentService.findById(workDayWithDepartmentIdDto.getDepartmentId());
-        var workday = workDayWithDepartmentIdDto.getDate();
-        var filteredTasks = taskService.filterByDate(taskService.findByDepartmentId(workDayWithDepartmentIdDto.getDepartmentId()), workday);
-        var doubleFilteredTasks = taskService.filterByExecutorAndDate(taskService.findByDepartmentId(workDayWithDepartmentIdDto.getDepartmentId()), department.getAuthUserFunction(), workday);
-        if (!department.getAuthUserFunction().equalsIgnoreCase("manager")){
-            model.addAttribute("tasks", doubleFilteredTasks);
-        } else {
-        model.addAttribute("tasks", filteredTasks);}
-
+        var filteredTasks = taskService.getFilteredTask(workDayWithDepartmentIdDto);
+        model.addAttribute("tasks", filteredTasks);
         model.addAttribute("department", department);
         model.addAttribute("workDayWithDepartmentIdDto", workDayWithDepartmentIdDto);
         model.addAttribute("editTask", new TaskDto());
@@ -40,15 +34,9 @@ public class TaskController {
     }
     @PostMapping(value = "/task")
     public String getTaskByDate(@ModelAttribute @NotNull WorkDayWithDepartmentIdDto workDayWithDepartmentIdDto, @NotNull Model model) {
-        var workday = workDayWithDepartmentIdDto.getDate();
-
         var department = departmentService.findById(workDayWithDepartmentIdDto.getDepartmentId());
-        var filteredTasks = taskService.filterByDate(taskService.findByDepartmentId(workDayWithDepartmentIdDto.getDepartmentId()), workday);
-        var doubleFilteredTasks = taskService.filterByExecutorAndDate(taskService.findByDepartmentId(workDayWithDepartmentIdDto.getDepartmentId()), department.getAuthUserFunction(), workday);
-        if (department.getAuthUserFunction().equalsIgnoreCase("manager")){
-            model.addAttribute("tasks", filteredTasks);
-        } else {
-            model.addAttribute("tasks", doubleFilteredTasks);}
+        var filteredTasks = taskService.getFilteredTask(workDayWithDepartmentIdDto);
+        model.addAttribute("tasks", filteredTasks);
         model.addAttribute("department", department);
         model.addAttribute("workDayWithDepartmentIdDto", workDayWithDepartmentIdDto);
         model.addAttribute("editTask", new TaskDto());
@@ -66,21 +54,16 @@ public class TaskController {
     @PostMapping(value = "/createTask")
     public String createNewTask(@ModelAttribute @NotNull TaskCreateDto newTask, @RequestParam long departmentId, @NotNull Model model) {
         var department = departmentService.findById(departmentId);
-        var workday = newTask.getWorkday();
-        var workDayWithDepartmentIdDto = new WorkDayWithDepartmentIdDto();
-        var taskForSave = taskConverter.convertToTask(newTask);
-        taskService.save(taskForSave);
-        workDayWithDepartmentIdDto.setDepartmentId(departmentId);
-        workDayWithDepartmentIdDto.setDate(workday);
+        var workDayWithDepartmentIdDto = new WorkDayWithDepartmentIdDto(newTask.getWorkday(), departmentId);
+        taskService.save(taskConverter.convertToTask(newTask));
         model.addAttribute("department", department);
         model.addAttribute("workDayWithDepartmentIdDto", workDayWithDepartmentIdDto);
-        return "redirect:/department";
+        return "redirect:/task?departmentId=".concat(newTask.getDepartmentId().toString());
     }
     @GetMapping(value = "/editTask")
     public String getComparableFormTask(@ModelAttribute(value = "editTask") @NotNull TaskDto editTask, @NotNull Model model){
         var department = departmentService.findById(editTask.getDepartmentId());
         var employees = departmentService.getDepartmentEmployees(editTask.getDepartmentId());
-
         model.addAttribute("employees", employees);
         model.addAttribute("department", department);
         model.addAttribute("editTask", editTask);
@@ -98,9 +81,6 @@ public class TaskController {
             model.addAttribute("taskError", "Need to change something row");
             return "editTask";
         }
-
-
-        model.addAttribute("editTask", editTask);
         return "redirect:/task?departmentId=".concat(editTask.getDepartmentId().toString());
     }
 }

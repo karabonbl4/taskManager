@@ -71,6 +71,7 @@
                                 </div>
                         </div>
                     <button type="submit" class="btn btn-primary">Create</button>
+                    <a href="/task?departmentId=${department.id}" class="btn btn-link">Back to Tasks</a>
                 </form:form>
             </div>
             <div class="col-md-5 col-lg-4 order-md-last">

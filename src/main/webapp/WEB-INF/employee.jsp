@@ -38,10 +38,21 @@
                             <c:forEach items="${employees}" var="employee">
                                 <tr>
                                     <td scope="raw">${employees.indexOf(employee) + 1}</td>
-                                    <td>${employee.username}</td>
-                                    <td>${employee.jobTitle}</td>
-                                    <td><input type="button" action="/editEmployee?departmentId=${department.id}" class="btn btn-secondary btn-sm" value="Edit"/></td>
-                                    <td><input type="button" action="/deleteEmployee?departmentId=${department.id}" class="btn btn-danger btn-sm" value="Delete"/></td>
+                                    <form:form action="/editEmployee" method="GET" modelAttribute="editEmployee">
+                                    <td><form:input type="hidden" path="username" value="${employee.username}"></form:input>${employee.username}</td>
+                                    <td><form:input type="hidden" path="jobTitle" value="${employee.jobTitle}"></form:input>${employee.jobTitle}</td>
+                                    <form:input type="hidden" path="id" value="${employee.id}"></form:input>
+                                    <form:input type="hidden" path="email" value="${employee.email}"></form:input>
+                                    <form:input type="hidden" path="departmentId" value="${employee.departmentId}"></form:input>
+                                    <c:if test="${employee.jobTitle!='manager'}">
+                                    <td><input type="submit" name="edit" class="btn btn-secondary btn-sm" value="Edit"></td>
+                                    <td><input type="submit" name="delete" class="btn btn-danger btn-sm" value="Delete"/>
+                                    </c:if>
+                                    <c:if test="${employee.jobTitle=='manager'}">
+                                    <td></td>
+                                    <td></td>
+                                    </c:if>
+                                    </form:form>
                                 </tr>
                             </c:forEach>
                             </tbody>

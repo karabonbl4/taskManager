@@ -47,7 +47,7 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer convertToCustomer(CustomerDto customerDto) {
         var customer = new Customer();
         if(customerDto.getId()!=null){
-            customer = customerRepository.getReferenceById(customerDto.getId());
+            customer.setId(customerDto.getId());
         }
         customer.setName(customerDto.getName());
         customer.setTaxNumber(customerDto.getTaxNumber());
@@ -59,8 +59,14 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void update(Customer customer) {
+    public boolean update(CustomerDto customerDto) {
+        var dbcustomer = customerRepository.getReferenceById(customerDto.getId());
+        var customer = convertToCustomer(customerDto);
+        if (customer.equals(dbcustomer)){
+            return false;
+        }
         customerRepository.saveAndFlush(customer);
+        return true;
     }
 
 }
