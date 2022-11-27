@@ -14,5 +14,9 @@ public interface EmployeeService {
     void saveAll(List<Employee> employees);
     Employee findById(Long id);
     EmployeeDto convertToEmployeeDto(Employee employee);
+    Employee convertToEmployee (EmployeeDto employeeDto);
+    boolean update(EmployeeDto editEmployee);
+    void delete(EmployeeDto employeeDto);
+
 
 }

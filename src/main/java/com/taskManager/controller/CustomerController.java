@@ -22,17 +22,14 @@ import java.time.LocalDate;
 public class CustomerController {
     private final CustomerService customerService;
     private final DepartmentService departmentService;
-    private final DateConverter dateConverter;
 
     @GetMapping(value = "/customer")
     public String getCustomer(@RequestParam long departmentId,  @NotNull Model model){
         var department = departmentService.findById(departmentId);
         var customers = departmentService.getDepartmentCustomers(departmentId);
-        var workDayWithDepartmentIdDto = new WorkDayWithDepartmentIdDto();
-        workDayWithDepartmentIdDto.setDate(dateConverter.convertLocalToDate(LocalDate.now()));
+        var workDayWithDepartmentIdDto = departmentService.getWorkdayToday();
         model.addAttribute("department", department);
         model.addAttribute("customers", customers);
-        model.addAttribute("customerError", "You already have such customer!");
         model.addAttribute("workDayWithDepartmentIdDto", workDayWithDepartmentIdDto);
         model.addAttribute("editCustomer", new CustomerDto());
         return "customer";
@@ -42,23 +39,21 @@ public class CustomerController {
         var department = departmentService.findById(departmentId);
         model.addAttribute("department", department);
         model.addAttribute("newCustomer", new CustomerDto());
-        model.addAttribute("editCustomer", new CustomerDto());
         return "createCustomer";
     }
     @PostMapping(value = "/createCustomer")
     public String createNewCustomer(@ModelAttribute("newCustomer") CustomerDto newCustomer, @NotNull Model model){
         if (!customerService.save(customerService.convertToCustomer(newCustomer))){
-            model.addAttribute("customerError", "Customer with that tax number already exist");
             var department = departmentService.findById(newCustomer.getDepartmentId());
+            model.addAttribute("customerError", "Customer with that tax number already exist");
             model.addAttribute("department", department);
             model.addAttribute("newCustomer", new CustomerDto());
             return "createCustomer";
         }
-        return "redirect:/department";
+        return "redirect:/customer?departmentId=".concat(newCustomer.getDepartmentId().toString());
     }
     @GetMapping(value = "/editCustomer")
     public String getEditCustomerForm(@ModelAttribute("editCustomer") @NotNull CustomerDto editCustomer, @NotNull Model model){
-
         var department = departmentService.findById(editCustomer.getDepartmentId());
         var customers = departmentService.getDepartmentCustomers(department.getId());
         model.addAttribute("department", department);
@@ -68,7 +63,11 @@ public class CustomerController {
     }
     @PostMapping(value = "/editCustomer")
     public String editCustomer(@ModelAttribute("editCustomer") CustomerDto editCustomer, Model model){
-        customerService.update(customerService.convertToCustomer(editCustomer));
+        if(!customerService.update(editCustomer)){
+            model.addAttribute("customerError", "Change one of some rows");
+            model.addAttribute("editCustomer", editCustomer);
+            return "editProvider";
+        }
         return "redirect:/customer?departmentId=".concat(editCustomer.getDepartmentId().toString());
     }
 }

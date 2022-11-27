@@ -3,10 +3,12 @@ package com.taskManager.service.impl;
 import com.taskManager.model.entity.Employee;
 import com.taskManager.model.entity.Task;
 import com.taskManager.model.repository.TaskRepository;
+import com.taskManager.service.DepartmentService;
 import com.taskManager.service.EmployeeService;
 import com.taskManager.service.TaskService;
 import com.taskManager.service.converter.TaskConverter;
 import com.taskManager.service.dto.TaskDto;
+import com.taskManager.service.dto.WorkDayWithDepartmentIdDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,7 @@ public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
     private final EmployeeService employeeService;
     private final TaskConverter taskConverter;
+    private final DepartmentService departmentService;
 
     @Override
     public List<Task> findByDate(Date date) {
@@ -96,5 +99,16 @@ public class TaskServiceImpl implements TaskService {
         employeeService.saveAll(oldEmployees);
         employeeService.saveAll(newEmployees);
         return true;
+    }
+
+    @Override
+    public List<Task> getFilteredTask(WorkDayWithDepartmentIdDto workDayWithDepartmentIdDto) {
+        var department = departmentService.findById(workDayWithDepartmentIdDto.getDepartmentId());
+        var filteredTasks = filterByDate(findByDepartmentId(department.getId()), workDayWithDepartmentIdDto.getDate());
+        var doubleFilteredTasks = filterByExecutorAndDate(findByDepartmentId(department.getId()), department.getAuthUserFunction(), workDayWithDepartmentIdDto.getDate());
+        if (!department.getAuthUserFunction().equalsIgnoreCase("manager")){
+            return doubleFilteredTasks;
+        } else {
+            return filteredTasks;}
     }
 }

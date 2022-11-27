@@ -10,5 +10,5 @@ public interface CustomerService {
     boolean save(Customer customer);
     CustomerDto convertToCustomerDto(Customer customer);
     Customer convertToCustomer(CustomerDto customerDto);
-    void update(Customer customer);
+    boolean update(CustomerDto customerDto);
 }

@@ -8,6 +8,4 @@ public interface MaterialService {
     Material convertToMaterial(MaterialDto materialDto);
     MaterialDto convertToMaterialDto(Material material);
     boolean update(MaterialDto materialDto);
-    Material findById(Long id);
-
 }

@@ -73,8 +73,8 @@
                         <div class="mb-3 row">
                             <form:input type="hidden" path="id" value="${editTask.id}"></form:input>
                             <form:input type="hidden" path="departmentId" value="${editTask.departmentId}"></form:input>
+                            <form:errors path="id"></form:errors>${taskError}
                         </div>
-                        <form:errors path="id"></form:errors>${taskError}
                     <button type="submit" class="btn btn-primary">Edit</button>
                     <a href="/task?departmentId=${editTask.departmentId}" class="btn btn-link">Back to Tasks</a>
                 </form:form>

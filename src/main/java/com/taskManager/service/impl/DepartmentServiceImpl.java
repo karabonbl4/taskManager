@@ -5,10 +5,12 @@ import com.taskManager.model.entity.Department;
 import com.taskManager.model.entity.Employee;
 import com.taskManager.model.repository.DepartmentRepository;
 import com.taskManager.service.*;
+import com.taskManager.service.converter.DateConverter;
 import com.taskManager.service.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +23,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     private final CustomerService customerService;
     private final MaterialService materialService;
     private final ProviderService providerService;
+    private final DateConverter dateConverter;
 
     @Override
     public boolean save(DepartmentDto departmentDto) {
@@ -76,6 +79,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public List<EmployeeDto> getDepartmentEmployees(Long departmentId) {
         return departmentRepository.getReferenceById(departmentId).getEmployees().stream()
+                .filter(employee -> !employee.getName().equals("deleted"))
                 .map(employeeService::convertToEmployeeDto)
                 .collect(Collectors.toList());
     }
@@ -104,6 +108,32 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public Department getById(Long id) {
         return departmentRepository.getReferenceById(id);
+    }
+
+    @Override
+    public boolean update(DepartmentDto departmentDto) {
+        var dbDepartment = departmentRepository.getReferenceById(departmentDto.getId());
+        if (dbDepartment.getName().equals(departmentDto.getName()) & dbDepartment.getLocation().equals(departmentDto.getLocation())){
+            return false;
+        }
+        dbDepartment.setName(departmentDto.getName());
+        dbDepartment.setLocation(departmentDto.getLocation());
+        departmentRepository.saveAndFlush(dbDepartment);
+        return true;
+    }
+
+    @Override
+    public WorkDayWithDepartmentIdDto getWorkdayToday() {
+        var workdayToday = new WorkDayWithDepartmentIdDto();
+        workdayToday.setDate(dateConverter.convertLocalToDate(LocalDate.now()));
+        return workdayToday;
+    }
+
+    @Override
+    public boolean containEmployee(EmployeeDto employeeDto) {
+        var department = departmentRepository.getReferenceById(employeeDto.getDepartmentId());
+        return department.getEmployees().stream()
+                .anyMatch(employee -> employee.getUser().getEmail().equals(employeeDto.getEmail()));
     }
 
 

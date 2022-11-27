@@ -2,10 +2,7 @@ package com.taskManager.controller;
 
 import com.taskManager.service.DepartmentService;
 import com.taskManager.service.ProviderService;
-import com.taskManager.service.dto.CustomerDto;
 import com.taskManager.service.dto.ProviderDto;
-import com.taskManager.service.dto.WorkDayWithDepartmentIdDto;
-import com.taskManager.service.converter.DateConverter;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Controller;
@@ -15,42 +12,61 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.LocalDate;
 
 @Controller
 @RequiredArgsConstructor
 public class ProviderController {
     private final ProviderService providerService;
     private final DepartmentService departmentService;
-    private final DateConverter dateConverter;
 
     @GetMapping(value = "/provider")
-    public String getProviders(@RequestParam long departmentId, @NotNull Model model){
+    public String getProviders(@RequestParam long departmentId, @NotNull Model model) {
         var department = departmentService.findById(departmentId);
         var providers = departmentService.getDepartmentProviders(departmentId);
-        var workDayWithDepartmentIdDto = new WorkDayWithDepartmentIdDto();
-        workDayWithDepartmentIdDto.setDate(dateConverter.convertLocalToDate(LocalDate.now()));
+        var workDayWithDepartmentIdDto = departmentService.getWorkdayToday();
         model.addAttribute("workDayWithDepartmentIdDto", workDayWithDepartmentIdDto);
         model.addAttribute("department", department);
         model.addAttribute("providers", providers);
-        model.addAttribute("providerError", "You already have such provider!");
+        model.addAttribute("editProvider", new ProviderDto());
         return "provider";
     }
+
     @GetMapping(value = "/createProvider")
-    public String getCreateForm(@RequestParam long departmentId, @NotNull Model model){
+    public String getCreateForm(@RequestParam long departmentId, @NotNull Model model) {
         var department = departmentService.findById(departmentId);
         model.addAttribute("department", department);
         model.addAttribute("newProvider", new ProviderDto());
         return "createProvider";
     }
+
     @PostMapping(value = "/createProvider")
-    public String createNewProvider(@ModelAttribute(value = "newProvider") ProviderDto newProvider, @NotNull Model model){
-        if (!providerService.save(providerService.convertToProvider(newProvider))){
-            model.addAttribute("providerError", "Provider with that tax number already exist");
+    public String createNewProvider(@ModelAttribute(value = "newProvider") ProviderDto newProvider, @NotNull Model model) {
+        if (!providerService.save(providerService.convertToProvider(newProvider))) {
             var department = departmentService.findById(newProvider.getDepartmentId());
+            model.addAttribute("providerError", "Provider with that tax number already exist");
             model.addAttribute("department", department);
             return "createProvider";
         }
         return "redirect:/department";
+    }
+
+    @GetMapping(value = "/editProvider")
+    public String getEditProviderForm(@ModelAttribute("editProvider") @NotNull ProviderDto editProvider, @NotNull Model model) {
+        var department = departmentService.findById(editProvider.getDepartmentId());
+        var customers = departmentService.getDepartmentCustomers(department.getId());
+        model.addAttribute("department", department);
+        model.addAttribute("providers", customers);
+        model.addAttribute("editProvider", editProvider);
+        return "editProvider";
+    }
+
+    @PostMapping(value = "/editProvider")
+    public String editProvider(@ModelAttribute("editProvider") ProviderDto editProvider, Model model) {
+        if (!providerService.update(editProvider)) {
+            model.addAttribute("providerError", "Change one of some rows");
+            model.addAttribute("editProvider", editProvider);
+            return "editProvider";
+        }
+        return "redirect:/provider?departmentId=".concat(editProvider.getDepartmentId().toString());
     }
 }

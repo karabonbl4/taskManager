@@ -32,7 +32,7 @@
         </div>
 
         <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
-          <li class="ms-3" width="16" height="16"><a class="text-muted" href="mailto:karabonbl4@gmail.com"><svg class="bi" width="16" height="16"><use xlink:href="#google"/></svg></a></li>
+          <li class="ms-3" width="16" height="16"><a class="text-muted" href="mailto:alexeykorobko.1993@gmail.com"><svg class="bi" width="16" height="16"><use xlink:href="#google"/></svg></a></li>
         </ul>
       </footer>
     </div>

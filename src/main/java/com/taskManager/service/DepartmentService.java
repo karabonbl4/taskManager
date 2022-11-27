@@ -17,4 +17,7 @@ public interface DepartmentService {
     List<ProviderDto> getDepartmentProviders(Long departmentId);
     List<CustomerDto> getDepartmentCustomers(Long departmentId);
     Department getById(Long id);
+    boolean update(DepartmentDto departmentDto);
+    WorkDayWithDepartmentIdDto getWorkdayToday();
+    boolean containEmployee(EmployeeDto employeeDto);
 }

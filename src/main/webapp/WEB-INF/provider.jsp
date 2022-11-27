@@ -42,13 +42,16 @@
                                 <c:forEach items="${providers}" var="provider">
                                     <tr>
                                         <td scope="raw">${providers.indexOf(provider) + 1}</td>
-                                        <td>${provider.name}</td>
-                                        <td>${provider.taxNumber}</td>
-                                        <td>${provider.location}</td>
-                                        <td>${provider.owner}</td>
-                                        <td>${provider.email}</td>
-                                        <td><input type="button" action="/editProvider?departmentId=${department.id}" class="btn btn-secondary btn-sm" value="Edit"/></td>
-                                        <td><input type="button" action="/deleteProvider?departmentId=${department.id}" class="btn btn-danger  btn-sm" value="Delete"/></td>
+                                        <form:form action="/editProvider" method="GET" modelAttribute="editProvider">
+                                        <form:input type="hidden" path="id" value="${provider.id}"></form:input>
+                                        <td><form:input type="hidden" path="name" value="${provider.name}"></form:input>${provider.name}</td>
+                                        <td><form:input type="hidden" path="taxNumber" value="${provider.taxNumber}"></form:input>${provider.taxNumber}</td>
+                                        <td><form:input type="hidden" path="location" value="${provider.location}"></form:input>${provider.location}</td>
+                                        <td><form:input type="hidden" path="owner" value="${provider.owner}"></form:input>${provider.owner}</td>
+                                        <td><form:input type="hidden" path="email" value="${provider.email}"></form:input>${provider.email}</td>
+                                        <form:input type="hidden" path="departmentId" value="${provider.departmentId}"></form:input>
+                                        <td><button type="submit" class="btn btn-secondary btn-sm">Edit</button></form:form></td>
+                                        <td><input type="button" action="/deleteProvider?departmentId=${department.id}" class="btn btn-danger btn-sm" value="Delete"/></td>
                                     </tr>
                                 </c:forEach>
                             </tbody>
