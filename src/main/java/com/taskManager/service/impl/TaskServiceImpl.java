@@ -1,6 +1,5 @@
 package com.taskManager.service.impl;
 
-import com.taskManager.enumeration.Condition;
 import com.taskManager.model.entity.Employee;
 import com.taskManager.model.entity.Task;
 import com.taskManager.model.repository.TaskRepository;

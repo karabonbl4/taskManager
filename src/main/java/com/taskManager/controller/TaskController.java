@@ -60,7 +60,7 @@ public class TaskController {
         model.addAttribute("workDayWithDepartmentIdDto", workDayWithDepartmentIdDto);
         return "redirect:/task?departmentId=".concat(newTask.getDepartmentId().toString());
     }
-    @GetMapping(value = "/editTask")
+    @GetMapping(value = "/editTask", params = "edit")
     public String getComparableFormTask(@ModelAttribute @NotNull TaskDto editTask, @NotNull Model model){
         var department = departmentService.findById(editTask.getDepartmentId());
         var employees = departmentService.getDepartmentEmployees(editTask.getDepartmentId());
@@ -70,7 +70,7 @@ public class TaskController {
         return "editTask";
     }
 
-    @PostMapping(value = "/editTask", params = "edit")
+    @PostMapping(value = "/editTask")
     public String editTask(@ModelAttribute @NotNull TaskDto editTask, @NotNull Model model){
         var department = departmentService.findById(editTask.getDepartmentId());
         var employees = departmentService.getDepartmentEmployees(editTask.getDepartmentId());
@@ -98,4 +98,5 @@ public class TaskController {
         taskService.toWork(editTask);
         return "redirect:/task?departmentId=".concat(editTask.getDepartmentId().toString());
     }
+
 }
