@@ -62,7 +62,8 @@ create table task (
   `description` varchar(150) not null,
   `dead_line` datetime(6) not null,
   `priority` int null,
-  `workday` date not null;
+  `workday` date not null,
+  `flag` varchar(45) not null;
 
 create table employee_task (
   `id` bigint primary key not null auto_increment,

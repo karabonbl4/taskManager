@@ -1,5 +1,6 @@
 package com.taskManager.service.impl;
 
+import com.taskManager.enumeration.Condition;
 import com.taskManager.model.entity.Employee;
 import com.taskManager.model.entity.Task;
 import com.taskManager.model.repository.TaskRepository;
@@ -68,6 +69,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void save(Task task) {
         var employees = new ArrayList<>(task.getEmployees());
+        task.setCondition("in_process");
         var returnedTask = taskRepository.saveAndFlush(task);
         for (var employee : employees) {
             employee.getTasks().add(returnedTask);
@@ -110,5 +112,26 @@ public class TaskServiceImpl implements TaskService {
             return doubleFilteredTasks;
         } else {
             return filteredTasks;}
+    }
+
+    @Override
+    public void execute(TaskDto taskDto) {
+        var task = taskRepository.getReferenceById(taskDto.getId());
+        task.setCondition("confirmed");
+        taskRepository.saveAndFlush(task);
+    }
+
+    @Override
+    public void confirm(TaskDto taskDto) {
+        var task = taskRepository.getReferenceById(taskDto.getId());
+        task.setCondition("done");
+        taskRepository.saveAndFlush(task);
+    }
+
+    @Override
+    public void toWork(TaskDto taskDto) {
+        var task = taskRepository.getReferenceById(taskDto.getId());
+        task.setCondition("in_process");
+        taskRepository.saveAndFlush(task);
     }
 }

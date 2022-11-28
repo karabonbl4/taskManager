@@ -61,7 +61,7 @@ public class TaskController {
         return "redirect:/task?departmentId=".concat(newTask.getDepartmentId().toString());
     }
     @GetMapping(value = "/editTask")
-    public String getComparableFormTask(@ModelAttribute(value = "editTask") @NotNull TaskDto editTask, @NotNull Model model){
+    public String getComparableFormTask(@ModelAttribute @NotNull TaskDto editTask, @NotNull Model model){
         var department = departmentService.findById(editTask.getDepartmentId());
         var employees = departmentService.getDepartmentEmployees(editTask.getDepartmentId());
         model.addAttribute("employees", employees);
@@ -70,8 +70,8 @@ public class TaskController {
         return "editTask";
     }
 
-    @PostMapping(value = "/editTask")
-    public String editTask(@ModelAttribute(value = "editTask") @NotNull TaskDto editTask, @NotNull Model model){
+    @PostMapping(value = "/editTask", params = "edit")
+    public String editTask(@ModelAttribute @NotNull TaskDto editTask, @NotNull Model model){
         var department = departmentService.findById(editTask.getDepartmentId());
         var employees = departmentService.getDepartmentEmployees(editTask.getDepartmentId());
         if (!taskService.update(editTask)){
@@ -81,6 +81,21 @@ public class TaskController {
             model.addAttribute("taskError", "Need to change something row");
             return "editTask";
         }
+        return "redirect:/task?departmentId=".concat(editTask.getDepartmentId().toString());
+    }
+    @GetMapping(value = "/editTask", params = "execute")
+    public String executeTask(@ModelAttribute @NotNull TaskDto editTask){
+        taskService.execute(editTask);
+        return "redirect:/task?departmentId=".concat(editTask.getDepartmentId().toString());
+    }
+    @GetMapping(value = "/editTask", params = "confirm")
+    public String confirmTask(@ModelAttribute @NotNull TaskDto editTask){
+        taskService.confirm(editTask);
+        return "redirect:/task?departmentId=".concat(editTask.getDepartmentId().toString());
+    }
+    @GetMapping(value = "/editTask", params = "toWork")
+    public String toWorkTask(@ModelAttribute @NotNull TaskDto editTask){
+        taskService.toWork(editTask);
         return "redirect:/task?departmentId=".concat(editTask.getDepartmentId().toString());
     }
 }

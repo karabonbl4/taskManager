@@ -16,6 +16,9 @@ public interface TaskService {
     void save(Task task);
     boolean update(TaskDto taskDto);
     List<Task> getFilteredTask(WorkDayWithDepartmentIdDto workday);
+    void execute(TaskDto taskDto);
+    void confirm(TaskDto taskDto);
+    void toWork(TaskDto taskDto);
 
 
 }
