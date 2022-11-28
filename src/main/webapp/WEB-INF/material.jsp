@@ -15,8 +15,8 @@
                         <form:input type="hidden" path="departmentId" value="${department.id}"></form:input>
                         <input type="submit" class="w-100 btn btn-primary btn-lg" value="Tasks"></input>
                   </form:form>
-                </div><br>
-                <a href = "/createMaterial?departmentId=${department.id}">Create new material</a><br>
+                </div>
+                <a href = "/createMaterial?departmentId=${department.id}" class="btn btn-outline-success">Create new material</a><br>
                 <c:if test = "${materials.size() == 0}">
                         <h4>Materials not found</h4>
                 </c:if>

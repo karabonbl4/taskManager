@@ -17,10 +17,10 @@
                         <form:input type="hidden" path="departmentId" value="${department.id}"></form:input>
                             <input type="submit" class="w-100 btn btn-primary btn-lg" value="Tasks"></input>
                         </form:form>
-                    </div><br>
+                    </div>
                 <c:if test="${department.authUserFunction=='manager'}">
-                    <div>
-                        <a href = "/createTask?departmentId=${department.id}">Create new task</a><br>
+                    <div class="text-end">
+                        <a href = "/createTask?departmentId=${department.id}" class="btn btn-outline-success">Create new task</a>
                     </div>
                 </c:if>
                 <div>
@@ -48,7 +48,7 @@
                         <thead>
                             <tr>
                                <th scope="col">#</th>
-                               <th scope="col">Name</th>
+                               <th scope="col">Title</th>
                                <th scope="col">Description</th>
                                <th scope="col">Priority</th>
                                <th scope="col">Executors</th>

@@ -6,7 +6,9 @@ import com.taskManager.model.repository.TaskRepository;
 import com.taskManager.service.DepartmentService;
 import com.taskManager.service.EmployeeService;
 import com.taskManager.service.TaskService;
+import com.taskManager.service.converter.DateConverter;
 import com.taskManager.service.converter.TaskConverter;
+import com.taskManager.service.dto.PeriodDto;
 import com.taskManager.service.dto.TaskDto;
 import com.taskManager.service.dto.WorkDayWithDepartmentIdDto;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,7 @@ public class TaskServiceImpl implements TaskService {
     private final EmployeeService employeeService;
     private final TaskConverter taskConverter;
     private final DepartmentService departmentService;
+    private final DateConverter dateConverter;
 
     @Override
     public List<Task> findByDate(Date date) {
@@ -73,6 +76,7 @@ public class TaskServiceImpl implements TaskService {
         for (var employee : employees) {
             employee.getTasks().add(returnedTask);
         }
+
         employeeService.saveAll(employees);
     }
 
@@ -100,6 +104,28 @@ public class TaskServiceImpl implements TaskService {
         employeeService.saveAll(oldEmployees);
         employeeService.saveAll(newEmployees);
         return true;
+    }
+
+    @Override
+    public List<Task> getByPeriod(PeriodDto periodDto) {
+        return findByDepartmentId(periodDto.getDepartmentId()).stream()
+                .filter(task->task.getWorkday().after(periodDto.getFromDate()))
+                .filter(task -> task.getWorkday().before(periodDto.getToDate()))
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Task> getByLastWeek(Long departmentId) {
+        var today = Date.from(LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+        var localToday = dateConverter.convertDateToLocal(today);
+        var localLastWeekDay = localToday.minusWeeks(1);
+        var lastWeekDay = dateConverter.convertLocalToDate(localLastWeekDay);
+        return findByDepartmentId(departmentId).stream()
+                .filter(task->task.getWorkday().after(lastWeekDay))
+                .filter(task -> task.getWorkday().before(today))
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     @Override
