@@ -7,12 +7,7 @@
     <title>Tasks</title>
 </head>
 <body>
-    <c:if test="${department.authUserFunction=='manager'}">
-        <jsp:include page="common/header.jsp"/>
-    </c:if>
-    <c:if test="${department.authUserFunction!='manager'}">
-        <jsp:include page="index.jsp"/>
-    </c:if>
+    <jsp:include page="common/header.jsp"/>
     <c:set var="calendar" value=""/>
     <div class="container">
         <div class="row g-5">
@@ -58,6 +53,7 @@
                                <th scope="col">Priority</th>
                                <th scope="col">Executors</th>
                                <th scope="col">Deadline</th>
+                               <th scope="col">Condition</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -74,13 +70,29 @@
                                         <p>${executor.name}</p></c:forEach></td>
                                    <fmt:formatDate value="${task.deadLine}" pattern="yyyy-MM-dd" var="deadLineDate"/>
                                    <td><form:input type="hidden" path="deadlineDate" value="${deadLineDate}"></form:input>${task.deadLine}</td>
+                                   <td><form:input type="hidden" path="condition" value="${task.condition}"></form:input>
+                                      <c:if test="${task.condition=='in_process'}">
+                                        <input type="submit" class="btn btn-light btn-sm" name="execute" value="Execute"/></c:if>
+                                      <c:if test="${task.condition=='confirmed'}">
+                                        <c:if test="${department.authUserFunction=='manager'}">
+                                          <div><input type="submit" class="btn btn-success btn-sm" name="confirm" value="Confirm"/></div>
+                                          <div><input type="submit" class="btn btn-warning btn-sm" name="toWork" value="To work"/></div>
+                                        </c:if>
+                                        <c:if test="${department.authUserFunction!='manager'}">
+                                        <input type="button" class="btn btn-secondary btn-sm" value="Checked" disabled/></c:if>
+                                      </c:if>
+                                      <c:if test="${task.condition=='done'}">
+                                         <input type="button" class="btn btn-success btn-sm" value="Done" disabled/></c:if>
+                                      <c:if test="${task.condition=='failed'}">
+                                         <input type="button" class="btn btn-danger btn-sm" value="Failed" disabled/></c:if>
+                                   </td>
                                    <fmt:formatDate value="${task.deadLine}" pattern="HH:mm" var="deadLineTime"/>
                                    <form:input type="hidden" path="deadlineTime" value="${deadLineTime}"></form:input>
                                    <form:input type="hidden" path="workday" value="${task.workday}"></form:input>
                                    <form:input type="hidden" path="departmentId" value="${department.id}"></form:input>
                                    <td>
                                        <c:if test = "${department.authUserFunction=='manager'}">
-                                           <button type="submit" class="btn btn-secondary btn-sm">Edit</button>
+                                           <input type="submit" name="edit" class="btn btn-secondary btn-sm" value="Edit"/>
                                        </c:if>
                                    </td>
                                </form:form>

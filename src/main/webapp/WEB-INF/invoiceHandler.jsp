@@ -6,12 +6,7 @@
     <title>Handle of invoice</title>
 </head>
 <body>
-    <c:if test="${department.authUserFunction=='manager'}">
-        <jsp:include page="common/header.jsp"/>
-    </c:if>
-    <c:if test="${department.authUserFunction!='manager'}">
-        <jsp:include page="index.jsp"/>
-    </c:if>
+    <jsp:include page="common/header.jsp"/>
     <div class="container">
         <div class="row g-5">
             <div class="col-md-7 col-lg-8">

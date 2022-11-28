@@ -10,10 +10,10 @@
       <style>
           <%@include file='css/form-validation.css' %>
       </style>
-   <%@include file="index.jsp" %>
 </head>
 
 <body class="bg-light">
+  <jsp:include page="common/header.jsp"/>
     <div class="container">
         <main>
            <div class="row g-5">

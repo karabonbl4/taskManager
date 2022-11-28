@@ -9,9 +9,10 @@
     <style>
          <%@include file='css/grid.css' %>
     </style>
-  <%@include file='index.jsp' %>
+
 </head>
 <body>
+<jsp:include page="common/header.jsp"/>
 <main>
 <div class="container">
   <form:form class="row g-3" method="POST" modelAttribute="newDepartment">

@@ -2,7 +2,6 @@ package com.taskManager.service.converter.impl;
 
 import com.taskManager.model.entity.Employee;
 import com.taskManager.model.entity.Task;
-import com.taskManager.service.DepartmentService;
 import com.taskManager.service.EmployeeService;
 import com.taskManager.service.dto.TaskCreateDto;
 import com.taskManager.service.converter.DateConverter;
@@ -23,7 +22,6 @@ import java.util.stream.Collectors;
 public class TaskConverterImpl implements TaskConverter {
     private final EmployeeService employeeService;
     private final DateConverter dateConverter;
-    private final DepartmentService departmentService;
 
     @Override
     public Task convertToTask(TaskCreateDto taskCreateDto) {
@@ -61,6 +59,7 @@ public class TaskConverterImpl implements TaskConverter {
         var deadLine = dateConverter.convertToDate(stringDeadline);
         task.setDeadLine(deadLine);
         task.setPriority(taskDto.getPriority());
+        task.setCondition(taskDto.getCondition());
         var executors = Arrays.stream(taskDto.getExecutors().split(","))
                 .map(Long::parseLong)
                 .map(employeeService::findById)
@@ -78,6 +77,7 @@ public class TaskConverterImpl implements TaskConverter {
         taskDto.setName(task.getName());
         taskDto.setDescription(task.getDescription());
         taskDto.setPriority(task.getPriority());
+        taskDto.setCondition(task.getCondition());
         taskDto.setWorkday(task.getWorkday());
         var dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         Date deadlineDate;

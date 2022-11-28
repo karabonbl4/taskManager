@@ -22,6 +22,8 @@ public class Task {
     private Integer priority;
     @Column
     private Date workday;
+    @Column(name = "flag")
+    private String condition;
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "tasks")
     private List<Employee> employees;
 
