@@ -67,7 +67,7 @@ public class CustomerController {
         if(!customerService.update(editCustomer)){
             model.addAttribute("customerError", "Change one of some rows");
             model.addAttribute("editCustomer", editCustomer);
-            return "editProvider";
+            return "editCustomer";
         }
         return "redirect:/customer?departmentId=".concat(editCustomer.getDepartmentId().toString());
     }

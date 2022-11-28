@@ -39,7 +39,7 @@
                             </div>
                         </div>
                     <button type="submit" class="btn btn-primary">Create</button>
-                    <a href="/material?departmentId=${editMaterial.departmentId}" class="btn btn-link">Back to materials</a>
+                    <a href="/material?departmentId=${department.id}" class="btn btn-link">Back to materials</a>
                 </form:form>
             </div>
             <div class="col-md-5 col-lg-4 order-md-last">

@@ -15,8 +15,8 @@
                         <form:input type="hidden" path="departmentId" value="${department.id}"></form:input>
                         <input type="submit" class="w-100 btn btn-primary btn-lg" value="Tasks"></input>
                     </form:form>
-                </div><br>
-                <a href = "/createProvider?departmentId=${department.id}">Create new provider</a><br>
+                </div>
+                <a href = "/createProvider?departmentId=${department.id}" class="btn btn-outline-success">Create new provider</a><br>
                 <c:if test = "${providers.size() == 0}">
                 <h4>Providers not found</h4>
                 </c:if>
