@@ -5,6 +5,7 @@ import com.taskManager.model.entity.Department;
 import com.taskManager.model.entity.Employee;
 import com.taskManager.model.repository.DepartmentRepository;
 import com.taskManager.service.*;
+import com.taskManager.service.converter.CustomerConverter;
 import com.taskManager.service.converter.DateConverter;
 import com.taskManager.service.dto.*;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +21,10 @@ public class DepartmentServiceImpl implements DepartmentService {
     private final DepartmentRepository departmentRepository;
     private final UserService userService;
     private final EmployeeService employeeService;
-    private final CustomerService customerService;
     private final MaterialService materialService;
     private final ProviderService providerService;
     private final DateConverter dateConverter;
+    private final CustomerConverter customerConverter;
 
     @Override
     public boolean save(DepartmentDto departmentDto) {
@@ -104,7 +105,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     public List<CustomerDto> getDepartmentCustomers(Long departmentId) {
         return departmentRepository.getReferenceById(departmentId).getCustomers().stream()
                 .filter(customer -> !customer.getName().equals("deleted"))
-                .map(customerService::convertToCustomerDto)
+                .map(customerConverter::convertToCustomerDto)
                 .collect(Collectors.toList());
     }
 
