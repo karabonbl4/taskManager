@@ -2,6 +2,7 @@ package com.taskManager.controller;
 
 import com.taskManager.service.CustomerService;
 import com.taskManager.service.DepartmentService;
+import com.taskManager.service.converter.CustomerConverter;
 import com.taskManager.service.dto.CustomerDto;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class CustomerController {
     private final CustomerService customerService;
     private final DepartmentService departmentService;
+    private final CustomerConverter customerConverter;
 
     @GetMapping(value = "/customer")
     public String getCustomer(@RequestParam long departmentId,  @NotNull Model model){
@@ -39,7 +41,7 @@ public class CustomerController {
     }
     @PostMapping(value = "/createCustomer")
     public String createNewCustomer(@ModelAttribute("newCustomer") CustomerDto newCustomer, @NotNull Model model){
-        if (!customerService.save(customerService.convertToCustomer(newCustomer))){
+        if (!customerService.save(customerConverter.convertToCustomer(newCustomer))){
             var department = departmentService.findById(newCustomer.getDepartmentId());
             model.addAttribute("customerError", "Customer with that tax number already exist");
             model.addAttribute("department", department);
