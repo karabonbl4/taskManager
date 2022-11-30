@@ -1,6 +1,7 @@
 package com.taskManager.controller;
 
 import com.taskManager.service.*;
+import com.taskManager.service.converter.EmployeeConverter;
 import com.taskManager.service.dto.EmployeeDto;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +20,7 @@ public class EmployeeController {
     private final EmployeeService employeeService;
     private final MailSender mailSender;
     private final InvoiceService invoiceService;
+    private final EmployeeConverter employeeConverter;
 
     @GetMapping(value = "/employee")
     public String getEmployees(@RequestParam("departmentId") long id, @NotNull Model model) {
@@ -70,7 +72,7 @@ public class EmployeeController {
     @PostMapping(value = "/invoiceHandler", params = "submit")
     public String handleInvoice(@ModelAttribute("newEmployee") EmployeeDto newEmployee, Model model) {
         var department = departmentService.findById(newEmployee.getDepartmentId());
-        employeeService.save(employeeService.convertToEmployee(newEmployee));
+        employeeService.save(employeeConverter.convertToEmployee(newEmployee));
         model.addAttribute("department", department);
         return "redirect:/department";
     }

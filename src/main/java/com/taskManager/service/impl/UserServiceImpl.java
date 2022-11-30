@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public boolean availableEmail(String email) {
+    public boolean checkAvailabilityEmail(String email) {
         User user = userRepository.findByEmail(email);
         if (user != null) {
             return false;

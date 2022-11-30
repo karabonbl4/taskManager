@@ -5,8 +5,7 @@ import com.taskManager.model.entity.Department;
 import com.taskManager.model.entity.Employee;
 import com.taskManager.model.repository.DepartmentRepository;
 import com.taskManager.service.*;
-import com.taskManager.service.converter.CustomerConverter;
-import com.taskManager.service.converter.DateConverter;
+import com.taskManager.service.converter.*;
 import com.taskManager.service.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,10 +20,11 @@ public class DepartmentServiceImpl implements DepartmentService {
     private final DepartmentRepository departmentRepository;
     private final UserService userService;
     private final EmployeeService employeeService;
-    private final MaterialService materialService;
-    private final ProviderService providerService;
     private final DateConverter dateConverter;
     private final CustomerConverter customerConverter;
+    private final MaterialConverter materialConverter;
+    private final EmployeeConverter employeeConverter;
+    private final ProviderConverter providerConverter;
 
     @Override
     public boolean save(DepartmentDto departmentDto) {
@@ -81,7 +81,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     public List<EmployeeDto> getDepartmentEmployees(Long departmentId) {
         return departmentRepository.getReferenceById(departmentId).getEmployees().stream()
                 .filter(employee -> !employee.getName().equals("deleted"))
-                .map(employeeService::convertToEmployeeDto)
+                .map(employeeConverter::convertToEmployeeDto)
                 .collect(Collectors.toList());
     }
 
@@ -89,7 +89,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     public List<MaterialDto> getDepartmentMaterials(Long departmentId) {
         return departmentRepository.getReferenceById(departmentId).getMaterials().stream()
                 .filter(material -> !material.getName().equals("deleted"))
-                .map(materialService::convertToMaterialDto)
+                .map(materialConverter::convertToMaterialDto)
                 .collect(Collectors.toList());
     }
 
@@ -97,7 +97,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     public List<ProviderDto> getDepartmentProviders(Long departmentId) {
         return departmentRepository.getReferenceById(departmentId).getProviders().stream()
                 .filter(provider -> !provider.getName().equals("deleted"))
-                .map(providerService::convertToProviderDto)
+                .map(providerConverter::convertToProviderDto)
                 .collect(Collectors.toList());
     }
 

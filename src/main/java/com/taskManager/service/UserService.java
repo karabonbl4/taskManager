@@ -10,5 +10,5 @@ public interface UserService {
     boolean saveUser(User user);
     User findByUsername(String username);
     User getAuthUser();
-    boolean availableEmail(String email);
+    boolean checkAvailabilityEmail(String email);
 }

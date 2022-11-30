@@ -26,7 +26,7 @@ public class RegistrationController {
             model.addAttribute("passwordError", "Password incorrect!");
             return "registration";
         }
-        if (!userService.availableEmail(userForm.getEmail())){
+        if (!userService.checkAvailabilityEmail(userForm.getEmail())){
             model.addAttribute("emailError", "User with that e-mail already exist!");
             return "registration";
         }
