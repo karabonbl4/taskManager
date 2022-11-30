@@ -5,8 +5,8 @@ import com.taskManager.service.dto.MaterialDto;
 
 public interface MaterialService {
     boolean save(Material material);
-    Material convertToMaterial(MaterialDto materialDto);
-    MaterialDto convertToMaterialDto(Material material);
+
     boolean update(MaterialDto materialDto);
+
     void delete(MaterialDto materialDto);
 }

@@ -2,6 +2,7 @@ package com.taskManager.controller;
 
 import com.taskManager.service.DepartmentService;
 import com.taskManager.service.ProviderService;
+import com.taskManager.service.converter.ProviderConverter;
 import com.taskManager.service.dto.ProviderDto;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ProviderController {
     private final ProviderService providerService;
     private final DepartmentService departmentService;
+    private final ProviderConverter providerConverter;
 
     @GetMapping(value = "/provider")
     public String getProviders(@RequestParam long departmentId, @NotNull Model model) {
@@ -41,7 +43,7 @@ public class ProviderController {
 
     @PostMapping(value = "/createProvider")
     public String createNewProvider(@ModelAttribute(value = "newProvider") ProviderDto newProvider, @NotNull Model model) {
-        if (!providerService.save(providerService.convertToProvider(newProvider))) {
+        if (!providerService.save(providerConverter.convertToProvider(newProvider))) {
             var department = departmentService.findById(newProvider.getDepartmentId());
             model.addAttribute("providerError", "Provider with that tax number already exist");
             model.addAttribute("department", department);

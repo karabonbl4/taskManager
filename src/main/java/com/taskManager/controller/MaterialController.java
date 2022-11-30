@@ -2,6 +2,7 @@ package com.taskManager.controller;
 
 import com.taskManager.service.DepartmentService;
 import com.taskManager.service.MaterialService;
+import com.taskManager.service.converter.MaterialConverter;
 import com.taskManager.service.dto.MaterialDto;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class MaterialController {
     private final MaterialService materialService;
     private final DepartmentService departmentService;
+    private final MaterialConverter materialConverter;
 
     @GetMapping(value = "/material")
     public String getProviders(@RequestParam("departmentId") long id, @NotNull Model model) {
@@ -42,7 +44,7 @@ public class MaterialController {
 
     @PostMapping(value = "/createMaterial")
     public String createNewMaterial(@ModelAttribute(value = "newMaterial") MaterialDto newMaterial, @NotNull Model model) {
-        if (!materialService.save(materialService.convertToMaterial(newMaterial))) {
+        if (!materialService.save(materialConverter.convertToMaterial(newMaterial))) {
             var department = departmentService.findById(newMaterial.getDepartmentId());
             model.addAttribute("materialError", "Material with that title and property already exist");
             model.addAttribute("department", department);
