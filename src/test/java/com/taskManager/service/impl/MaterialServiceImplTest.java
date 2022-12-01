@@ -45,6 +45,15 @@ class MaterialServiceImplTest {
         boolean actual = materialService.save(material);
 
         assertFalse(actual);
+
+        materials.remove(material);
+        when(material.getDepartmentMaterial()).thenReturn(department);
+        when(department.getMaterials()).thenReturn(materials);
+        lenient().when(material.getName()).thenReturn(NAME);
+        lenient().when(material.getProperty()).thenReturn(PROPERTY);
+        boolean actualTrue = materialService.save(material);
+
+        assertTrue(actualTrue);
     }
 
     @Test

@@ -55,12 +55,21 @@ public class CustomerServiceImplTest {
         boolean actual = customerService.save(customer);
 
         assertFalse(actual);
+
+        customers.remove(customer);
+        when(customer.getDepartmentId()).thenReturn(department);
+        when(department.getCustomers()).thenReturn(customers);
+        boolean actualSave = customerService.save(customer);
+
+        assertTrue(actualSave);
+        verify(customerRepository).saveAndFlush(customer);
     }
 
     @Test
     @DisplayName("Update customer")
     void update() {
         final Customer customer = mock(Customer.class);
+        final Customer customerWithChanges = mock(Customer.class);
         final CustomerDto customerDto = mock(CustomerDto.class);
         when(customerDto.getId()).thenReturn(ID);
         when(customerRepository.getReferenceById(ID)).thenReturn(customer);
@@ -68,6 +77,15 @@ public class CustomerServiceImplTest {
         boolean actual = customerService.update(customerDto);
 
         assertFalse(actual);
+
+        when(customerDto.getId()).thenReturn(ID);
+        when(customerRepository.getReferenceById(ID)).thenReturn(customer);
+        when(customerConverter.convertToCustomer(customerDto)).thenReturn(customerWithChanges);
+        boolean actualSave = customerService.update(customerDto);
+
+        assertTrue(actualSave);
+        verify(customerRepository).saveAndFlush(customerWithChanges);
+
     }
 
     @Test
