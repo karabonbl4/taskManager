@@ -25,6 +25,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     private final MaterialConverter materialConverter;
     private final EmployeeConverter employeeConverter;
     private final ProviderConverter providerConverter;
+    private final DepartmentConverter departmentConverter;
 
     @Override
     public boolean save(DepartmentDto departmentDto) {
@@ -32,7 +33,7 @@ public class DepartmentServiceImpl implements DepartmentService {
                 .anyMatch(dept -> dept.getName().equalsIgnoreCase(departmentDto.getName())) || departmentDto.getName().equalsIgnoreCase("")) {
             return false;
         }
-        employeeService.save(new Employee(userService.getAuthUser(), "manager", departmentRepository.save(convertToDepartment(departmentDto))));
+        employeeService.save(new Employee(userService.getAuthUser(), "manager", departmentRepository.save(departmentConverter.convertToDepartment(departmentDto))));
         return true;
     }
 
@@ -44,37 +45,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public List<DepartmentDto> getDepartmentsDto() {
         return findByAuthUsername().stream()
-                .map(this::convertToDepartmentDto)
+                .map(departmentConverter::convertToDepartmentDto)
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public DepartmentDto convertToDepartmentDto(Department department) {
-        var departmentDto = new DepartmentDto();
-        var employees = department.getEmployees();
-        for (Employee employee : employees) {
-            if (employee.getName().equalsIgnoreCase("manager")) {
-                departmentDto.setManager(employee.getUser().getUsername());
-            }
-            if (employee.getUser().getUsername().equals(userService.getAuthUser().getUsername())) {
-                departmentDto.setAuthUserFunction(employee.getName());
-            }
-        }
-        departmentDto.setId(department.getId());
-        departmentDto.setName(department.getName());
-        departmentDto.setLocation(department.getLocation());
-        return departmentDto;
-    }
-
-    @Override
-    public Department convertToDepartment(DepartmentDto departmentDto) {
-        var department = new Department();
-        if(departmentDto.getId()!=null){
-            department.setId(departmentDto.getId());
-        }
-        department.setName(departmentDto.getName());
-        department.setLocation(departmentDto.getLocation());
-        return department;
     }
 
     @Override
@@ -138,7 +110,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public DepartmentDto findById(long id) {
-        return convertToDepartmentDto(departmentRepository.getReferenceById(id));
+        return departmentConverter.convertToDepartmentDto(departmentRepository.getReferenceById(id));
     }
 
 }

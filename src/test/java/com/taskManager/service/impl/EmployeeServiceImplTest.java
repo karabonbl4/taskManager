@@ -79,6 +79,19 @@ class EmployeeServiceImplTest {
         boolean actualFalse = employeeService.update(employeeDto);
 
         assertFalse(actualFalse);
+
+        when(employeeDto.getDepartmentId()).thenReturn(DEPARTMENT_ID);
+        when(departmentRepository.getReferenceById(DEPARTMENT_ID)).thenReturn(department);
+        when(department.getEmployees()).thenReturn(employees);
+        when(employeeDto.getJobTitle()).thenReturn("new job title");
+        when(employee.getName()).thenReturn(NAME);
+        when(employeeDto.getId()).thenReturn(ID);
+        when(employeeRepository.getReferenceById(ID)).thenReturn(employee);
+
+        boolean actualTrue = employeeService.update(employeeDto);
+
+        assertTrue(actualTrue);
+        verify(employeeRepository).saveAndFlush(employee);
     }
 
     @Test

@@ -45,6 +45,12 @@ class MaterialServiceImplTest {
         boolean actual = materialService.save(material);
 
         assertFalse(actual);
+
+        materials.remove(material);
+
+        boolean actualTrue = materialService.save(material);
+
+        assertTrue(actualTrue);
     }
 
     @Test
@@ -52,6 +58,7 @@ class MaterialServiceImplTest {
     void update() {
         final Material material = mock(Material.class);
         final MaterialDto materialDto = mock(MaterialDto.class);
+        final Material updatedMaterial = mock(Material.class);
         when(materialDto.getId()).thenReturn(ID);
         when(materialRepository.getReferenceById(ID)).thenReturn(material);
         lenient().when(materialDto.getDepartmentId()).thenReturn(DEPARTMENT_ID);
@@ -59,6 +66,12 @@ class MaterialServiceImplTest {
         boolean actual = materialService.update(materialDto);
 
         assertFalse(actual);
+
+        when(materialConverter.convertToMaterial(materialDto)).thenReturn(updatedMaterial);
+
+        boolean actualTrue = materialService.update(materialDto);
+
+        assertTrue(actualTrue);
     }
 
     @Test
@@ -71,6 +84,5 @@ class MaterialServiceImplTest {
         materialService.delete(materialDto);
 
         verify(materialRepository).saveAndFlush(material);
-
     }
 }

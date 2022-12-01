@@ -15,7 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,18 +24,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
-    }
 
     @Override
     public boolean saveUser(User user) {
-        User userFromDB = userRepository.findByUsername(user.getUsername());
-        if (userFromDB != null) {
+        if (userRepository.findByUsername(user.getUsername()) != null) {
             return false;
         }
-
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setRoles(Collections.singletonList(roleRepository.save(new Role("ROLE_USER"))));
         userRepository.save(user);
@@ -58,10 +51,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public boolean checkAvailabilityEmail(String email) {
         User user = userRepository.findByEmail(email);
-        if (user != null) {
-            return false;
-        }
-        return true;
+        return user == null;
     }
 
     @Override
