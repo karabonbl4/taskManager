@@ -57,8 +57,7 @@ public class CustomerServiceImplTest {
         assertFalse(actual);
 
         customers.remove(customer);
-        when(customer.getDepartmentId()).thenReturn(department);
-        when(department.getCustomers()).thenReturn(customers);
+
         boolean actualSave = customerService.save(customer);
 
         assertTrue(actualSave);
@@ -78,14 +77,11 @@ public class CustomerServiceImplTest {
 
         assertFalse(actual);
 
-        when(customerDto.getId()).thenReturn(ID);
-        when(customerRepository.getReferenceById(ID)).thenReturn(customer);
         when(customerConverter.convertToCustomer(customerDto)).thenReturn(customerWithChanges);
         boolean actualSave = customerService.update(customerDto);
 
         assertTrue(actualSave);
         verify(customerRepository).saveAndFlush(customerWithChanges);
-
     }
 
     @Test

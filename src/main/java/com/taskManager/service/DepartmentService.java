@@ -14,10 +14,6 @@ public interface DepartmentService {
 
     DepartmentDto findById(long id);
 
-    DepartmentDto convertToDepartmentDto(Department department);
-
-    Department convertToDepartment(DepartmentDto departmentDto);
-
     List<EmployeeDto> getDepartmentEmployees(Long departmentId);
 
     List<MaterialDto> getDepartmentMaterials(Long departmentId);

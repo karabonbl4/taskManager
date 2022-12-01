@@ -8,9 +8,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,8 +22,9 @@ class MailSenderImplTest {
     private final static String FROM = "karabonbl4@gmail.com";
     private final static String LINK = "some:link";
     private final static String SUBJECT = "Invoice";
-    private String host = "http://localhost:";
-    private String port = "8080";
+    private final String host = "http://localhost:";
+
+    private final String port = "8080";
     private final static StringBuilder TEXT = new StringBuilder("You are invited to be part of the team:");
     @Mock
     private JavaMailSender mailSender;
@@ -45,14 +46,16 @@ class MailSenderImplTest {
     @Test
     @DisplayName("Create link for offer")
     void createInvoiceLinkByEmployee() {
-//        final EmployeeDto employeeDtoForCreateInvoiceLink = new EmployeeDto();
-//        employeeDtoForCreateInvoiceLink.setDepartmentId(11L);
-//        employeeDtoForCreateInvoiceLink.setJobTitle("worker");
-//        employeeDtoForCreateInvoiceLink.setEmail(TO);
-//
-//        String expected = "http://localhost:8080/invoiceHandler?departmentId=11&name=worker&email=example@mail.com";
-//        String actual = mailSenderImpl.createInvoiceLinkByEmployee(employeeDtoForCreateInvoiceLink);
-//
-//        assertEquals(expected, actual);
+        ReflectionTestUtils.setField(mailSenderImpl, "host", host);
+        ReflectionTestUtils.setField(mailSenderImpl, "port", port);
+        final EmployeeDto employeeDtoForCreateInvoiceLink = new EmployeeDto();
+        employeeDtoForCreateInvoiceLink.setDepartmentId(11L);
+        employeeDtoForCreateInvoiceLink.setJobTitle("worker");
+        employeeDtoForCreateInvoiceLink.setEmail(TO);
+
+        String expected = "http://localhost:8080/invoiceHandler?departmentId=11&name=worker&email=example@mail.com";
+        String actual = mailSenderImpl.createInvoiceLinkByEmployee(employeeDtoForCreateInvoiceLink);
+
+        assertEquals(expected, actual);
     }
 }

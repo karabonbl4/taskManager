@@ -58,6 +58,11 @@ class ProviderServiceImplTest {
         boolean actual = providerService.save(provider);
 
         assertFalse(actual);
+
+        providers.remove(provider);
+        boolean actualTrue = providerService.save(provider);
+
+        assertTrue(actualTrue);
     }
 
     @Test
@@ -65,12 +70,20 @@ class ProviderServiceImplTest {
     void update() {
         final Provider provider = mock(Provider.class);
         final ProviderDto providerDto = mock(ProviderDto.class);
+        final Provider updProvider = mock(Provider.class);
         when(providerDto.getId()).thenReturn(ID);
         when(providerRepository.getReferenceById(ID)).thenReturn(provider);
         when(providerConverter.convertToProvider(providerDto)).thenReturn(provider);
         boolean actual = providerService.update(providerDto);
 
         assertFalse(actual);
+
+        when(providerConverter.convertToProvider(providerDto)).thenReturn(updProvider);
+        boolean actualTrue = providerService.update(providerDto);
+
+        assertTrue(actualTrue);
+
+
     }
 
     @Test

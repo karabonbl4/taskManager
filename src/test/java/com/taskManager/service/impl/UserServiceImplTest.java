@@ -1,11 +1,9 @@
 package com.taskManager.service.impl;
 
-import com.taskManager.exception.UserNotFoundException;
 import com.taskManager.model.entity.User;
 import com.taskManager.model.repository.RoleRepository;
 import com.taskManager.model.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -66,14 +64,13 @@ class UserServiceImplTest {
     @Test
     void getAuthUser() {
         final User user = mock(User.class);
-        final Object principal = mock(Object.class);
-        UserDetails userDetails = mock(UserDetails.class);
+        final UserDetails principal = mock(UserDetails.class);
         final Authentication authentication = mock(Authentication.class);
         final SecurityContext securityContext = mock(SecurityContext.class);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         SecurityContextHolder.setContext(securityContext);
         when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(principal);
-        when(userDetails.getUsername()).thenReturn(USERNAME);
+        when(principal.getUsername()).thenReturn(USERNAME);
         when(userRepository.findByUsername(USERNAME)).thenReturn(user);
 
         final User actual = userService.getAuthUser();
@@ -95,6 +92,7 @@ class UserServiceImplTest {
         final boolean actualOther = userService.checkAvailabilityEmail(EMAIL);
 
         assertTrue(actualOther);
+        verifyNoMoreInteractions(userRepository);
     }
 
     @Test()
