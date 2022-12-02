@@ -58,7 +58,7 @@
                         <div class="mb-3 row">
                             <label for="floatingExecutors" class="col-sm-2 col-form-label">Executors</label>
                                 <div class="col-sm-10">
-                                <form:select class="form-select" id="floatingExecutors" path="executors" multiple="multiple">
+                                <form:select class="form-select" id="floatingExecutors" path="executors" multiple="multiple" required="required">
                                         <c:forEach items="${employees}" var="executor">
                                             <option value="${executor.id}">${executor.jobTitle}</option>
                                         </c:forEach>

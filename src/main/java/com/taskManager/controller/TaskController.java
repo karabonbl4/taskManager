@@ -2,7 +2,6 @@ package com.taskManager.controller;
 
 import com.taskManager.service.DepartmentService;
 import com.taskManager.service.TaskService;
-import com.taskManager.service.dto.TaskCreateDto;
 import com.taskManager.service.dto.TaskDto;
 import com.taskManager.service.dto.WorkDayWithDepartmentIdDto;
 import com.taskManager.service.converter.TaskConverter;
@@ -48,11 +47,11 @@ public class TaskController {
         var employees = departmentService.getDepartmentEmployees(departmentId);
         model.addAttribute("employees", employees);
         model.addAttribute("department", department);
-        model.addAttribute("newTask", new TaskCreateDto());
+        model.addAttribute("newTask", new TaskDto());
         return "createTask";
     }
     @PostMapping(value = "/createTask")
-    public String createNewTask(@ModelAttribute @NotNull TaskCreateDto newTask, @RequestParam long departmentId, @NotNull Model model) {
+    public String createNewTask(@ModelAttribute @NotNull TaskDto newTask, @RequestParam long departmentId, @NotNull Model model) {
         var department = departmentService.findById(departmentId);
         var workDayWithDepartmentIdDto = new WorkDayWithDepartmentIdDto(newTask.getWorkday(), departmentId);
         taskService.save(taskConverter.convertToTask(newTask));

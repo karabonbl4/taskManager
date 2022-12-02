@@ -24,7 +24,7 @@
                     </div>
                 </c:if>
                 <div>
-                   <h5 class="display 6">Choose the date to see your tasks:</h5>
+                   <h1 class="display-6">Choose the date to see your tasks:</h1>
                    <form:form method="POST" class="row g-3" modelAttribute="workDayWithDepartmentIdDto">
                           <div class="col-auto">
                               <form:input type="hidden"  path="departmentId" value="${department.id}"></form:input>

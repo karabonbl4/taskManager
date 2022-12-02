@@ -12,7 +12,7 @@
     <div class="container">
         <div class="row g-3">
             <div class="col-md-7 col-lg-8">
-                <h3 class="display 6">Select period to view the tasks</h3>
+                <h1 class="display-6">Select period to view the tasks</h1>
                 <form:form method="POST" action="/report" class="row" modelAttribute="period">
                     <form:input type="hidden" path="departmentId" value="${department.id}"></form:input>
                     <div class="col"><a href="/report?departmentId=${department.id}" class="btn btn-primary">Today</a></div>

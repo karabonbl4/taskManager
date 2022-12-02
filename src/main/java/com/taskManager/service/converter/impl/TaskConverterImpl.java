@@ -3,7 +3,6 @@ package com.taskManager.service.converter.impl;
 import com.taskManager.model.entity.Employee;
 import com.taskManager.model.entity.Task;
 import com.taskManager.service.EmployeeService;
-import com.taskManager.service.dto.TaskCreateDto;
 import com.taskManager.service.converter.DateConverter;
 import com.taskManager.service.converter.TaskConverter;
 import com.taskManager.service.dto.TaskDto;
@@ -22,28 +21,6 @@ import java.util.stream.Collectors;
 public class TaskConverterImpl implements TaskConverter {
     private final EmployeeService employeeService;
     private final DateConverter dateConverter;
-
-    @Override
-    public Task convertToTask(TaskCreateDto taskCreateDto) {
-        var task = new Task();
-        if (taskCreateDto.getId() != null) {
-            task.setId(taskCreateDto.getId());
-        }
-        task.setName(taskCreateDto.getName());
-        task.setDescription(taskCreateDto.getDescription());
-        task.setWorkday(taskCreateDto.getWorkday());
-        var dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
-        var stringDeadline = dateFormat.format(taskCreateDto.getDeadlineDate()).replace("00:00:00", taskCreateDto.getDeadlineTime().concat(":00"));
-        var deadLine = dateConverter.convertToDate(stringDeadline);
-        task.setDeadLine(deadLine);
-        task.setPriority(taskCreateDto.getPriority());
-        var executors = Arrays.stream(taskCreateDto.getExecutors().split(","))
-                .map(Long::parseLong)
-                .map(employeeService::findById)
-                .collect(Collectors.toList());
-        task.setEmployees(executors);
-        return task;
-    }
 
     @Override
     public Task convertToTask(TaskDto taskDto) {
