@@ -43,7 +43,7 @@
                                             <td><form:input type="hidden" path="taxNumber" value="${provider.taxNumber}"></form:input>${provider.taxNumber}</td>
                                             <td><form:input type="hidden" path="location" value="${provider.location}"></form:input>${provider.location}</td>
                                             <td><form:input type="hidden" path="owner" value="${provider.owner}"></form:input>${provider.owner}</td>
-                                            <td><form:input type="hidden" path="email" value="${provider.email}"></form:input>${provider.email}</td>
+                                            <td><form:input type="hidden" path="email" value="${provider.email}"></form:input><a href="mailto:${provider.email}">${provider.email}</a></td>
                                             <form:input type="hidden" path="departmentId" value="${provider.departmentId}"></form:input>
                                             <td><input type="submit" name="edit" class="btn btn-secondary btn-sm" value="Edit"></td>
                                             <td><input type="submit" name="delete" class="btn btn-danger btn-sm" value="Delete"/></td>

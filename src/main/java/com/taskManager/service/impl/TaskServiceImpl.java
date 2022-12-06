@@ -2,10 +2,9 @@ package com.taskManager.service.impl;
 
 import com.taskManager.model.entity.Employee;
 import com.taskManager.model.entity.Task;
+import com.taskManager.model.entity.TempMaterial;
 import com.taskManager.model.repository.TaskRepository;
-import com.taskManager.service.DepartmentService;
-import com.taskManager.service.EmployeeService;
-import com.taskManager.service.TaskService;
+import com.taskManager.service.*;
 import com.taskManager.service.converter.DateConverter;
 import com.taskManager.service.converter.TaskConverter;
 import com.taskManager.service.dto.PeriodDto;
@@ -14,13 +13,12 @@ import com.taskManager.service.dto.WorkDayWithDepartmentIdDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,6 +29,8 @@ public class TaskServiceImpl implements TaskService {
     private final TaskConverter taskConverter;
     private final DepartmentService departmentService;
     private final DateConverter dateConverter;
+    private final TempMaterialService tempMaterialService;
+    private final MaterialService materialService;
 
     @Override
     public List<Task> findByDate(Date date) {
@@ -69,14 +69,24 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public void save(Task task) {
         var employees = new ArrayList<>(task.getEmployees());
         task.setCondition("in_process");
+        List<TempMaterial> tempMaterials = null;
+        if(task.getTempMaterials()!=null) {
+            tempMaterials = task.getTempMaterials();
+        }
         var returnedTask = taskRepository.saveAndFlush(task);
         for (var employee : employees) {
             employee.getTasks().add(returnedTask);
         }
-
+        if(tempMaterials!=null){
+            for (var tempMaterial:tempMaterials){
+                tempMaterial.setTask(returnedTask);
+            }
+            tempMaterialService.saveAll(tempMaterials);
+        }
         employeeService.saveAll(employees);
     }
 
@@ -112,6 +122,7 @@ public class TaskServiceImpl implements TaskService {
                 .filter(task->task.getWorkday().after(periodDto.getFromDate()))
                 .filter(task -> task.getWorkday().before(periodDto.getToDate()))
                 .distinct()
+                .sorted(Comparator.comparing(Task::getWorkday))
                 .collect(Collectors.toList());
     }
 
@@ -125,6 +136,7 @@ public class TaskServiceImpl implements TaskService {
                 .filter(task->task.getWorkday().after(lastWeekDay))
                 .filter(task -> task.getWorkday().before(today))
                 .distinct()
+                .sorted(Comparator.comparing(Task::getWorkday))
                 .collect(Collectors.toList());
     }
 
@@ -134,8 +146,18 @@ public class TaskServiceImpl implements TaskService {
         var filteredTasks = filterByDate(findByDepartmentId(department.getId()), workDayWithDepartmentIdDto.getDate());
         var doubleFilteredTasks = filterByExecutorAndDate(findByDepartmentId(department.getId()), department.getAuthUserFunction(), workDayWithDepartmentIdDto.getDate());
         if (!department.getAuthUserFunction().equalsIgnoreCase("manager")){
+            for (var task:doubleFilteredTasks) {
+                if(task.getDeadLine().toInstant().isBefore(Instant.now()) && !task.getCondition().equals("done")){
+                    fail(task);
+                }
+            }
             return doubleFilteredTasks;
         } else {
+            for (var task:filteredTasks) {
+                if(task.getDeadLine().toInstant().isBefore(Instant.now()) && !task.getCondition().equals("done")){
+                    fail(task);
+                }
+            }
             return filteredTasks;}
     }
 
@@ -147,9 +169,17 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public void confirm(TaskDto taskDto) {
         var task = taskRepository.getReferenceById(taskDto.getId());
         task.setCondition("done");
+        if (task.getTempMaterials() != null){
+            for (var tempMaterial:task.getTempMaterials()) {
+                var material = materialService.findById(tempMaterial.getMaterialId());
+                material.setValue(material.getValue() - tempMaterial.getValue());
+                materialService.save(material);
+            }
+        }
         taskRepository.saveAndFlush(task);
     }
 
@@ -157,6 +187,12 @@ public class TaskServiceImpl implements TaskService {
     public void toWork(TaskDto taskDto) {
         var task = taskRepository.getReferenceById(taskDto.getId());
         task.setCondition("in_process");
+        taskRepository.saveAndFlush(task);
+    }
+
+    @Override
+    public void fail(Task task) {
+        task.setCondition("failed");
         taskRepository.saveAndFlush(task);
     }
 }

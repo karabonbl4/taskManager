@@ -26,5 +26,7 @@ public class Task {
     private String condition;
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "tasks")
     private List<Employee> employees;
+    @OneToMany(cascade = CascadeType.MERGE, mappedBy = "task")
+    private List<TempMaterial> tempMaterials;
 
 }

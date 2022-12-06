@@ -29,24 +29,33 @@
                         <div class="mb-3 row">
                             <label for="deadlineDate" class="col-sm-2 col-form-label">Deadline day</label>
                                 <div class="col-auto">
-                                    <form:input type="date" class="form-control" id="deadlineDate" path="deadlineDate" name="deadlineDate"></form:input>
+                                    <form:input type="date" class="form-control" id="deadlineDate" path="deadlineDate"></form:input>
                                 </div>
                             <label for="deadlineTime" class="col-sm-2 col-form-label">Deadline time</label>
                                 <div class="col-auto">
-                                    <form:input type="time" class="form-control" id="deadlineTime" path="deadlineTime" name="deadlineTime"></form:input>
+                                    <form:input type="time" class="form-control" id="deadlineTime" path="deadlineTime"></form:input>
+                                </div>
+                                <div class="col-auto">
+                                    <form:input type="hidden" path="tempMaterials" name="tempMaterials" value="${newTask.tempMaterials}"></form:input>
+                                    <c:if test="${empty newTask.tempMaterials}">
+                                        <input type="submit" class="btn btn-primary" name="addMaterial" value="+ Material"/>
+                                    </c:if>
+                                    <c:if test="${!empty newTask.tempMaterials}">
+                                        <input type="submit" class="btn btn-primary" name="addMaterial" value="+ Material" disabled/>
+                                    </c:if>
                                 </div>
                         </div>
                         <div class="mb-3 row">
                             <label for="workday" class="col-sm-2 col-form-label">Workday</label>
                             <div class="col-sm-10">
-                                <form:input type="date" class="form-control" id="workday" path="workday" name="workday"></form:input>
+                                <form:input type="date" class="form-control" id="workday" path="workday"></form:input>
                             </div>
                         </div>
                         <div class="mb-3 row">
                             <label for="floatingPriority" class="col-sm-2 col-form-label">Task priority</label>
                                 <div class="col-sm-10">
                                     <form:select class="form-select" id="floatingPriority" path="priority">
-                                        <option selected>Choose priority for task</option>
+                                        <option selected value="1">Choose priority for task</option>
                                         <option value="1">&#9734</option>
                                         <option value="2">&#9734&#9734</option>
                                         <option value="3">&#9734&#9734&#9734</option>
@@ -65,7 +74,7 @@
                                     </form:select>
                                 </div>
                         </div>
-                    <button type="submit" class="btn btn-primary">Create</button>
+                    <input type="submit" class="btn btn-primary" name="create" value="Create"/>
                     <a href="/task?departmentId=${department.id}" class="btn btn-link">Back to Tasks</a>
                 </form:form>
             </div>

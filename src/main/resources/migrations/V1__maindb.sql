@@ -13,7 +13,7 @@ create table department (
   `name` varchar(255) not null,
   `location` varchar(255) not null;
   
-  create table employee (
+create table employee (
   `id` bigint primary key not null auto_increment,
   `name` varchar(45) not null,
   `user_id` bigint not null,
@@ -72,13 +72,21 @@ create table employee_task (
   foreign key (employee_id) references maindb.employee(id),
   foreign key (task_id) references maindb.task(id));
 
-CREATE TABLE `maindb`.`role` (
-  `id` BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(150) NOT NULL);
+create table `maindb`.`role` (
+  `id` bigint primary key not null AUTO_INCREMENT,
+  `name` varchar(150) not null);
 
-CREATE TABLE `maindb`.`employee_role` (
-  `id` BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  `employee_id` BIGINT NOT NULL,
-  `role_id` BIGINT NOT NULL,
-  FOREIGN KEY (employee_id) references maindb.employee(id),
-  FOREIGN KEY (role_id) references maindb.role(id));
+create table `maindb`.`employee_role` (
+  `id` bigint primary key not null AUTO_INCREMENT,
+  `employee_id` bigint not null,
+  `role_id` bigint not null,
+  foreign key (employee_id) references maindb.employee(id),
+  foreign key (role_id) references maindb.role(id));
+
+create table `maindb`.`temp_material` (
+  `id` bigint primary key not null auto_increment,
+  `name` varchar(255) not null,
+  `property` varchar(45) null,
+  `value` int not null,
+  `task_id` bigint not null,
+  foreign key (task_id) references maindb.task(id));

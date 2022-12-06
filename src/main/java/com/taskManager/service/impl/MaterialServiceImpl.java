@@ -42,4 +42,9 @@ public class MaterialServiceImpl implements MaterialService {
         dbMaterial.setName("deleted");
         materialRepository.saveAndFlush(dbMaterial);
     }
+
+    @Override
+    public Material findById(Long id) {
+        return materialRepository.getReferenceById(id);
+    }
 }
