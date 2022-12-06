@@ -18,4 +18,5 @@ public class TaskDto {
     private Integer priority;
     private Long departmentId;
     private String executors;
+    private String tempMaterials;
 }

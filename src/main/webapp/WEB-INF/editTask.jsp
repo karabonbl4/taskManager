@@ -33,7 +33,7 @@
                                 </div>
                             <label for="deadlineTime" class="col-sm-2 col-form-label">Deadline time</label>
                                 <div class="col-auto">
-                                    <form:input type="time" class="form-control" id="deadlineTime" path="deadlineTime" value="${editTask.deadlineTime}"></form:input>
+                                    <form:input type="time" class="form-control" id="deadlineTime" path="deadlineTime"></form:input>
                                 </div>
                         </div>
                         <div class="mb-3 row">

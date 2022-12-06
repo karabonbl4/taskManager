@@ -3,6 +3,7 @@ package com.taskManager.controller;
 import com.taskManager.service.DepartmentService;
 import com.taskManager.service.TaskService;
 import com.taskManager.service.dto.TaskDto;
+import com.taskManager.service.dto.TempMaterialDto;
 import com.taskManager.service.dto.WorkDayWithDepartmentIdDto;
 import com.taskManager.service.converter.TaskConverter;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class TaskController {
         model.addAttribute("department", department);
         model.addAttribute("workDayWithDepartmentIdDto", workDayWithDepartmentIdDto);
         model.addAttribute("editTask", new TaskDto());
+        model.addAttribute("newTask", new TaskDto());
         return "task";
     }
     @PostMapping(value = "/task")
@@ -39,18 +41,19 @@ public class TaskController {
         model.addAttribute("department", department);
         model.addAttribute("workDayWithDepartmentIdDto", workDayWithDepartmentIdDto);
         model.addAttribute("editTask", new TaskDto());
+        model.addAttribute("newTask", new TaskDto());
         return "task";
     }
     @GetMapping(value = "/createTask")
-    public String getFormNewTask(@RequestParam long departmentId, @NotNull Model model){
+    public String getFormNewTask(@ModelAttribute TaskDto newTask, @RequestParam long departmentId, @NotNull Model model){
         var department = departmentService.findById(departmentId);
         var employees = departmentService.getDepartmentEmployees(departmentId);
         model.addAttribute("employees", employees);
         model.addAttribute("department", department);
-        model.addAttribute("newTask", new TaskDto());
+        model.addAttribute("newTask", newTask);
         return "createTask";
     }
-    @PostMapping(value = "/createTask")
+    @PostMapping(value = "/createTask", params = "create")
     public String createNewTask(@ModelAttribute @NotNull TaskDto newTask, @RequestParam long departmentId, @NotNull Model model) {
         var department = departmentService.findById(departmentId);
         var workDayWithDepartmentIdDto = new WorkDayWithDepartmentIdDto(newTask.getWorkday(), departmentId);
@@ -59,6 +62,17 @@ public class TaskController {
         model.addAttribute("workDayWithDepartmentIdDto", workDayWithDepartmentIdDto);
         return "redirect:/task?departmentId=".concat(newTask.getDepartmentId().toString());
     }
+    @PostMapping(value = "/createTask", params = "addMaterial")
+    public String addMaterial(@ModelAttribute @NotNull TaskDto newTask, @RequestParam long departmentId, Model model){
+        var department = departmentService.findById(departmentId);
+        var materials = departmentService.getDepartmentMaterials(departmentId);
+        model.addAttribute("newTask", newTask);
+        model.addAttribute("materials", materials);
+        model.addAttribute("department", department);
+        return "addMaterial";
+    }
+
+
     @GetMapping(value = "/editTask", params = "edit")
     public String getComparableFormTask(@ModelAttribute @NotNull TaskDto editTask, @NotNull Model model){
         var department = departmentService.findById(editTask.getDepartmentId());

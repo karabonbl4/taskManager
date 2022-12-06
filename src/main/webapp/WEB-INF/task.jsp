@@ -20,7 +20,11 @@
                     </div>
                 <c:if test="${department.authUserFunction=='manager'}">
                     <div class="text-end">
-                        <a href = "/createTask?departmentId=${department.id}" class="btn btn-outline-success">Create new task</a>
+                        <form:form method="GET" action="/createTask" modelAttribute="newTask">
+
+                        <button type="submit" class="btn btn-outline-success" name="departmentId" value="${department.id}">Create new task</button>
+
+                        </form:form>
                     </div>
                 </c:if>
                 <div>
@@ -50,6 +54,7 @@
                                <th scope="col">#</th>
                                <th scope="col">Title</th>
                                <th scope="col">Description</th>
+                               <th scope="col">Materials</th>
                                <th scope="col">Priority</th>
                                <th scope="col">Executors</th>
                                <th scope="col">Deadline</th>
@@ -64,12 +69,17 @@
                                    <form:input type="hidden" path="id" value="${task.id}"></form:input>
                                    <td><form:input type="hidden" path="name" value="${task.name}"></form:input>${task.name}</td>
                                    <td><form:input type="hidden" path="description" value="${task.description}"></form:input>${task.description}</td>
+                                   <td><c:if test="${empty task.tempMaterials}"><button type="button" class="btn btn-outline-secondary btn-sm" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="${task.tempMaterials}" disabled>
+                                       Materials</button></c:if>
+                                       <c:if test="${!empty task.tempMaterials}"><button type="button" class="btn btn-outline-secondary btn-sm" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="${task.tempMaterials}">
+                                       Materials</button></c:if>
+                                       </td>
                                    <td><form:input type="hidden" path="priority" value="${task.priority}"></form:input>${task.priority}</td>
                                    <td><form:input type="hidden" path="executors" value="${editTask.executors}"></form:input>
                                    <c:forEach items="${task.employees}" var="executor">
                                         <p>${executor.name}</p></c:forEach></td>
-                                   <fmt:formatDate value="${task.deadLine}" pattern="yyyy-MM-dd" var="deadLineDate"/>
-                                   <td><form:input type="hidden" path="deadlineDate" value="${deadLineDate}"></form:input>${task.deadLine}</td>
+                                   <fmt:formatDate value="${task.deadLine}" pattern="yyyy-MM-dd HH:mm" var="deadLineDate"/>
+                                   <td><form:input type="hidden" path="deadlineDate" value="${deadLineDate}"></form:input>${deadLineDate}</td>
                                    <td><form:input type="hidden" path="condition" value="${task.condition}"></form:input>
                                       <c:if test="${task.condition=='in_process'}">
                                         <input type="submit" class="btn btn-light btn-sm" name="execute" value="Execute"/></c:if>
@@ -117,9 +127,13 @@
                     </div>
                 </div>
             </div>
-           <jsp:include page="common/footer.jsp"/>
+
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script> const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+    const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))</script>
+  <jsp:include page="common/flexFooter.jsp"/>
   </body>
 </html>
 

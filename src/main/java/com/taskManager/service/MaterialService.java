@@ -9,4 +9,5 @@ public interface MaterialService {
     boolean update(MaterialDto materialDto);
 
     void delete(MaterialDto materialDto);
+    Material findById(Long id);
 }

@@ -1,9 +1,13 @@
 package com.taskManager.service.converter.impl;
 
 import com.taskManager.model.entity.Employee;
+import com.taskManager.model.entity.Material;
 import com.taskManager.model.entity.Task;
+import com.taskManager.model.entity.TempMaterial;
 import com.taskManager.service.EmployeeService;
+import com.taskManager.service.MaterialService;
 import com.taskManager.service.converter.DateConverter;
+import com.taskManager.service.converter.MaterialConverter;
 import com.taskManager.service.converter.TaskConverter;
 import com.taskManager.service.dto.TaskDto;
 import lombok.RequiredArgsConstructor;
@@ -15,12 +19,14 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Component
 @RequiredArgsConstructor
 public class TaskConverterImpl implements TaskConverter {
     private final EmployeeService employeeService;
     private final DateConverter dateConverter;
+    private final MaterialConverter materialConverter;
 
     @Override
     public Task convertToTask(TaskDto taskDto) {
@@ -42,6 +48,10 @@ public class TaskConverterImpl implements TaskConverter {
                 .map(employeeService::findById)
                 .collect(Collectors.toList());
         task.setEmployees(executors);
+        if(taskDto.getTempMaterials()!=""&&taskDto.getTempMaterials()!=null) {
+            var tempMaterials = materialConverter.convertToTempMaterial(taskDto.getTempMaterials());
+            task.setTempMaterials(tempMaterials);
+        }
         return task;
     }
 
@@ -73,6 +83,9 @@ public class TaskConverterImpl implements TaskConverter {
                 .toString()
                 .concat(",");
         taskDto.setExecutors(executors);
+        if(task.getTempMaterials()!=null){
+            taskDto.setTempMaterials(task.getTempMaterials().toString());
+        }
         return taskDto;
     }
 }

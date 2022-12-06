@@ -22,6 +22,7 @@ public interface TaskService {
     void execute(TaskDto taskDto);
     void confirm(TaskDto taskDto);
     void toWork(TaskDto taskDto);
+    void fail(Task task);
 
 
 }
