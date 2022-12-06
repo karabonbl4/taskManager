@@ -21,15 +21,15 @@
                         <div class="mb-3 row">
                             <label for="jobTitle" class="col-sm-2 col-form-label">Job title</label>
                             <div class="col-sm-10">
-                                <form:input type="text" class="form-control" path="jobTitle" id="jobTitle" name="jobTitle"></form:input>
+                                <form:input type="text" class="form-control" path="jobTitle" id="jobTitle" name="jobTitle" required="required"></form:input>
                             </div>
                         </div>
                         <div class="mb-3 row">
                             <label for="email" class="col-sm-2 col-form-label">E-mail</label>
                                 <div class="col-sm-10">
-                                    <form:input type="email" class="form-control" path="email" id="email" name="email" placeholder="email@example.com"></form:input>
+                                    <form:input type="email" class="form-control" path="email" id="email" name="email" placeholder="email@example.com" required="required"></form:input>
                                     <form:errors path="email"></form:errors>
-                                    ${inviteError}
+                                    <div class="error text-center">${inviteError}</div>
                                 </div>
                         </div>
                         <div class="mb-3 row">
@@ -38,6 +38,7 @@
                             </div>
                         </div>
                     <button type="submit" class="btn btn-primary">Invite</button>
+                    <a href="/employee?departmentId=${department.id}" class="btn btn-link">Back to employees</a>
                 </form:form>
             </div>
             <div class="col-md-5 col-lg-4 order-md-last">
@@ -54,7 +55,7 @@
                     </div>
                 </div>
             </div>
-          <jsp:include page="common/footer.jsp"/>
+            <jsp:include page="common/footer.jsp"/>
         </div>
     </div>
 </body>

@@ -30,7 +30,7 @@
                                 <form:input type="hidden" path="email" value="${editEmployee.email}"></form:input>
                                 <form:input type="hidden" path="departmentId" value="${editEmployee.departmentId}"></form:input>
                             </div>
-                            <form:errors path="id"></form:errors>${employeeError}
+                            <form:errors path="id"></form:errors><div class="error text-center">${employeeError}</div>
                         </div>
                     <button type="submit" class="btn btn-primary">Edit</button>
                     <a href="/employee?departmentId=${editEmployee.departmentId}" class="btn btn-link">Back to employees</a>

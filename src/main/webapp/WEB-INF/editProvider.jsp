@@ -22,7 +22,7 @@
                             <label for="taxNumber" class="col-sm-2 col-form-label">Tax number</label>
                                 <div class="col-sm-10">
                                     <div class="form-group">
-                                        <form:input type="text" readonly="true" class="form-control" path="taxNumber" id="taxNumber" value="${editProvider.taxNumber}"></form:input>
+                                        <form:input type="text" class="form-control" path="taxNumber" id="taxNumber" value="${editProvider.taxNumber}"></form:input>
                                     </div>
                                 </div>
                         </div>
@@ -42,7 +42,7 @@
                             <label for="email" class="col-sm-2 col-form-label">E-mail</label>
                             <div class="col-sm-10">
                                 <form:input type="email" class="form-control" id="email" path="email" value="${editProvider.email}"></form:input>
-                                <form:errors path="email"></form:errors> ${providerError}
+                                <form:errors path="email"></form:errors> <div class="error text-center">${providerError}</div>
                             </div>
                         </div>
                         <div class="mb-3 row">

@@ -32,14 +32,14 @@
                             <div class="col-sm-12">
                               <label for="email" class="form-label">E-mail</label>
                               <form:input type="email" class="form-control" path="email" id="email" placeholder="E-mail" autofocus="true"></form:input>
-                              <form:errors path="email"></form:errors> ${emailError}
+                              <form:errors path="email"></form:errors> <div class="error text-center">${emailError}</div>
                             </div>
                             <div class="col-sm-12">
                               <label for="username" class="form-label">Username</label>
                                 <div class="input-group has-validation">
                                   <span class="input-group-text">@</span>
                                   <form:input type="text" class="form-control" path="username" id="username" placeholder="Username" autofocus="true"></form:input>
-                                  <form:errors path="username"></form:errors> ${usernameError}
+                                  <form:errors path="username"></form:errors> <div class="error text-center">${usernameError}</div>
                                 </div>
                             </div>
                             <div class="col-sm-12">
@@ -49,7 +49,7 @@
                             <div class="col-sm-12">
                               <label for="confirmPassword" class="form-label">Confirm password</label>
                               <form:input type="password" class="form-control" path="confirmPassword" id="confirmPassword" placeholder="Confirm your password"></form:input>
-                              <form:errors path="password"></form:errors> ${passwordError}
+                              <form:errors path="password"></form:errors> <div class="error text-center">${passwordError}</div>
                             </div><br>
                         </div>
                         <hr class="my-4"><br>

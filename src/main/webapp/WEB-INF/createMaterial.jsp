@@ -15,22 +15,22 @@
                         <div class="mb-3 row">
                             <label for="name" class="col-sm-2 col-form-label">Title</label>
                             <div class="col-sm-10">
-                                <form:input type="text" class="form-control" path="name" id="name"></form:input>
+                                <form:input type="text" class="form-control" path="name" id="name" required="required"></form:input>
                             </div>
                         </div>
                         <div class="mb-3 row">
                             <label for="property" class="col-sm-2 col-form-label">Property</label>
                                 <div class="col-sm-10">
                                     <div class="form-group">
-                                        <form:input type="text" class="form-control" path="property" id="property" rows="2"></form:input>
-                                        <form:errors path="property"></form:errors> ${materialError}
+                                        <form:input type="text" class="form-control" path="property" id="property" required="required"></form:input>
                                     </div>
                                 </div>
                         </div>
                         <div class="mb-3 row">
                             <label for="value" class="col-sm-2 col-form-label">Value</label>
                                 <div class="col-sm-10">
-                                    <form:input type="text" class="form-control" id="value" path="value"></form:input>
+                                    <form:input type="text" class="form-control" id="value" path="value" required="required"></form:input>
+                                    <form:errors path="value"></form:errors> <div class="error text-center">${materialError}</div>
                                 </div>
                         </div>
                         <div class="mb-3 row">

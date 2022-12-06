@@ -23,7 +23,7 @@
                                 <div class="col-sm-10">
                                     <div class="form-group">
                                         <form:input type="text" class="form-control" path="property" id="property" value="${editMaterial.property}"></form:input>
-                                        <form:errors path="property"></form:errors> ${materialError}
+
                                     </div>
                                 </div>
                         </div>
@@ -31,6 +31,7 @@
                             <label for="value" class="col-sm-2 col-form-label">Value</label>
                                 <div class="col-sm-10">
                                     <form:input type="text" class="form-control" id="value" path="value" value="${editMaterial.value}"></form:input>
+                                    <form:errors path="value"></form:errors> <div class="error text-center">${materialError}</div>
                                 </div>
                         </div>
                         <div class="mb-3 row">

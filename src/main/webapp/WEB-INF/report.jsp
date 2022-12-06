@@ -22,7 +22,7 @@
                     <div class="col"><p class="text-center">To:</p></div>
                     <div class="col"><form:input type="date" id="toDate" class="form-control" path="toDate" value="${toDate}"></form:input></div>
                     <div class="col"><button type="submit" class="btn btn-primary">Show</button></div>
-                    <div class="col"><form:errors path="fromDate"></form:errors>${dateError}</div>
+                    <div class="col"><form:errors path="fromDate"></form:errors><div class="error text-center">${dateError}</div></div>
                 </form:form>
             </div>
         <div>

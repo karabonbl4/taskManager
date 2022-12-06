@@ -22,8 +22,8 @@
                             <label for="taxNumber" class="col-sm-2 col-form-label">Tax number</label>
                                 <div class="col-sm-10">
                                     <div class="form-group">
-                                        <form:input type="text" class="form-control" path="taxNumber" id="taxNumber"></form:input>
-                                        <form:errors path="taxNumber"></form:errors> ${customerError}
+                                        <form:input type="text" class="form-control" path="taxNumber" id="taxNumber" required="required"></form:input>
+                                        <form:errors path="taxNumber"></form:errors> <div class="error text-center">${customerError}</div>
                                     </div>
                                 </div>
                         </div>

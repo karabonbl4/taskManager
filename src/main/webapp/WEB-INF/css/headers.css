@@ -63,3 +63,6 @@
           white-space: nowrap;
           -webkit-overflow-scrolling: touch;
         }
+.error {
+  color: red;
+  }

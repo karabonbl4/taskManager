@@ -20,7 +20,7 @@
      <label for="staticEmail2" class="visually-hidden">Title</label>
           <form:input type="text" class="form-control" id="staticEmail2" path="name" placeholder="Title"></form:input>
           <form:errors path="name"></form:errors>
-          ${departmentError}
+          <div class="error text-center">${departmentError}</div>
     </div>
     <div class="col-auto">
       <label for="staticEmail2" class="visually-hidden">Location</label>
