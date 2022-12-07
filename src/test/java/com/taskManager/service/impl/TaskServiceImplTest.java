@@ -2,9 +2,11 @@ package com.taskManager.service.impl;
 
 import com.taskManager.model.entity.Employee;
 import com.taskManager.model.entity.Task;
+import com.taskManager.model.entity.TempMaterial;
 import com.taskManager.model.repository.TaskRepository;
 import com.taskManager.service.DepartmentService;
 import com.taskManager.service.EmployeeService;
+import com.taskManager.service.TempMaterialService;
 import com.taskManager.service.converter.DateConverter;
 import com.taskManager.service.converter.TaskConverter;
 import com.taskManager.service.dto.TaskDto;
@@ -39,6 +41,8 @@ class TaskServiceImplTest {
     private DepartmentService departmentService;
     @Mock
     private DateConverter dateConverter;
+    @Mock
+    private TempMaterialService tempMaterialService;
     @InjectMocks
     private TaskServiceImpl taskService;
 
@@ -81,18 +85,18 @@ class TaskServiceImplTest {
         final Task task = mock(Task.class);
         final List<Employee> employees = task.getEmployees();
         final Employee employee = mock(Employee.class);
+        final List<TempMaterial> tempMaterials = null;
         employees.add(employee);
         when(task.getEmployees()).thenReturn(employees);
         when(taskRepository.saveAndFlush(task)).thenReturn(task);
-
         taskService.save(task);
 
         verify(employeeService).saveAll(employees);
-
     }
 
     @Test
     void update() {
+
     }
 
     @Test

@@ -13,4 +13,5 @@ import java.util.Date;
 public class WorkDayWithDepartmentIdDto {
     private Date date;
     private long departmentId;
+    private Integer page;
 }

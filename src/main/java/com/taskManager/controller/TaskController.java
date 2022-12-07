@@ -23,23 +23,18 @@ public class TaskController {
 
     @GetMapping(value = "/task")
     public String getTask(@ModelAttribute @NotNull WorkDayWithDepartmentIdDto workDayWithDepartmentIdDto, @NotNull Model model) {
+        if (workDayWithDepartmentIdDto.getPage()==null){
+            workDayWithDepartmentIdDto.setPage(1);
+        }
+        var page = workDayWithDepartmentIdDto.getPage();
         var department = departmentService.findById(workDayWithDepartmentIdDto.getDepartmentId());
         var filteredTasks = taskService.getFilteredTask(workDayWithDepartmentIdDto);
+        var countPage = taskService.getCountPageByWorkday(workDayWithDepartmentIdDto);
         model.addAttribute("tasks", filteredTasks);
         model.addAttribute("department", department);
         model.addAttribute("workDayWithDepartmentIdDto", workDayWithDepartmentIdDto);
-        model.addAttribute("editTask", new TaskDto());
-        model.addAttribute("newTask", new TaskDto());
-        return "task";
-    }
-
-    @PostMapping(value = "/task")
-    public String getTaskByDate(@ModelAttribute @NotNull WorkDayWithDepartmentIdDto workDayWithDepartmentIdDto, @NotNull Model model) {
-        var department = departmentService.findById(workDayWithDepartmentIdDto.getDepartmentId());
-        var filteredTasks = taskService.getFilteredTask(workDayWithDepartmentIdDto);
-        model.addAttribute("tasks", filteredTasks);
-        model.addAttribute("department", department);
-        model.addAttribute("workDayWithDepartmentIdDto", workDayWithDepartmentIdDto);
+        model.addAttribute("countPage", countPage);
+        model.addAttribute("page", page);
         model.addAttribute("editTask", new TaskDto());
         model.addAttribute("newTask", new TaskDto());
         return "task";
@@ -58,7 +53,7 @@ public class TaskController {
     @PostMapping(value = "/createTask", params = "create")
     public String createNewTask(@ModelAttribute @NotNull TaskDto newTask, @RequestParam long departmentId, @NotNull Model model) {
         var department = departmentService.findById(departmentId);
-        var workDayWithDepartmentIdDto = new WorkDayWithDepartmentIdDto(newTask.getWorkday(), departmentId);
+        var workDayWithDepartmentIdDto = new WorkDayWithDepartmentIdDto(newTask.getWorkday(), departmentId, 1);
         taskService.save(taskConverter.convertToTask(newTask));
         model.addAttribute("department", department);
         model.addAttribute("workDayWithDepartmentIdDto", workDayWithDepartmentIdDto);

@@ -12,32 +12,38 @@
     <div class="container">
         <div class="row g-5">
             <div class="col-md-7 col-lg-8">
-                <div>
-                    <form:form method="GET" action="/task" modelAttribute="workDayWithDepartmentIdDto">
-                        <form:input type="hidden" path="departmentId" value="${department.id}"></form:input>
-                            <input type="submit" class="w-100 btn btn-primary btn-lg" value="Tasks"></input>
-                        </form:form>
+                <div class="row">
+                    <div class="col">
+                        <h1 class="display-6">Choose the date to see your tasks:</h1>
                     </div>
-                <c:if test="${department.authUserFunction=='manager'}">
-                    <div class="text-end">
-                        <form:form method="GET" action="/createTask" modelAttribute="newTask">
-
-                        <button type="submit" class="btn btn-outline-success" name="departmentId" value="${department.id}">Create new task</button>
-
-                        </form:form>
-                    </div>
-                </c:if>
+                    <c:if test="${department.authUserFunction=='manager'}">
+                        <div class="col text-end">
+                            <form:form method="GET" action="/createTask" modelAttribute="newTask">
+                                <button type="submit" class="btn btn-outline-success" name="departmentId" value="${department.id}">Create new task</button>
+                            </form:form>
+                        </div>
+                    </c:if>
+                </div><br>
                 <div>
-                   <h1 class="display-6">Choose the date to see your tasks:</h1>
-                   <form:form method="POST" class="row g-3" modelAttribute="workDayWithDepartmentIdDto">
-                          <div class="col-auto">
-                              <form:input type="hidden"  path="departmentId" value="${department.id}"></form:input>
+                   <form:form method="GET" class="row g-3" modelAttribute="workDayWithDepartmentIdDto">
+                          <form:input type="hidden"  path="departmentId" value="${department.id}"></form:input>
+                          <div class="row">
+                          <div class="col">
+                              <form:input type="date" class="form-control" path="date" value="${date}"></form:input>
                           </div>
-                          <div class="col-auto">
-                              <form:input type="date" class="form-control" path="date"></form:input>
-                          </div>
-                          <div class="col-auto">
+                          <div class="col">
                               <button type="submit" class="btn btn-primary">Choose</button>
+                          </div>
+                          <div class="col">
+                              <nav aria-label="...">
+                                  <ul class="pagination justify-content-end">
+                                      <c:forEach var="counter" begin="1" end="${countPage}">
+                                      <fmt:formatDate value="${workDayWithDepartmentIdDto.date}" pattern="yyyy-MM-dd" var="workday"/>
+                                          <li class="page-item"><a class="page-link" href="/task?departmentId=${department.id}&date=${workday}&page=${counter}">${counter}</a></li>
+                                      </c:forEach>
+                                  </ul>
+                              </nav>
+                          </div>
                           </div>
                    </form:form>
                 </div>
@@ -64,7 +70,7 @@
                         <tbody>
                             <c:forEach items="${tasks}" var="task">
                             <tr>
-                               <td scope="raw">${tasks.indexOf(task) + 1}</td>
+                               <td scope="raw">${tasks.indexOf(task) + 1 + 5*(page - 1)}</td>
                                <form:form action="/editTask" method="GET" modelAttribute="editTask">
                                    <form:input type="hidden" path="id" value="${task.id}"></form:input>
                                    <td><form:input type="hidden" path="name" value="${task.name}"></form:input>${task.name}</td>
@@ -133,7 +139,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script> const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
     const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))</script>
-  <jsp:include page="common/flexFooter.jsp"/>
+  <jsp:include page="common/footer.jsp"/>
   </body>
 </html>
 

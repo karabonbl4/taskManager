@@ -1,6 +1,5 @@
 package com.taskManager.service.impl;
 
-import com.taskManager.model.entity.Employee;
 import com.taskManager.model.entity.Task;
 import com.taskManager.model.entity.TempMaterial;
 import com.taskManager.model.repository.TaskRepository;
@@ -11,15 +10,16 @@ import com.taskManager.service.dto.PeriodDto;
 import com.taskManager.service.dto.TaskDto;
 import com.taskManager.service.dto.WorkDayWithDepartmentIdDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,29 +43,23 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> filterByDate(List<Task> tasks, Date workDay) {
-        var date = Objects.requireNonNullElseGet(workDay, () -> Date.from(LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
-        SimpleDateFormat smf = new SimpleDateFormat("yyyy-MM-dd");
-        return tasks.stream()
-                .filter(task -> smf.format(task.getWorkday()).equals(smf.format(date)))
-                .distinct()
-                .collect(Collectors.toList());
+    public List<Task> filterByToday(WorkDayWithDepartmentIdDto workday) {
+        var date = Objects.requireNonNullElseGet(workday.getDate(), () -> Date.from(LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
+        var pageForDB = workday.getPage() - 1;
+        var paging = PageRequest.of(pageForDB, 5, Sort.by("deadLine"));
+        return taskRepository.findDistinctByWorkdayAndEmployees_Department_Id(date, workday.getDepartmentId(), paging);
     }
 
     @Override
-    public List<Task> filterByExecutorAndDate(List<Task> tasks, String function, Date workday) {
-        var date = Objects.requireNonNullElseGet(workday, () -> Date.from(LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
-        SimpleDateFormat smf = new SimpleDateFormat("yyyy-MM-dd");
-         var filteredTasks = tasks.stream()
-                .map(task-> task.getEmployees())
-                .flatMap(List::stream)
-                .filter(employee -> employee.getName().equalsIgnoreCase(function))
-                .map(employee-> employee.getTasks())
-                .flatMap(List::stream)
-                .distinct()
-                .filter(task -> smf.format(task.getWorkday()).equals(smf.format(date)))
-                .collect(Collectors.toList());
-        return filteredTasks;
+    public List<Task> filterByExecutorAndDate(WorkDayWithDepartmentIdDto workday) {
+        var date = Objects.requireNonNullElseGet(workday.getDate(), () -> Date.from(LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
+        var department = departmentService.findById(workday.getDepartmentId());
+        if (workday.getPage()==null){
+            workday.setPage(1);
+        }
+        var pageForDB = workday.getPage() - 1;
+        var paging = PageRequest.of(pageForDB, 5, Sort.by("deadLine"));
+        return taskRepository.findByWorkdayAndEmployees_NameAndEmployees_Department_Id(date, department.getAuthUserFunction(), department.getId(), paging);
     }
 
     @Override
@@ -93,12 +87,6 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public boolean update(TaskDto taskDto) {
         var task = taskRepository.getReferenceById(taskDto.getId());
-        if (taskDto.getExecutors()==null){
-            taskDto.setExecutors(task.getEmployees().stream()
-                    .map(Employee::getId)
-                    .toString()
-                    .concat(","));
-        }
         if(taskConverter.convertToTask(taskDto).equals(task)){
             return false;
         }
@@ -117,34 +105,28 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> getByPeriod(PeriodDto periodDto) {
-        return findByDepartmentId(periodDto.getDepartmentId()).stream()
-                .filter(task->task.getWorkday().after(periodDto.getFromDate()))
-                .filter(task -> task.getWorkday().before(periodDto.getToDate()))
-                .distinct()
-                .sorted(Comparator.comparing(Task::getWorkday))
-                .collect(Collectors.toList());
+    public List<Task> getByPeriod(PeriodDto periodDto, Integer page) {
+        var pageForDB = page - 1;
+        Pageable paging = PageRequest.of(pageForDB, 5, Sort.by("workday"));
+        return taskRepository.findDistinctByWorkdayBetweenAndEmployees_Department_Id(periodDto.getFromDate(), periodDto.getToDate(), periodDto.getDepartmentId(), paging);
     }
 
     @Override
-    public List<Task> getByLastWeek(Long departmentId) {
+    public List<Task> getByLastWeek(Long departmentId, Integer page) {
+        var pageForDB = page - 1;
+        Pageable paging = PageRequest.of(pageForDB, 5, Sort.by("workday"));
         var today = Date.from(LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
         var localToday = dateConverter.convertDateToLocal(today);
         var localLastWeekDay = localToday.minusWeeks(1);
         var lastWeekDay = dateConverter.convertLocalToDate(localLastWeekDay);
-        return findByDepartmentId(departmentId).stream()
-                .filter(task->task.getWorkday().after(lastWeekDay))
-                .filter(task -> task.getWorkday().before(today))
-                .distinct()
-                .sorted(Comparator.comparing(Task::getWorkday))
-                .collect(Collectors.toList());
+        return taskRepository.findDistinctByWorkdayBetweenAndEmployees_Department_Id(lastWeekDay, today, departmentId, paging);
     }
 
     @Override
     public List<Task> getFilteredTask(WorkDayWithDepartmentIdDto workDayWithDepartmentIdDto) {
         var department = departmentService.findById(workDayWithDepartmentIdDto.getDepartmentId());
-        var filteredTasks = filterByDate(findByDepartmentId(department.getId()), workDayWithDepartmentIdDto.getDate());
-        var doubleFilteredTasks = filterByExecutorAndDate(findByDepartmentId(department.getId()), department.getAuthUserFunction(), workDayWithDepartmentIdDto.getDate());
+        var filteredTasks = filterByToday(workDayWithDepartmentIdDto);
+        var doubleFilteredTasks = filterByExecutorAndDate(workDayWithDepartmentIdDto);
         if (!department.getAuthUserFunction().equalsIgnoreCase("manager")){
             for (var task:doubleFilteredTasks) {
                 if(task.getDeadLine().toInstant().isBefore(Instant.now()) && !task.getCondition().equals("done")){
@@ -194,5 +176,36 @@ public class TaskServiceImpl implements TaskService {
     public void fail(Task task) {
         task.setCondition("failed");
         taskRepository.saveAndFlush(task);
+    }
+
+    @Override
+    public int getCountPageForPeriod(PeriodDto periodDto) {
+        var countTask = taskRepository.countDistinctTaskByWorkdayBetweenAndEmployees_Department_Id(periodDto.getFromDate(), periodDto.getToDate(), periodDto.getDepartmentId());
+        var countTaskDouble = (double) countTask;
+        return (int) Math.ceil(countTaskDouble/5);
+    }
+
+    @Override
+    public int getCountPageForWeek(Long departmentId) {
+        var today = Date.from(LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+        var localToday = dateConverter.convertDateToLocal(today);
+        var localLastWeekDay = localToday.minusWeeks(1);
+        var lastWeekDay = dateConverter.convertLocalToDate(localLastWeekDay);
+        var countTask = taskRepository.countDistinctTaskByWorkdayBetweenAndEmployees_Department_Id(lastWeekDay, today, departmentId);
+        var countTaskDouble = (double) countTask;
+        return (int) Math.ceil(countTaskDouble/5);
+    }
+
+    @Override
+    public int getCountPageByWorkday(WorkDayWithDepartmentIdDto workday) {
+        var date = Objects.requireNonNullElseGet(workday.getDate(), () -> Date.from(LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
+        var department = departmentService.findById(workday.getDepartmentId());
+        Integer countTask;
+        if (!department.getAuthUserFunction().equalsIgnoreCase("manager")){
+            countTask = taskRepository.countDistinctByWorkdayAndEmployees_Department_Id(date, workday.getDepartmentId());
+        } else {
+            countTask = taskRepository.countByWorkdayAndEmployees_NameAndEmployees_Department_Id(date, department.getAuthUserFunction(), department.getId());
+        }
+        return (int) Math.ceil((double) countTask/5);
     }
 }

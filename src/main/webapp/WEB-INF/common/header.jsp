@@ -26,7 +26,7 @@
                             <li><a href="/provider?departmentId=${department.id}" class="nav-link px-2 link-secondary">Providers</a></li>
                             <li><a href="/material?departmentId=${department.id}" class="nav-link px-2 link-secondary">Materials</a></li>
                             <li><a href="/employee?departmentId=${department.id}" class="nav-link px-2 link-secondary">Employees</a></li>
-                            <li><a href="/report?departmentId=${department.id}" class="nav-link px-2 link-secondary">Reports</a></li>
+                            <li><a href="/report?departmentId=${department.id}&page=1" class="nav-link px-2 link-secondary">Reports</a></li>
                         </ul>
                     </c:if>
                     <sec:authorize access="isAuthenticated()">
