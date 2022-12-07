@@ -29,11 +29,11 @@
                         <div class="mb-3 row">
                             <label for="deadlineDate" class="col-sm-2 col-form-label">Deadline day</label>
                                 <div class="col-auto">
-                                    <form:input type="date" class="form-control" id="deadlineDate" path="deadlineDate"></form:input>
+                                    <form:input type="date" class="form-control" id="deadlineDate" path="deadlineDate" required="required"></form:input>
                                 </div>
                             <label for="deadlineTime" class="col-sm-2 col-form-label">Deadline time</label>
                                 <div class="col-auto">
-                                    <form:input type="time" class="form-control" id="deadlineTime" path="deadlineTime"></form:input>
+                                    <form:input type="time" class="form-control" id="deadlineTime" path="deadlineTime" required="required"></form:input>
                                 </div>
                                 <div class="col-auto">
                                     <form:input type="hidden" path="tempMaterials" name="tempMaterials" value="${newTask.tempMaterials}"></form:input>
@@ -48,7 +48,7 @@
                         <div class="mb-3 row">
                             <label for="workday" class="col-sm-2 col-form-label">Workday</label>
                             <div class="col-sm-10">
-                                <form:input type="date" class="form-control" id="workday" path="workday"></form:input>
+                                <form:input type="date" class="form-control" id="workday" path="workday" required="required"></form:input>
                             </div>
                         </div>
                         <div class="mb-3 row">

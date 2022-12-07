@@ -30,7 +30,7 @@
                                 <form:input type="hidden" path="manager" value="${editCustomer.manager}"></form:input>
                                 <form:input type="hidden" path="authUserFunction" value="${editDepartment.authUserFunction}"></form:input>
                             </div>
-                            <form:errors path="id"></form:errors><div class="error text-center">${departmentError}</div>
+                            <form:errors path="id"></form:errors><div class="error">${departmentError}</div>
                         </div>
                     <button type="submit" class="btn btn-primary">Edit</button>
                     <a href="/department" class="btn btn-link">Back to departments</a>

@@ -50,7 +50,7 @@ public class MaterialController {
             model.addAttribute("department", department);
             return "createMaterial";
         }
-        return "redirect:/department";
+        return "redirect:/material?departmentId=".concat(newMaterial.getDepartmentId().toString());
     }
 
     @GetMapping(value = "/editMaterial", params = "edit")

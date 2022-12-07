@@ -12,5 +12,5 @@ public class PeriodDto {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date toDate;
     private Long departmentId;
-
+    private Integer page;
 }

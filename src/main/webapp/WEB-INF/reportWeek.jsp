@@ -4,7 +4,7 @@
 <%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
-    <title>Report</title>
+    <title>Report for week</title>
 </head>
 <body>
     <jsp:include page="common/header.jsp"/>
@@ -18,15 +18,15 @@
                     <div class="col"><a href="/report?departmentId=${department.id}&page=1" class="btn btn-primary">Today</a></div>
                     <div class="col-auto"><a href="/reportWeek?departmentId=${department.id}&page=1" class="btn btn-primary">Last week</a></div>
                     <div class="col"><p class="text-center">From:</p></div>
-                    <div class="col"><form:input type="date" id="fromDate" class="form-control" path="fromDate" value="${period.fromDate}"></form:input></div>
+                    <div class="col"><form:input type="date" id="fromDate" class="form-control" path="fromDate" value="${fromDate}"></form:input></div>
                     <div class="col"><p class="text-center">To:</p></div>
-                    <div class="col"><form:input type="date" id="toDate" class="form-control" path="toDate" value="${period.toDate}"></form:input></div>
+                    <div class="col"><form:input type="date" id="toDate" class="form-control" path="toDate" value="${toDate}"></form:input></div>
                     <div class="col"><input type="submit" class="btn btn-primary" name="show" value="Show"/></div>
                     <div class="col"><form:errors path="fromDate"></form:errors><div class="error text-center">${dateError}</div></div></div></form:form>
                     <div class="col-md-5 col-lg-4 order-md-last"><nav aria-label="...">
                       <ul class="pagination justify-content-end">
                       <c:forEach var="counter" begin="1" end="${countPage}">
-                          <li class="page-item"><a class="page-link" href="/report?departmentId=${department.id}&page=${counter}">${counter}</a></li>
+                        <li class="page-item"><a class="page-link" href="/reportWeek?departmentId=${department.id}&page=${counter}">${counter}</a></li>
                       </c:forEach>
                       </ul>
                     </nav></div>

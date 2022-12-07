@@ -18,18 +18,22 @@
                     <div class="col"><a href="/report?departmentId=${department.id}&page=1" class="btn btn-primary">Today</a></div>
                     <div class="col-auto"><a href="/reportWeek?departmentId=${department.id}&page=1" class="btn btn-primary">Last week</a></div>
                     <div class="col"><p class="text-center">From:</p></div>
-                    <div class="col"><form:input type="date" id="fromDate" class="form-control" path="fromDate" value="${period.fromDate}"></form:input></div>
+                    <div class="col"><form:input type="date" id="fromDate" class="form-control" path="fromDate"></form:input></div>
                     <div class="col"><p class="text-center">To:</p></div>
-                    <div class="col"><form:input type="date" id="toDate" class="form-control" path="toDate" value="${period.toDate}"></form:input></div>
-                    <div class="col"><input type="submit" class="btn btn-primary" name="show" value="Show"/></div>
-                    <div class="col"><form:errors path="fromDate"></form:errors><div class="error text-center">${dateError}</div></div></div></form:form>
+                    <div class="col"><form:input type="date" id="toDate" class="form-control" path="toDate"></form:input></div>
+                    <div class="col"><button type="submit" class="btn btn-primary">Show</button></div>
+                    <div class="col"><form:errors path="fromDate"></form:errors><div class="error text-center">${dateError}</div>
+                    <form:input type="hidden" path="page" value="${period.page}"></form:input></div></div></form:form>
                     <div class="col-md-5 col-lg-4 order-md-last"><nav aria-label="...">
                       <ul class="pagination justify-content-end">
                       <c:forEach var="counter" begin="1" end="${countPage}">
-                          <li class="page-item"><a class="page-link" href="/report?departmentId=${department.id}&page=${counter}">${counter}</a></li>
+                      <fmt:formatDate value="${period.fromDate}" pattern="yyyy-MM-dd" var="fromDate"/>
+                      <fmt:formatDate value="${period.toDate}" pattern="yyyy-MM-dd" var="toDate"/>
+                        <li class="page-item"><a class="page-link" href="/reportPeriod?departmentId=${department.id}&fromDate=${fromDate}&toDate=${toDate}&page=${counter}">${counter}</a></li>
                       </c:forEach>
                       </ul>
                     </nav></div>
+
             </div>
         <div>
         <c:if test = "${tasks.size() == 0}">
