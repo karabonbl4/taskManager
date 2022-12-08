@@ -22,9 +22,6 @@ class MailSenderImplTest {
     private final static String FROM = "karabonbl4@gmail.com";
     private final static String LINK = "some:link";
     private final static String SUBJECT = "Invoice";
-    private final String host = "http://localhost:";
-
-    private final String port = "8080";
     private final static StringBuilder TEXT = new StringBuilder("You are invited to be part of the team:");
     @Mock
     private JavaMailSender mailSender;
@@ -46,8 +43,12 @@ class MailSenderImplTest {
     @Test
     @DisplayName("Create link for offer")
     void createInvoiceLinkByEmployee() {
+        String host = "http://localhost:";
         ReflectionTestUtils.setField(mailSenderImpl, "host", host);
+        String port = "8080";
         ReflectionTestUtils.setField(mailSenderImpl, "port", port);
+        String emailFrom = "karabonbl4@gmail.com";
+        ReflectionTestUtils.setField(mailSenderImpl, "emailFrom", emailFrom);
         final EmployeeDto employeeDtoForCreateInvoiceLink = new EmployeeDto();
         employeeDtoForCreateInvoiceLink.setDepartmentId(11L);
         employeeDtoForCreateInvoiceLink.setJobTitle("worker");

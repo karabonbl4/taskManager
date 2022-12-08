@@ -10,6 +10,7 @@ import com.taskManager.service.dto.PeriodDto;
 import com.taskManager.service.dto.TaskDto;
 import com.taskManager.service.dto.WorkDayWithDepartmentIdDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -31,6 +32,8 @@ public class TaskServiceImpl implements TaskService {
     private final DateConverter dateConverter;
     private final TempMaterialService tempMaterialService;
     private final MaterialService materialService;
+    @Value("${app.sizePage}")
+    private Integer elementOnPage;
 
     @Override
     public List<Task> findByDate(Date date) {
@@ -43,10 +46,10 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> filterByToday(WorkDayWithDepartmentIdDto workday) {
+    public List<Task> filterByDate(WorkDayWithDepartmentIdDto workday) {
         var date = Objects.requireNonNullElseGet(workday.getDate(), () -> Date.from(LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
         var pageForDB = workday.getPage() - 1;
-        var paging = PageRequest.of(pageForDB, 5, Sort.by("deadLine"));
+        var paging = PageRequest.of(pageForDB, elementOnPage, Sort.by("deadLine"));
         return taskRepository.findDistinctByWorkdayAndEmployees_Department_Id(date, workday.getDepartmentId(), paging);
     }
 
@@ -58,7 +61,7 @@ public class TaskServiceImpl implements TaskService {
             workday.setPage(1);
         }
         var pageForDB = workday.getPage() - 1;
-        var paging = PageRequest.of(pageForDB, 5, Sort.by("deadLine"));
+        var paging = PageRequest.of(pageForDB, elementOnPage, Sort.by("deadLine"));
         return taskRepository.findByWorkdayAndEmployees_NameAndEmployees_Department_Id(date, department.getAuthUserFunction(), department.getId(), paging);
     }
 
@@ -107,14 +110,14 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<Task> getByPeriod(PeriodDto periodDto, Integer page) {
         var pageForDB = page - 1;
-        Pageable paging = PageRequest.of(pageForDB, 5, Sort.by("workday"));
+        Pageable paging = PageRequest.of(pageForDB, elementOnPage, Sort.by("workday"));
         return taskRepository.findDistinctByWorkdayBetweenAndEmployees_Department_Id(periodDto.getFromDate(), periodDto.getToDate(), periodDto.getDepartmentId(), paging);
     }
 
     @Override
     public List<Task> getByLastWeek(Long departmentId, Integer page) {
         var pageForDB = page - 1;
-        Pageable paging = PageRequest.of(pageForDB, 5, Sort.by("workday"));
+        Pageable paging = PageRequest.of(pageForDB, elementOnPage, Sort.by("workday"));
         var today = Date.from(LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
         var localToday = dateConverter.convertDateToLocal(today);
         var localLastWeekDay = localToday.minusWeeks(1);
@@ -125,7 +128,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<Task> getFilteredTask(WorkDayWithDepartmentIdDto workDayWithDepartmentIdDto) {
         var department = departmentService.findById(workDayWithDepartmentIdDto.getDepartmentId());
-        var filteredTasks = filterByToday(workDayWithDepartmentIdDto);
+        var filteredTasks = filterByDate(workDayWithDepartmentIdDto);
         var doubleFilteredTasks = filterByExecutorAndDate(workDayWithDepartmentIdDto);
         if (!department.getAuthUserFunction().equalsIgnoreCase("manager")){
             for (var task:doubleFilteredTasks) {
@@ -182,7 +185,7 @@ public class TaskServiceImpl implements TaskService {
     public int getCountPageForPeriod(PeriodDto periodDto) {
         var countTask = taskRepository.countDistinctTaskByWorkdayBetweenAndEmployees_Department_Id(periodDto.getFromDate(), periodDto.getToDate(), periodDto.getDepartmentId());
         var countTaskDouble = (double) countTask;
-        return (int) Math.ceil(countTaskDouble/5);
+        return (int) Math.ceil(countTaskDouble/elementOnPage);
     }
 
     @Override
@@ -193,19 +196,19 @@ public class TaskServiceImpl implements TaskService {
         var lastWeekDay = dateConverter.convertLocalToDate(localLastWeekDay);
         var countTask = taskRepository.countDistinctTaskByWorkdayBetweenAndEmployees_Department_Id(lastWeekDay, today, departmentId);
         var countTaskDouble = (double) countTask;
-        return (int) Math.ceil(countTaskDouble/5);
+        return (int) Math.ceil(countTaskDouble/elementOnPage);
     }
 
     @Override
     public int getCountPageByWorkday(WorkDayWithDepartmentIdDto workday) {
         var date = Objects.requireNonNullElseGet(workday.getDate(), () -> Date.from(LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
         var department = departmentService.findById(workday.getDepartmentId());
-        Integer countTask;
+        int countTask;
         if (!department.getAuthUserFunction().equalsIgnoreCase("manager")){
             countTask = taskRepository.countDistinctByWorkdayAndEmployees_Department_Id(date, workday.getDepartmentId());
         } else {
             countTask = taskRepository.countByWorkdayAndEmployees_NameAndEmployees_Department_Id(date, department.getAuthUserFunction(), department.getId());
         }
-        return (int) Math.ceil((double) countTask/5);
+        return (int) Math.ceil((double) countTask/elementOnPage);
     }
 }

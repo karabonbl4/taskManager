@@ -12,7 +12,7 @@ import java.util.List;
 public interface TaskService {
     List<Task> findByDate(Date date);
     List<Task> findByDepartmentId(long id);
-    List<Task> filterByToday(WorkDayWithDepartmentIdDto workday);
+    List<Task> filterByDate(WorkDayWithDepartmentIdDto workday);
     List<Task> filterByExecutorAndDate(WorkDayWithDepartmentIdDto workday);
     void save(Task task);
     boolean update(TaskDto taskDto);

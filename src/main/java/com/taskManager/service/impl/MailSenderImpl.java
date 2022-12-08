@@ -17,10 +17,12 @@ public class MailSenderImpl implements MailSender {
     private String host;
     @Value("${server.port}")
     private String port;
+    @Value("${spring.mail.username}")
+    private String emailFrom;
     @Override
     public void sendInvoice(String to, String link) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setFrom("karabonbl4@gmail.com");
+        mailMessage.setFrom(emailFrom);
         mailMessage.setTo(to);
         String subject = "Invoice";
         mailMessage.setSubject(subject);
