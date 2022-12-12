@@ -31,6 +31,7 @@ class MailSenderImplTest {
     @DisplayName("Prepare and send invoice within mailSender")
     void sendInvoice() {
         final SimpleMailMessage mailMessage = new SimpleMailMessage();
+        ReflectionTestUtils.setField(mailSenderImpl, "emailFrom", FROM);
         mailMessage.setText(TEXT +"\n"+ LINK);
         mailMessage.setTo(TO);
         mailMessage.setFrom(FROM);
@@ -47,8 +48,7 @@ class MailSenderImplTest {
         ReflectionTestUtils.setField(mailSenderImpl, "host", host);
         String port = "8080";
         ReflectionTestUtils.setField(mailSenderImpl, "port", port);
-        String emailFrom = "karabonbl4@gmail.com";
-        ReflectionTestUtils.setField(mailSenderImpl, "emailFrom", emailFrom);
+        ReflectionTestUtils.setField(mailSenderImpl, "emailFrom", FROM);
         final EmployeeDto employeeDtoForCreateInvoiceLink = new EmployeeDto();
         employeeDtoForCreateInvoiceLink.setDepartmentId(11L);
         employeeDtoForCreateInvoiceLink.setJobTitle("worker");

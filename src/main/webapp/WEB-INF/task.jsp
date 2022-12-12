@@ -14,7 +14,7 @@
             <div class="col-md-7 col-lg-8">
                 <div class="row">
                     <div class="col">
-                        <h1 class="display-6">Choose the date to see your tasks:</h1>
+                        <h1 class="display-6">Choose the date:</h1>
                     </div>
                     <c:if test="${department.authUserFunction=='manager'}">
                         <div class="col text-end">

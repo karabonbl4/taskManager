@@ -69,7 +69,7 @@ public class ReportController {
         model.addAttribute("dateError", "No date selected!");
         model.addAttribute("department", department);
         model.addAttribute("page", page);
-        model.addAttribute("period", new PeriodDto());  //add countPage
+        model.addAttribute("period", new PeriodDto());
         return "report";
     }
 
