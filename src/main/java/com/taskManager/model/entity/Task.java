@@ -1,5 +1,6 @@
 package com.taskManager.model.entity;
 
+import com.taskManager.model.enumeration.State;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -22,8 +23,9 @@ public class Task {
     private Integer priority;
     @Column
     private Date workday;
+    @Enumerated(value = EnumType.STRING)
     @Column(name = "flag")
-    private String condition;
+    private State condition;
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "tasks")
     private List<Employee> employees;
     @OneToMany(cascade = CascadeType.MERGE, mappedBy = "task")
