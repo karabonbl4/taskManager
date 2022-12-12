@@ -69,13 +69,13 @@
                             <fmt:formatDate value="${task.deadLine}" pattern="yyyy-MM-dd HH:mm:ss" var="deadline"/>
                             <td>${deadline}</td>
                             <td>
-                                <c:if test="${task.condition=='in_process'}">
+                                <c:if test="${task.condition=='IN_PROCESS'}">
                                     <button type="button" class="btn btn-info btn-sm" disabled>In process</button></c:if>
-                                <c:if test="${task.condition=='confirmed'}">
+                                <c:if test="${task.condition=='CONFIRMED'}">
                                     <button type="button" class="btn btn-secondary btn-sm" disabled>Confirmed</button></c:if>
-                                <c:if test="${task.condition=='done'}">
+                                <c:if test="${task.condition=='DONE'}">
                                     <button type="button" class="btn btn-success btn-sm"disabled>Done</button></c:if>
-                                <c:if test="${task.condition=='failed'}">
+                                <c:if test="${task.condition=='FAILED'}">
                                     <button type="button" class="btn btn-danger btn-sm" disabled>Failed</button></c:if>
                             </td>
                             <fmt:formatDate value="${task.workday}" pattern="yyyy-MM-dd" var="workday"/>

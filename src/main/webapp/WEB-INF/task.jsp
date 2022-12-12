@@ -87,9 +87,9 @@
                                    <fmt:formatDate value="${task.deadLine}" pattern="yyyy-MM-dd HH:mm" var="deadLineDate"/>
                                    <td><form:input type="hidden" path="deadlineDate" value="${deadLineDate}"></form:input>${deadLineDate}</td>
                                    <td><form:input type="hidden" path="condition" value="${task.condition}"></form:input>
-                                      <c:if test="${task.condition=='in_process'}">
+                                      <c:if test="${task.condition=='IN_PROCESS'}">
                                         <input type="submit" class="btn btn-light btn-sm" name="execute" value="Execute"/></c:if>
-                                      <c:if test="${task.condition=='confirmed'}">
+                                      <c:if test="${task.condition=='CONFIRMED'}">
                                         <c:if test="${department.authUserFunction=='manager'}">
                                           <div><input type="submit" class="btn btn-success btn-sm" name="confirm" value="Confirm"/></div>
                                           <div><input type="submit" class="btn btn-warning btn-sm" name="toWork" value="To work"/></div>
@@ -97,9 +97,9 @@
                                         <c:if test="${department.authUserFunction!='manager'}">
                                         <input type="button" class="btn btn-secondary btn-sm" value="Checked" disabled/></c:if>
                                       </c:if>
-                                      <c:if test="${task.condition=='done'}">
+                                      <c:if test="${task.condition=='DONE'}">
                                          <input type="button" class="btn btn-success btn-sm" value="Done" disabled/></c:if>
-                                      <c:if test="${task.condition=='failed'}">
+                                      <c:if test="${task.condition=='FAILED'}">
                                          <input type="button" class="btn btn-danger btn-sm" value="Failed" disabled/></c:if>
                                    </td>
                                    <fmt:formatDate value="${task.deadLine}" pattern="HH:mm" var="deadLineTime"/>

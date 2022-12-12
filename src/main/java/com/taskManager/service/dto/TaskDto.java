@@ -1,6 +1,7 @@
 package com.taskManager.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.taskManager.model.enumeration.State;
 import lombok.Data;
 
 import java.util.Date;
@@ -14,7 +15,7 @@ public class TaskDto {
     private Date deadlineDate;
     private String deadlineTime;
     private Date workday;
-    private String condition;
+    private State condition;
     private Integer priority;
     private Long departmentId;
     private String executors;

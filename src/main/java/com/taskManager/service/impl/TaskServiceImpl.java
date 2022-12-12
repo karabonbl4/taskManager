@@ -2,6 +2,7 @@ package com.taskManager.service.impl;
 
 import com.taskManager.model.entity.Task;
 import com.taskManager.model.entity.TempMaterial;
+import com.taskManager.model.enumeration.State;
 import com.taskManager.model.repository.TaskRepository;
 import com.taskManager.service.*;
 import com.taskManager.service.converter.DateConverter;
@@ -69,7 +70,7 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public void save(Task task) {
         var employees = new ArrayList<>(task.getEmployees());
-        task.setCondition("in_process");
+        task.setCondition(State.IN_PROCESS);
         List<TempMaterial> tempMaterials = null;
         if(task.getTempMaterials()!=null) {
             tempMaterials = task.getTempMaterials();
@@ -132,14 +133,14 @@ public class TaskServiceImpl implements TaskService {
         var doubleFilteredTasks = filterByExecutorAndDate(workDayWithDepartmentIdDto);
         if (!department.getAuthUserFunction().equalsIgnoreCase("manager")){
             for (var task:doubleFilteredTasks) {
-                if(task.getDeadLine().toInstant().isBefore(Instant.now()) && !task.getCondition().equals("done")){
+                if(task.getDeadLine().toInstant().isBefore(Instant.now()) && !task.getCondition().equals(State.DONE)){
                     fail(task);
                 }
             }
             return doubleFilteredTasks;
         } else {
             for (var task:filteredTasks) {
-                if(task.getDeadLine().toInstant().isBefore(Instant.now()) && !task.getCondition().equals("done")){
+                if(task.getDeadLine().toInstant().isBefore(Instant.now()) && !task.getCondition().equals(State.DONE)){
                     fail(task);
                 }
             }
@@ -149,7 +150,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void execute(TaskDto taskDto) {
         var task = taskRepository.getReferenceById(taskDto.getId());
-        task.setCondition("confirmed");
+        task.setCondition(State.CONFIRMED);
         taskRepository.saveAndFlush(task);
     }
 
@@ -157,7 +158,7 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public void confirm(TaskDto taskDto) {
         var task = taskRepository.getReferenceById(taskDto.getId());
-        task.setCondition("done");
+        task.setCondition(State.DONE);
         if (task.getTempMaterials() != null){
             for (var tempMaterial:task.getTempMaterials()) {
                 var material = materialService.findById(tempMaterial.getMaterialId());
@@ -171,13 +172,13 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void toWork(TaskDto taskDto) {
         var task = taskRepository.getReferenceById(taskDto.getId());
-        task.setCondition("in_process");
+        task.setCondition(State.IN_PROCESS);
         taskRepository.saveAndFlush(task);
     }
 
     @Override
     public void fail(Task task) {
-        task.setCondition("failed");
+        task.setCondition(State.FAILED);
         taskRepository.saveAndFlush(task);
     }
 
