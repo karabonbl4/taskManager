@@ -33,10 +33,9 @@
                          </div>
                      </sec:authorize>
                 </header>
-
-          <div class="text-center"><h1 class="display-3">Task manager</h1></div><br>
-          <div class="text-center"><h3 class="display-6">TM is tool for monitoring tasks in your unit.  The manager creates tasks and assigns executors from among his employees.  The employee interacts with the task and changes its state depending on its implementation.  The manager has access to the journal of suppliers, customers, materials and all employees of the department, as well as a report on tasks for different periods.</h3></div>
-       </div>
+                <div class="text-center"><h1 class="display-3">Task manager</h1></div><br>
+             <div class="text-center"><h3 class="display-6">TM is tool for monitoring tasks in your unit.  The manager creates tasks and assigns executors from among his employees.  The employee interacts with the task and changes its state depending on its implementation.  The manager has access to the journal of suppliers, customers, materials and all employees of the department, as well as a report on tasks for different periods.</h3></div>
+          </div>
     </main>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>

@@ -33,7 +33,6 @@
                       </c:forEach>
                       </ul>
                     </nav></div>
-
             </div>
         <div>
         <c:if test = "${tasks.size() == 0}">

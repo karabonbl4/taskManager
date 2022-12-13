@@ -15,7 +15,6 @@
                 <c:if test = "${materials.size() == 0}">
                         <h4>Materials not found</h4>
                 </c:if>
-
                     <form:form action="/createTask?departmentId=${department.id}" method="GET" modelAttribute="newTask">
                         <form:input type="hidden" path="id" value="${newTask.id}"></form:input>
                         <form:input type="hidden" path="name" value="${newTask.name}"></form:input>
@@ -30,52 +29,33 @@
                         <form:input type="hidden" path="executors" value="${newTask.executors}"></form:input>
                     <c:if test = "${materials.size() > 0}">
                         <table class="table">
-                        <thead>
-                          <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Title</th>
-                            <th scope="col">Property</th>
-                            <th scope="col">Value</th>
-                            <th scope="col">Count</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-
-                               <c:forEach items="${materials}" var="material">
-                                      <tr>
-                                          <td scope="raw">${materials.indexOf(material) + 1}</td>
-                                          <td>${material.name}</td>
-                                          <td>${material.property}</td>
-                                          <td>${material.value}</td>
-                                          <form:input type="hidden" path="tempMaterials" value="${material.id}"></form:input>
-                                          <td><form:input type="text" path="tempMaterials" value="0"></form:input></td>
-                                      </tr>
-
-                               </c:forEach>
-
-
-
-                        </tbody>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Title</th>
+                                    <th scope="col">Property</th>
+                                    <th scope="col">Value</th>
+                                    <th scope="col">Count</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach items="${materials}" var="material">
+                                    <tr>
+                                        <td scope="raw">${materials.indexOf(material) + 1}</td>
+                                        <td>${material.name}</td>
+                                        <td>${material.property}</td>
+                                        <td>${material.value}</td>
+                                        <form:input type="hidden" path="tempMaterials" value="${material.id}"></form:input>
+                                        <td><form:input type="text" path="tempMaterials" value="0"></form:input></td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
                         </table>
                         <div><button type="submit" class="btn btn-outline-success" name="departmentId" value="${department.id}">Add material</button></div>
-
                     </c:if>
-                 </form:form>
+                    </form:form>
             </div>
-            <div class="col-md-5 col-lg-4 order-md-last">
-                <div class="card text-bg-info mb-3" style="max-width: 18rem;">
-                    <div class="card-header">Info</div>
-                        <div class="card-body">
-                            <h5 class="card-title">Department info</h5>
-                              <p class="card-text">Title: ${department.name}</p>
-                              <p class="card-text">Location: ${department.location}</p>
-                            <h5 class="card-title">User info</h5>
-                              <p class="card-text">Username: ${pageContext.request.userPrincipal.name}</p>
-                              <p class="card-text">Function: ${department.authUserFunction}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <jsp:include page="departmentDetails.jsp"/>
           <jsp:include page="common/footer.jsp"/>
         </div>
     </div>
