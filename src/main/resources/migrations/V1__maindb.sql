@@ -63,7 +63,7 @@ create table task (
   `dead_line` datetime(6) not null,
   `priority` int null,
   `workday` date not null,
-  `flag` varchar(45) not null;
+  `flag` enum('DONE', 'IN_PROCESS', 'CONFIRMED', 'FAILED') null;
 
 create table employee_task (
   `id` bigint primary key not null auto_increment,
