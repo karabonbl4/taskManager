@@ -39,7 +39,7 @@ public class MaterialServiceImpl implements MaterialService {
     @Override
     public void delete(MaterialDto materialDto) {
         var dbMaterial = materialRepository.getReferenceById(materialDto.getId());
-        dbMaterial.setName("deleted");
+        dbMaterial.setDeleted(true);
         materialRepository.saveAndFlush(dbMaterial);
     }
 

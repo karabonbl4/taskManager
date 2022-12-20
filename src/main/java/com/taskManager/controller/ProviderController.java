@@ -1,8 +1,8 @@
 package com.taskManager.controller;
 
+import com.taskManager.service.CompanyService;
 import com.taskManager.service.DepartmentService;
-import com.taskManager.service.ProviderService;
-import com.taskManager.service.converter.ProviderConverter;
+import com.taskManager.service.converter.CompanyConverter;
 import com.taskManager.service.dto.ProviderDto;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequiredArgsConstructor
 public class ProviderController {
-    private final ProviderService providerService;
+    private final CompanyService companyService;
     private final DepartmentService departmentService;
-    private final ProviderConverter providerConverter;
+    private final CompanyConverter companyConverter;
 
     @GetMapping(value = "/provider")
     public String getProviders(@RequestParam long departmentId, @NotNull Model model) {
@@ -43,7 +43,7 @@ public class ProviderController {
 
     @PostMapping(value = "/createProvider")
     public String createNewProvider(@ModelAttribute(value = "newProvider") ProviderDto newProvider, @NotNull Model model) {
-        if (!providerService.save(providerConverter.convertToProvider(newProvider))) {
+        if (!companyService.save(companyConverter.convertProviderDtoToCompany(newProvider))) {
             var department = departmentService.findById(newProvider.getDepartmentId());
             model.addAttribute("providerError", "Provider with that tax number already exist");
             model.addAttribute("department", department);
@@ -63,13 +63,13 @@ public class ProviderController {
     }
     @GetMapping(value = "/editProvider", params = "delete")
     public String deleteProvider(@ModelAttribute ProviderDto editProvider, Model model){
-        providerService.delete(editProvider);
+        companyService.delete(companyConverter.convertProviderDtoToCompany(editProvider));
         return "redirect:/provider?departmentId=".concat(editProvider.getDepartmentId().toString());
     }
 
     @PostMapping(value = "/editProvider")
     public String editProvider(@ModelAttribute("editProvider") ProviderDto editProvider, Model model) {
-        if (!providerService.update(editProvider)) {
+        if (!companyService.update(companyConverter.convertProviderDtoToCompany(editProvider))) {
             var department = departmentService.findById(editProvider.getDepartmentId());
             model.addAttribute("providerError", "Change one of some rows");
             model.addAttribute("editProvider", editProvider);

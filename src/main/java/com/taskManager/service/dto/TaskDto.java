@@ -1,7 +1,7 @@
 package com.taskManager.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.taskManager.model.enumeration.State;
+import com.taskManager.model.enums.State;
 import lombok.Data;
 
 import java.util.Date;

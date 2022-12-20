@@ -15,14 +15,17 @@ public class Department {
     private String name;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "department")
     private List<Employee> employees;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "departmentId")
-    private List<Customer> customers;
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "departmentId")
+//    private List<Customer> customers;
     @Column
     private String location;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "departmentMaterial")
     private List<Material> materials;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "departmentProvider")
-    private List<Provider> providers;
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "departmentProvider")
+//    private List<Provider> providers;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "department")
+    private List<Product> products;
+
 
     @Override
     public String toString() {
@@ -31,9 +34,7 @@ public class Department {
                 ", name='" + name + '\'' +
                 ", employees=" + employees.toString() +
                 ", location=" + location +
-                ", customers=" + customers.toString() +
                 ", materials=" + materials.toString() +
-                ", providers=" + providers.toString() +
                 '}';
     }
 }

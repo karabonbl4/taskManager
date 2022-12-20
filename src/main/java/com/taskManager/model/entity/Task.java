@@ -1,6 +1,6 @@
 package com.taskManager.model.entity;
 
-import com.taskManager.model.enumeration.State;
+import com.taskManager.model.enums.State;
 import lombok.Data;
 
 import javax.persistence.*;
