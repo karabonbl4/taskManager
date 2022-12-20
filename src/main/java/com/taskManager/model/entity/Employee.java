@@ -32,6 +32,8 @@ public class Employee {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "department_id")
     private Department department;
+    @Column
+    private boolean deleted;
 
     @Override
     public String toString() {

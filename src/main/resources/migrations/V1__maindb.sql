@@ -21,27 +21,7 @@ create table employee (
   foreign key (user_id) references maindb.user (id),
   foreign key (department_id) references maindb.department(id));
   
-create table customer (
-  `id` bigint  primary key not null auto_increment,
-  `name` varchar(255) not null,
-  `location` varchar(255) not null,
-  `tax_number` int not null,
-  `owner` varchar(255) null,
-  `department_id` bigint not null,
-  `email` varchar(255) not null,
-  foreign key (department_id) references maindb.department(id);
-
-create table provider (
-  `id` bigint primary key not null auto_increment,
-  `name` varchar(255) not null,
-  `tax_number` int not null,
-  `location` varchar(45) not null,
-  `owner` varchar(45) null,
-  `department_id` bigint not null,
-  `email` varchar(255) not null,
-  foreign key (department_id) references maindb.department(id);
-
-create table material (
+create table material_storage (
   `id` bigint primary key not null auto_increment,
   `name` varchar(255) not null,
   `property` varchar(45) null,
@@ -90,3 +70,40 @@ create table `maindb`.`temp_material` (
   `value` int not null,
   `task_id` bigint not null,
   foreign key (task_id) references maindb.task(id));
+
+  create table `maindb`.`bid` (
+  `id` bigint primary key not null auto_increment,
+  `value` int not null,
+  `company_id` bigint not null,
+  `contract_type` enum('BUY', 'SELL') not null,
+  `state` enum('IN_PROCESS', 'CONFIRMED', 'DONE', 'FAILED') not null default('IN_PROCESS'),
+  `contract_day` datetime not null,
+  foreign key (company_id) references maindb.company(id));
+
+CREATE TABLE company (
+  `id` BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NOT NULL,
+  `tax_number` INT NOT NULL,
+  `location` VARCHAR(45) NOT NULL,
+  `owner` VARCHAR(45) NULL,
+  `role` enum('CUSTOMER', 'PROVIDER') not null);
+
+create table material_bid (
+`id` bigint primary key not null auto_increment,
+`material_id` bigint not null,
+`bid_id` bigint not null,
+foreign key (material_id) references material_storage(id),
+foreign key (bid_id) references bid(id));
+
+create table product_bid (
+`id` bigint primary key not null auto_increment,
+`product_id` bigint not null,
+`bid_id` bigint not null,
+foreign key (product_id) references product(id),
+foreign key (bid_id) references bid(id));
+
+alter table company
+add column email varchar(250) not null;
+
+alter table company
+add column deleted boolean default false after role;

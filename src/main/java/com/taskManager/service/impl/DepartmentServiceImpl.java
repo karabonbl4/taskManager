@@ -20,6 +20,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     private final DepartmentRepository departmentRepository;
     private final UserService userService;
     private final EmployeeService employeeService;
+    private final CompanyService companyService;
     private final DateConverter dateConverter;
     private final CustomerConverter customerConverter;
     private final MaterialConverter materialConverter;
@@ -52,7 +53,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public List<EmployeeDto> getDepartmentEmployees(Long departmentId) {
         return departmentRepository.getReferenceById(departmentId).getEmployees().stream()
-                .filter(employee -> !employee.getName().equals("deleted"))
+                .filter(employee -> !employee.isDeleted())
                 .map(employeeConverter::convertToEmployeeDto)
                 .collect(Collectors.toList());
     }
@@ -60,25 +61,19 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public List<MaterialDto> getDepartmentMaterials(Long departmentId) {
         return departmentRepository.getReferenceById(departmentId).getMaterials().stream()
-                .filter(material -> !material.getName().equals("deleted"))
+                .filter(material -> !material.isDeleted())
                 .map(materialConverter::convertToMaterialDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<ProviderDto> getDepartmentProviders(Long departmentId) {
-        return departmentRepository.getReferenceById(departmentId).getProviders().stream()
-                .filter(provider -> !provider.getName().equals("deleted"))
-                .map(providerConverter::convertToProviderDto)
-                .collect(Collectors.toList());
+        return companyService.findProviderByDepartmentId(departmentId);
     }
 
     @Override
     public List<CustomerDto> getDepartmentCustomers(Long departmentId) {
-        return departmentRepository.getReferenceById(departmentId).getCustomers().stream()
-                .filter(customer -> !customer.getName().equals("deleted"))
-                .map(customerConverter::convertToCustomerDto)
-                .collect(Collectors.toList());
+        return companyService.findCustomerByDepartmentId(departmentId);
     }
 
     @Override

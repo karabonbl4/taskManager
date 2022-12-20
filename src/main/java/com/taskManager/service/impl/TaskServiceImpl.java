@@ -2,7 +2,7 @@ package com.taskManager.service.impl;
 
 import com.taskManager.model.entity.Task;
 import com.taskManager.model.entity.TempMaterial;
-import com.taskManager.model.enumeration.State;
+import com.taskManager.model.enums.State;
 import com.taskManager.model.repository.TaskRepository;
 import com.taskManager.service.*;
 import com.taskManager.service.converter.DateConverter;

@@ -46,7 +46,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     public void delete(EmployeeDto employeeDto) {
         var dbEmployee = employeeRepository.getReferenceById(employeeDto.getId());
-        dbEmployee.setName("deleted");
+        dbEmployee.setDeleted(true);
         employeeRepository.saveAndFlush(dbEmployee);
     }
 
